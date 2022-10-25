@@ -11,7 +11,7 @@ class Memories extends StatelessWidget {
         title: const Text('My Memories'),
       ),
       body: const Center(
-        child: Text('I remeber'),
+        child: Text('I remember'),
       ),
     );
   }
