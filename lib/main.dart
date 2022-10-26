@@ -1,5 +1,5 @@
 /*
-*Names: Max Grimm, Scott Webber, Xee    , Micheal
+*Names: Max Grimm, Scott Weber, Xee    , Micheal
 *Description: This is the code for the basic bottom tabbed navigation.
 *Bugs: None yet
 *Date: 10/19/2022
