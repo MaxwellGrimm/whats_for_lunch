@@ -27,58 +27,105 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
         title: const Text('My Profile'),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text('Username:'),
-              Text(
-                  'user_name') //this will be replaced with the actual user's username
-            ],
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text('Username:  ', textAlign: TextAlign.left),
+                Text('user_name',
+                    textAlign: TextAlign
+                        .left) //this will be replaced with the actual user's username
+              ],
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text('Password:'),
-              Text(
-                  '********') //this will be replaced with the actual user's password
-            ],
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text('Password:  ', textAlign: TextAlign.left),
+                Text('********',
+                    textAlign: TextAlign
+                        .left) //this will be replaced with the actual user's password
+              ],
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text('Allow Location:'),
-              ElevatedButton(
-                onPressed: null,
-                child: Text('yes'),
-              ), //buttons will need to be active
-              ElevatedButton(onPressed: null, child: Text('no'))
-            ],
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Allow Location:  ', textAlign: TextAlign.left),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: allowLocation,
+                    child: const Text('yes'),
+                  ),
+                ), //buttons will need to be active
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                      onPressed: disallowLocation, child: const Text('no')),
+                )
+              ],
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text('Home Address:'),
-              Text(
-                  '123 address st, Oshkosh, WI 54901') //this will be replaced with the actual user's address
-            ],
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text('Home Address:  ', textAlign: TextAlign.left),
+                Text('123 address st, Oshkosh, WI 54901',
+                    textAlign: TextAlign
+                        .left) //this will be replaced with the actual user's address
+              ],
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.all(15.0),
+            child: Text('Recently Selected:'),
           ),
           Expanded(
               flex: 10,
               child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: restaruant
-                      .length, //should not be hard coded, will need to be changed
-                  itemBuilder: ((context, index) {
-                    return ListTile(
-                        title: Text(restaruant[index]
-                            .name!), //this will need to call the getRestauant({required int at})
-                        subtitle: Text(restaruant[index].numPicked!.toString()),
-                        tileColor: const Color.fromARGB(255, 255, 255, 255));
-                  }))),
+                scrollDirection: Axis.vertical,
+                itemCount: restaruant
+                    .length, //should not be hard coded, will need to be changed
+                itemBuilder: ((context, index) {
+                  return ListTile(
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${restaruant[index].name!}:      ',
+                            textAlign: TextAlign.left,
+                          ),
+                          Text(restaruant[index].numPicked!.toString())
+                        ],
+                      ), //this will need to call the getRestauant({required int at})
+                      //subtitle: Text(restaruant[index].numPicked!.toString()),
+                      tileColor: const Color.fromARGB(255, 255, 255, 255));
+                }),
+              ))
         ],
       ),
     );
+  }
+
+//lets the customer share their location
+//this information will find nearest restaurants around customer
+  bool allowLocation() {
+    return true;
+  }
+
+//the customer will not be sharing their location
+  bool disallowLocation() {
+    return false;
   }
 }
