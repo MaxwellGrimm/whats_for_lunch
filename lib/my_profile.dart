@@ -54,6 +54,15 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               ],
             ),
           ),
+         // const Padding(
+          //  padding: EdgeInsets.all(5.0),
+           // child: 
+            Text(
+              'change password?',
+              textAlign: TextAlign.right,
+              style: TextStyle(color: Colors.blue),
+            ),
+          //),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Row(
