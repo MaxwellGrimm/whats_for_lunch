@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:whats_for_lunch/numRestaruants_model.dart';
 import 'MainModel.dart';
+import 'change_password_widget.dart';
 
 class MyProfileWidget extends StatefulWidget {
   MyProfileWidget({super.key});
@@ -35,10 +36,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Text('Username:  ', textAlign: TextAlign.left),
-                Text('user_name',
-                    textAlign: TextAlign
-                        .left) //this will be replaced with the actual user's username
+                Text('Username:    '),
+                Text(
+                    'user_name') //this will be replaced with the actual user's username
               ],
             ),
           ),
@@ -47,20 +47,29 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Text('Password:  ', textAlign: TextAlign.left),
-                Text('********',
-                    textAlign: TextAlign
-                        .left) //this will be replaced with the actual user's password
+                Text('Password:    '),
+                Text(
+                    '********') //this will be replaced with the actual user's password
               ],
             ),
           ),
-          // const Padding(
-          //  padding: EdgeInsets.all(5.0),
-          // child:
-          const Text(
-            'change password?',
-            textAlign: TextAlign.right,
-            style: TextStyle(color: Colors.blue),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ChangePasswordWidget()), //needs to pass in the model for information --user information--
+                    );
+                  },
+                  child: const Text(
+                    'change password?',
+                    style: TextStyle(color: Colors.blue),
+                  )),
+            ],
           ),
           //),
           Padding(
@@ -68,7 +77,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Allow Location:  ', textAlign: TextAlign.left),
+                const Text('Allow Location:    '),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
@@ -89,10 +98,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Text('Home Address:  ', textAlign: TextAlign.left),
-                Text('123 address st, Oshkosh, WI 54901',
-                    textAlign: TextAlign
-                        .left) //this will be replaced with the actual user's address
+                Text('Home Address:    '),
+                Text(
+                    '123 address st, Oshkosh, WI 54901') //this will be replaced with the actual user's address
               ],
             ),
           ),

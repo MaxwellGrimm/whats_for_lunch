@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'MainModel.dart';
 import 'Memories.dart';
-import 'my_profile.dart';
+import 'my_profile_widget.dart';
 
 class UserProfile extends StatelessWidget {
   const UserProfile({super.key});
