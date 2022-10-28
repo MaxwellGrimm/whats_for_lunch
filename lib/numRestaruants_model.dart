@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//this class keeps track of how many times the user has picked a restaurant
 class NumRestaruant {
   String? name;
   int? numPicked;
@@ -15,7 +16,7 @@ class NumRestaruant {
   }
 }
 
-class RestaruantModel extends ChangeNotifier {
+class NumRestaruantModel extends ChangeNotifier {
   final List<NumRestaruant> _restaruant = [];
 
   bool addCluan({required NumRestaruant restaruant}) {
