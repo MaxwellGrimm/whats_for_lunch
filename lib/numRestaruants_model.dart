@@ -19,7 +19,7 @@ class NumRestaruant {
 class NumRestaruantModel extends ChangeNotifier {
   final List<NumRestaruant> _restaruant = [];
 
-  bool addCluan({required NumRestaruant restaruant}) {
+  bool addNumRestaruant({required NumRestaruant restaruant}) {
     try {
       _restaruant.add(restaruant);
       notifyListeners();
