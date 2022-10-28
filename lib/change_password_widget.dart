@@ -75,6 +75,6 @@ class ChangePasswordWidget extends StatelessWidget {
 //checks to see if the old password is correct, checks if new passwords are identical
 //changes old password to new password
 //gives alert that password was changed successfully
-//should also return us to the profile page once we successfully change the password..
+//should also return us to the My Profile page once we successfully change the password..
   void changePassword() {}
 }
