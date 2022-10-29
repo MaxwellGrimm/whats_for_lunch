@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'MainModel.dart';
 import 'Memories.dart';
+import 'my_profile_widget.dart';
 
 class UserProfile extends StatelessWidget {
   const UserProfile({super.key});
@@ -13,14 +14,35 @@ class UserProfile extends StatelessWidget {
         title: const Text('Profile'),
       ),
       body: Center(
-        child: ElevatedButton(
-          child: const Text('My Memories'),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Memories()),
-            );
-          },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ElevatedButton(
+              child: const Text('My Profile'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MyProfileWidget()), //may need const again
+                );
+              },
+            ), //My Profile button
+            ElevatedButton(
+              child: const Text('My Memories'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Memories()),
+                );
+              },
+            ), //My Memories button
+            ElevatedButton(
+              child: const Text('Log Out'),
+              onPressed: null,
+              //),//this is the Center widget
+            ),
+          ], //children of column
         ),
       ),
     );
