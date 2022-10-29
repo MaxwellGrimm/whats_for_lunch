@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   provider: ^6.0.4
   flutter_fortune_wheel: ^1.2.0
+  rxdart: ^0.27.5
 
 dev_dependencies:
   flutter_test:

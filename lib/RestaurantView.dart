@@ -3,16 +3,19 @@ import 'package:provider/provider.dart';
 import 'MainModel.dart';
 
 class RestaurantView extends StatelessWidget {
-  const RestaurantView({super.key});
+  String restaurantName;
+  RestaurantView({super.key, this.restaurantName = ''});
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Restaurant'),
-      ),
-      body: const Center(
-       child: Text('Resturant'),
-      ),
-    );
+        appBar: AppBar(
+          title: Text(restaurantName),
+        ),
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 300, child: Text(restaurantName)),
+            ]));
   }
 }
