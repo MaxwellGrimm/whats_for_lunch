@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, unnecessary_new
+
 /*
 *Names: Max Grimm, Scott Webber, Xee    , Micheal
 *Description: This is the code for the basic bottom tabbed navigation.
@@ -16,7 +18,7 @@ import 'MainModel.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
-      child: WhatsForLunch(), create: (context) => MainModel()));
+      child: const WhatsForLunch(), create: (context) => MainModel()));
 }
 
 class WhatsForLunch extends StatelessWidget {
@@ -37,21 +39,23 @@ class WhatsForLunch extends StatelessWidget {
   }
 }
 
+// ignore: use_key_in_widget_constructors
 class Navigation extends StatefulWidget {
   @override
+  // ignore: library_private_types_in_public_api
   _NavigationState createState() => _NavigationState();
 }
 
 class _NavigationState extends State<Navigation> {
   var currentTab = [
     Consumer<MainModel>(builder: (context, mainmodel, child) {
-      return Location();
+      return const Location();
     }),
     Consumer<MainModel>(builder: (context, mainmodel, child) {
       return SpinPage();
     }),
     Consumer<MainModel>(builder: (context, mainmodel, child) {
-      return UserProfile();
+      return const UserProfile();
     }),
   ];
 
@@ -74,7 +78,7 @@ class _NavigationState extends State<Navigation> {
             icon: new Icon(Icons.home),
             label: 'Spin',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           )

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'RestaurantView.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:rxdart/rxdart.dart';
 
+// ignore: must_be_immutable
 class SpinPage extends StatelessWidget {
   SpinPage({super.key});
 

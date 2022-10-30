@@ -39,6 +39,8 @@ dependencies:
   provider: ^6.0.4
   flutter_fortune_wheel: ^1.2.0
   rxdart: ^0.27.5
+  google_maps_flutter: ^2.2.1
+  google_maps_flutter_web: ^0.4.0+3
 
 dev_dependencies:
   flutter_test:
