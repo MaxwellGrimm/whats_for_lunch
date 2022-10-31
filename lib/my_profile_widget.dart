@@ -24,7 +24,6 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
     NumRestaruant(name: 'Culvers', numPicked: 14),
   ];
 
-  //this figures out which navigation they are going to
   @override
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
@@ -33,11 +32,14 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
         title: const Text('My Profile'),
         actions: [
           PopupMenuButton<MenuItem>(
+              //this figures out which navigation they are going to
               onSelected: (value) {
                 if (value == MenuItem.myMemories) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Memories()),
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const Memories()), //navigating to the My Memories page
                   );
                 } else if (value == MenuItem.logOut) {
                   //needs to log out here
@@ -87,8 +89,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              ChangePasswordWidget()), //needs to pass in the model for information --user information--
+                          builder:
+                              (context) => //this takes you to the Change Passoword Page
+                                  ChangePasswordWidget()), //needs to pass in the model for information --user information--
                     );
                   },
                   child: const Text(
