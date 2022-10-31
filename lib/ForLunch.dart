@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'MainModel.dart';
 
 ///list of states
-const List<String> list = [
+const List<String> states = [
   "AK",
   "AL",
   "AR",
@@ -75,13 +75,13 @@ class ForLunch extends StatefulWidget {
 }
 
 class _ForLunchState extends State<ForLunch> {
-  ///textfields
+  ///for textfields not implemented
   TextEditingController Address = TextEditingController();
   TextEditingController Zip = TextEditingController();
   TextEditingController Radius = TextEditingController();
 
   ///drop down values
-  String dropdownvalue = list.first;
+  String dropdownvalue = states.first;
 
   ///listview
   List<restaurants> roles = [
@@ -102,6 +102,8 @@ class _ForLunchState extends State<ForLunch> {
         children: [
           const Padding(
             padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
+
+            ///text field for address
             child: TextField(
                 decoration: InputDecoration(
                     fillColor: Colors.black12,
@@ -110,6 +112,8 @@ class _ForLunchState extends State<ForLunch> {
                     labelText: 'Address: ')),
           ),
           Padding(
+
+              ///drop down button as a form field
               padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
               child: DropdownButtonFormField<String>(
                 icon: const Icon(Icons.arrow_downward),
@@ -119,13 +123,17 @@ class _ForLunchState extends State<ForLunch> {
                     filled: true,
                     border: OutlineInputBorder(),
                     labelText: 'State'),
+
+                ///setting the value for drop down
                 value: dropdownvalue,
+
+                ///putting list of states in drop down
                 onChanged: (String? value) {
                   setState(() {
                     dropdownvalue = value!;
                   });
                 },
-                items: list.map<DropdownMenuItem<String>>((String value) {
+                items: states.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -134,6 +142,8 @@ class _ForLunchState extends State<ForLunch> {
               )),
           const Padding(
             padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
+
+            ///text field for zip
             child: TextField(
                 decoration: InputDecoration(
               fillColor: Colors.black12,
@@ -144,6 +154,8 @@ class _ForLunchState extends State<ForLunch> {
           ),
           const Padding(
             padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
+
+            ///text field for radius with hint text sense this one is not obvious what the user needs to fill out
             child: TextField(
                 decoration: InputDecoration(
                     fillColor: Colors.black12,
@@ -153,6 +165,8 @@ class _ForLunchState extends State<ForLunch> {
                     hintText: 'i.e: 4 mi')),
           ),
           const Padding(
+
+              ///text
               padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
               child: Text(
                   'Scroll through to remove Restaurants you do not want in the spin')),
