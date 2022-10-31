@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:whats_for_lunch/numrestaruants_model.dart';
+import 'package:whats_for_lunch/num_restaurants_model.dart';
 import 'main_model.dart';
 import 'memories.dart';
 import 'change_password_widget.dart';
