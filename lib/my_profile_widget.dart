@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:whats_for_lunch/numrestaruants_model.dart';
 import 'MainModel.dart';
+import 'Memories.dart';
 import 'change_password_widget.dart';
+
+enum MenuItem { myMemories, logOut }
 
 class MyProfileWidget extends StatefulWidget {
   MyProfileWidget({super.key});
@@ -21,18 +24,41 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
     NumRestaruant(name: 'Culvers', numPicked: 14),
   ];
 
+  //this figures out which navigation they are going to
   @override
   Widget build(BuildContext context) {
+    MainModel mainModel = Provider.of<MainModel>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Profile'),
+        actions: [
+          PopupMenuButton<MenuItem>(
+              onSelected: (value) {
+                if (value == MenuItem.myMemories) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Memories()),
+                  );
+                } else if (value == MenuItem.logOut) {
+                  //needs to log out here
+                }
+              },
+              itemBuilder: (context) => [
+                    const PopupMenuItem(
+                      value: MenuItem.myMemories,
+                      child: Text('My Memories'),
+                    ),
+                    const PopupMenuItem(
+                        value: MenuItem.logOut, child: Text('Log out')),
+                  ]),
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.only(top: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
@@ -43,7 +69,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.only(top: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
@@ -71,30 +97,26 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                   )),
             ],
           ),
-          //),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Allow Location:    '),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: allowLocation,
-                    child: const Text('yes'),
-                  ),
-                ), //buttons will need to be active
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                      onPressed: disallowLocation, child: const Text('no')),
-                )
-              ],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Allow Location:    '),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: allowLocation,
+                  child: const Text('yes'),
+                ),
+              ), //buttons will need to be active
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    onPressed: disallowLocation, child: const Text('no')),
+              )
+            ],
           ),
           Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.only(top: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
@@ -105,7 +127,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             ),
           ),
           const Padding(
-            padding: EdgeInsets.all(15.0),
+            padding: EdgeInsets.only(left: 8.0, top: 55.0),
             child: Text('Recently Selected:'),
           ),
           Expanded(
@@ -126,7 +148,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                           Text(restaruant[index].numPicked!.toString())
                         ],
                       ), //this will need to call the getRestauant({required int at})
-                      //subtitle: Text(restaruant[index].numPicked!.toString()),
+
                       tileColor: const Color.fromARGB(255, 255, 255, 255));
                 }),
               ))

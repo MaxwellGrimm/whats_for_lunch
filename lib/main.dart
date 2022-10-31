@@ -10,13 +10,13 @@ import 'package:provider/provider.dart';
 import 'SpinPage.dart';
 import 'Location.dart';
 import 'RestaurantView.dart';
-import 'UserProfile.dart';
 import 'Memories.dart';
 import 'MainModel.dart';
+import 'my_profile_widget.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
-      child: WhatsForLunch(), create: (context) => MainModel()));
+      child: const WhatsForLunch(), create: (context) => MainModel()));
 }
 
 class WhatsForLunch extends StatelessWidget {
@@ -45,13 +45,13 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   var currentTab = [
     Consumer<MainModel>(builder: (context, mainmodel, child) {
-      return Location();
+      return const Location();
     }),
     Consumer<MainModel>(builder: (context, mainmodel, child) {
       return SpinPage();
     }),
     Consumer<MainModel>(builder: (context, mainmodel, child) {
-      return UserProfile();
+      return MyProfileWidget();
     }),
   ];
 
@@ -74,7 +74,7 @@ class _NavigationState extends State<Navigation> {
             icon: new Icon(Icons.home),
             label: 'Spin',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
           )
