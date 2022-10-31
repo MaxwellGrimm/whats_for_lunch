@@ -66,7 +66,7 @@ class ChangePasswordWidget extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: ElevatedButton(
                 onPressed: changePassword, child: const Text('Submit')),
-          ) //this will be replaced with the actual user's password
+          )
         ],
       ),
     );

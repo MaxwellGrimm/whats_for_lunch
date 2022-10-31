@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'MainModel.dart';
+import 'main_model.dart';
 
 class Memories extends StatefulWidget {
   const Memories({super.key});

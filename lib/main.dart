@@ -1,26 +1,29 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_new
+// ignore_for_file: prefer_const_constructors, unnecessary_new, unused_import
 
 /*
 *Names: Max Grimm, Scott Webber, Xee    , Micheal Meisenburg
-*Description: This is the code for the basic bottom tabbed navigation.
+*Description: This is the main file for Whats For Lunch. Right now we just have
+  the basic elements of our GUI. There will be more refining and changes as we
+  continue to move forward.
 *Bugs: None yet
 *Date: 10/19/2022
 *Version: 1.0.0
 */
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'SpinPage.dart';
-import 'RestaurantView.dart';
-import 'Memories.dart';
-import 'MainModel.dart';
+import 'spain_page.dart';
+import 'restaurant_view.dart';
+import 'memories.dart';
+import 'main_model.dart';
 import 'my_profile_widget.dart';
-import 'ForLunch.dart';
+import 'for_lunch.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
       child: const WhatsForLunch(), create: (context) => MainModel()));
 }
 
+///Description: This is the main widget that is a consumer of the NavigationModel
 class WhatsForLunch extends StatelessWidget {
   const WhatsForLunch({super.key});
 
@@ -46,6 +49,7 @@ class Navigation extends StatefulWidget {
   _NavigationState createState() => _NavigationState();
 }
 
+///Sets the files that will be the main tabs for navigation
 class _NavigationState extends State<Navigation> {
   var currentTab = [
     Consumer<MainModel>(builder: (context, mainmodel, child) {
@@ -88,6 +92,7 @@ class _NavigationState extends State<Navigation> {
   }
 }
 
+///This is the model that assists with the tabbed navigation
 class NavigationModel with ChangeNotifier {
   int _currentIndex = 1;
 

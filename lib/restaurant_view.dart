@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'MainModel.dart';
+import 'main_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 // ignore: must_be_immutable
@@ -10,13 +10,17 @@ class RestaurantView extends StatelessWidget {
   double fracStars = .5;
   RestaurantView({super.key, this.restaurantName = ''});
 
-  int reviewsIndex = 0;
+  //These are the names of the reviews that will probably end up being in the
+  //google cloud database
   List<String> reviewNames = [
     'Mary Loo',
     'Jane Doe',
     'Ronald Regan',
     'Karen McKaren'
   ];
+
+  //These are the reviews related with the names that will probably end up
+  //being in the google cloud database
   List<String> reviews = [
     'Great Food!',
     'Hard to find the enterance',
@@ -24,8 +28,11 @@ class RestaurantView extends StatelessWidget {
     'The worst place I have ever eaten!'
   ];
 
+  //controller for a google map instance, will need to change the api to the
+  //google directions
   late GoogleMapController mapController;
 
+  //sets the starting location
   final LatLng _center = const LatLng(44.034294, -88.547745);
 
   void _onMapCreated(GoogleMapController controller) {
@@ -45,7 +52,9 @@ class RestaurantView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
+                  //cuts page in half taking the app bar into account
                   height: (MediaQuery.of(context).size.height - 80) / 2.ceil(),
+                  //waits for the maps creation and then makes a controller for it
                   child: GoogleMap(
                     onMapCreated: _onMapCreated,
                     initialCameraPosition: CameraPosition(
@@ -56,6 +65,7 @@ class RestaurantView extends StatelessWidget {
                 ),
                 Container(
                   width: double.infinity,
+                  //uses the other half without the map
                   height: (MediaQuery.of(context).size.height - 80) / 2.ceil(),
                   color: Colors.white,
                   child: Column(children: [
@@ -89,6 +99,8 @@ class RestaurantView extends StatelessWidget {
                             }
                           ]),
                     ),
+                    //uses expanded arround the list view so it does not cause
+                    //overflow issues with the avaliable space left
                     Expanded(
                       child: ListView.separated(
                         itemCount: reviews.length,
