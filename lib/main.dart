@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_new
 
 /*
-*Names: Max Grimm, Scott Webber, Xee    , Micheal
+*Names: Max Grimm, Scott Webber, Xee    , Micheal Meisenburg
 *Description: This is the code for the basic bottom tabbed navigation.
 *Bugs: None yet
 *Date: 10/19/2022
@@ -10,11 +10,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'SpinPage.dart';
-import 'Location.dart';
 import 'RestaurantView.dart';
 import 'UserProfile.dart';
 import 'Memories.dart';
 import 'MainModel.dart';
+import 'ForLunch.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
@@ -49,7 +49,7 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   var currentTab = [
     Consumer<MainModel>(builder: (context, mainmodel, child) {
-      return const Location();
+      return ForLunch();
     }),
     Consumer<MainModel>(builder: (context, mainmodel, child) {
       return SpinPage();
