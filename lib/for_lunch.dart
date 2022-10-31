@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'Main_Model.dart';
+import 'main_model.dart';
 
 ///list of states
 const List<String> states = [
