@@ -4,4 +4,6 @@ import 'Restaurant.dart';
 
 class MainModel extends ChangeNotifier {
   MainModel();
+
+  List<Restaurant> resturantsNear = [];
 }
