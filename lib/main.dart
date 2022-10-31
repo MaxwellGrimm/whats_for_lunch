@@ -9,12 +9,12 @@
 */
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'SpinPage.dart';
-import 'RestaurantView.dart';
-import 'Memories.dart';
-import 'MainModel.dart';
+import 'spain_page.dart';
+import 'restaurant_view.dart';
+import 'memories.dart';
+import 'main_model.dart';
 import 'my_profile_widget.dart';
-import 'ForLunch.dart';
+import 'for_lunch.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(

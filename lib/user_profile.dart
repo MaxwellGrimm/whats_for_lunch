@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'MainModel.dart';
-import 'Memories.dart';
+import 'main_model.dart';
+import 'memories.dart';
 import 'my_profile_widget.dart';
 
 class UserProfile extends StatelessWidget {

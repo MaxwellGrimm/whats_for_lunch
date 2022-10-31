@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:whats_for_lunch/numrestaruants_model.dart';
-import 'MainModel.dart';
-import 'Memories.dart';
+import 'main_model.dart';
+import 'memories.dart';
 import 'change_password_widget.dart';
 
 enum MenuItem { myMemories, logOut }

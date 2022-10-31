@@ -4,8 +4,8 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'MainModel.dart';
-import 'RestaurantView.dart';
+import 'main_model.dart';
+import 'restaurant_view.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:rxdart/rxdart.dart';
 
