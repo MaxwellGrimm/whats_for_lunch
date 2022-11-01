@@ -37,7 +37,14 @@ class Memories extends StatelessWidget {
                     child: Center(
                         child: Column(
                       children: [
-                        Text("Memory: $index ${memoriesListTemp[index]}"),
+                        Text(
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Rajdhani',
+                                color: Colors.white),
+                            "Memory: $index ${memoriesListTemp[index]}"),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -66,8 +73,21 @@ class Memories extends StatelessWidget {
                                     ///will eventurally have the picture, rating, date, location shown in pop up
                                     children: [
                                       Text(
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Rajdhani',
+                                              color: Colors.blue),
                                           "Memory: $index ${memoriesListTemp[index]}"),
-                                      const Text("Memory from: 10-10-2010"),
+                                      const Text(
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Rajdhani',
+                                              color: Colors.blue),
+                                          "Memory from: 10-10-2010"),
                                       Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
