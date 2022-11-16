@@ -11,6 +11,8 @@
 */
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'spain_page.dart';
 import 'restaurant_view.dart';
 import 'memories.dart';
@@ -18,9 +20,12 @@ import 'main_model.dart';
 import 'my_profile_widget.dart';
 import 'for_lunch.dart';
 
-void main() {
+Future<void> main() async {
   runApp(ChangeNotifierProvider(
       child: const WhatsForLunch(), create: (context) => MainModel()));
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 ///Description: This is the main widget that is a consumer of the NavigationModel

@@ -41,6 +41,9 @@ dependencies:
   rxdart: ^0.27.5
   google_maps_flutter: ^2.2.1
   google_maps_flutter_web: ^0.4.0+3
+  firebase_auth: ^4.1.2
+  firebase_core: ^2.2.0
+  flutterfire_ui: ^0.4.3+20
 
 dev_dependencies:
   flutter_test:

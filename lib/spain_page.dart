@@ -6,14 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'main_model.dart';
 import 'restaurant_view.dart';
+import 'sign_in_page.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:rxdart/rxdart.dart';
+
+enum MenuItem { signIn, signOut }
 
 // ignore: must_be_immutable
 class SpinPage extends StatelessWidget {
   SpinPage({super.key});
 
-  //needed to use a BehaviorSubject<int> because we needed the .value method 
+  //needed to use a BehaviorSubject<int> because we needed the .value method
   //that the StreamController does not provide
   final wheelController = BehaviorSubject<int>();
 
@@ -30,8 +33,27 @@ class SpinPage extends StatelessWidget {
     MainModel mainModel = Provider.of<MainModel>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('What\'s For Lunch')),
-      ),
+          title: const Center(child: Text('What\'s For Lunch')),
+          actions: [
+            PopupMenuButton<MenuItem>(
+                //this figures out which navigation they are going to
+                onSelected: (value) {
+                  if (value == MenuItem.signIn) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              SignInPage()), //navigating to the My Memories page
+                    );
+                  }
+                },
+                itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: MenuItem.signIn,
+                        child: Text('Sign In'),
+                      ),
+                    ]),
+          ]),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -51,7 +73,7 @@ class SpinPage extends StatelessWidget {
                   //This sets what whill happen when the wheele is spun
                   onFling: () {
                     wheelController.add(Random().nextInt(fortuneItems.length));
-                    //This delays the changing of screens long enough for the 
+                    //This delays the changing of screens long enough for the
                     //wheel to finish spinning
                     Timer(const Duration(seconds: 6), () {
                       Navigator.push(

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>736806620309-1kuj3669psd7rs9vnl3k1vdsr8ef1elm.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.736806620309-1kuj3669psd7rs9vnl3k1vdsr8ef1elm</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA8gz_m3reeU0ukebsHA2nTHzlowvKv-Jg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>736806620309</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.whatsForLunch</string>
+	<key>PROJECT_ID</key>
+	<string>whatsforlunch-621ad</string>
+	<key>STORAGE_BUCKET</key>
+	<string>whatsforlunch-621ad.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:736806620309:ios:484a12736a15783e421f9c</string>
+</dict>
+</plist>
