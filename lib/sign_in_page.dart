@@ -6,12 +6,14 @@ import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'main_model.dart';
 import 'spain_page.dart';
+import 'auth/secrets.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({Key? key}) : super(key: key);
 
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
+    print(mySecretKey);
 
     return SignInScreen(
       actions: [
@@ -22,11 +24,10 @@ class SignInPage extends StatelessWidget {
               context, MaterialPageRoute(builder: (context) => SpinPage()));
         }),
       ],
-      providerConfigs: const [
-        EmailProviderConfiguration(),
+      providerConfigs: [
+        const EmailProviderConfiguration(),
         GoogleProviderConfiguration(
-          clientId:
-              '736806620309-rlp378ucbckpvl18tlogvklfhsod0eok.apps.googleusercontent.com',
+          clientId: mySecretKey,
         ),
       ],
     );
