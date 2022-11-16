@@ -6,28 +6,34 @@ class MainModel extends ChangeNotifier {
   MainModel();
 
   List<Restaurant> resturantsNear = [];
-  bool signedIn = false;
-  String userName = '-1';
-  String userId = '-1';
 
-  void setCurrentUser(String userName, String userId) {
-    this.signedIn = true;
+  bool signedIn = false;
+  String? userName = 'User Name';
+  String? userId = 'User ID';
+
+  void setCurrentUser(String? userName, String? userId) {
+    signedIn = true;
     this.userName = userName;
     this.userId = userId;
     notifyListeners();
   }
 
-  String getCurrentUserName() {
+  String? getCurrentUserName() {
     return userName;
   }
 
-  String getCurrentUserId() {
+  String? getCurrentUserId() {
     return userId;
   }
 
   bool isUserSignedIn() {
     return signedIn;
   }
-}
 
-class currentUser {}
+  void userSignedOut() {
+    this.signedIn = false;
+    this.userName = 'User Name';
+    this.userId = 'User ID';
+    notifyListeners();
+  }
+}

@@ -13,15 +13,15 @@ class SignInPage extends StatelessWidget {
 
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
-    print(mySecretKey);
 
     return SignInScreen(
       actions: [
         AuthStateChangeAction<SignedIn>((context, _) {
-          String userName;
-          String userId;
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SpinPage()));
+          if (FirebaseAuth.instance.currentUser != null) {
+            mainModel.setCurrentUser(FirebaseAuth.instance.currentUser?.email,
+                FirebaseAuth.instance.currentUser?.uid);
+          }
+          Navigator.pop(context);
         }),
       ],
       providerConfigs: [

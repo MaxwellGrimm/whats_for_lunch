@@ -9,6 +9,7 @@ import 'restaurant_view.dart';
 import 'sign_in_page.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 enum MenuItem { signIn, signOut }
 
@@ -29,6 +30,7 @@ class SpinPage extends StatelessWidget {
     'Pizza Hut'
   ];
 
+  @override
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
     return Scaffold(
@@ -43,7 +45,7 @@ class SpinPage extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              SignInPage()), //navigating to the My Memories page
+                              const SignInPage()), //navigating to the My Memories page
                     );
                   }
                 },
@@ -63,6 +65,12 @@ class SpinPage extends StatelessWidget {
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Rajdhani')),
+            if (mainModel.getCurrentUserName() != 'User Name')
+              Text('Signed In As: ${mainModel.getCurrentUserName()}',
+                  style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Rajdhani')),
             SizedBox(
               height: 300,
               child: FortuneWheel(
