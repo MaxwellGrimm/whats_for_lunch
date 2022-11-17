@@ -1,7 +1,6 @@
 // ignore_for_file: unused_local_variable
 
 import 'dart:async';
-import 'dart:html';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -73,27 +72,38 @@ class SpinPage extends StatelessWidget {
                       ]),
           ]),
       body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text('Spin The Wheel',
-                style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Rajdhani')),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
+              child: Text('Swipe to Spin',
+                  style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Rajdhani')),
+            ),
             if (mainModel.getCurrentUserName() != 'User Name')
               Text('Signed In As: ${mainModel.getCurrentUserName()}',
                   style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Rajdhani')),
-            SizedBox(
-              height: 300,
-              child: FortuneWheel(
-                  physics: CircularPanPhysics(
-                    duration: const Duration(seconds: 0),
-                    curve: Curves.decelerate,
+            FittedBox(
+              child: FortuneBar(
+                  styleStrategy: const UniformStyleStrategy(
+                    color: Color.fromARGB(80, 253, 115, 91),
+                    borderColor: Colors.red,
+                    borderWidth: 3,
                   ),
+                  visibleItemCount: 1,
+                  indicators: [],
+                  height: 400,
+                  fullWidth: true,
+                  // physics: CircularPanPhysics(
+                  //   duration: const Duration(seconds: 0),
+                  //   curve: Curves.decelerate,
+                  // ),
                   //This sets what whill happen when the wheele is spun
                   onFling: () {
                     wheelController.add(Random().nextInt(fortuneItems.length));
@@ -104,8 +114,10 @@ class SpinPage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => RestaurantView(
-                                restaurantName:
-                                    fortuneItems[wheelController.value])),
+                                restaurantName: fortuneItems[
+                                    (wheelController.value == 0)
+                                        ? fortuneItems.length - 1
+                                        : wheelController.value - 1])),
                       );
                     });
                   },
@@ -117,7 +129,14 @@ class SpinPage extends StatelessWidget {
                     for (int i = 0;
                         i < fortuneItems.length;
                         i++) ...<FortuneItem>{
-                      FortuneItem(child: Text(fortuneItems[i])),
+                      FortuneItem(
+                          style: const FortuneItemStyle(
+                              borderWidth: 3,
+                              borderColor: Colors.red,
+                              color: Color.fromARGB(80, 251, 142, 161)),
+                          child: Text(fortuneItems[i],
+                              style: const TextStyle(
+                                  fontFamily: 'Rajdhani', fontSize: 30))),
                     },
                   ]),
             ),
