@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:whats_for_lunch/num_restaurants_model.dart';
+import 'package:whats_for_lunch/sign_in_page.dart';
 import 'main_model.dart';
 import 'memories.dart';
 import 'change_password_widget.dart';
 
-enum MenuItem { myMemories, logOut }
+enum MenuItem { myMemories, signOut, signIn }
 
 class MyProfileWidget extends StatefulWidget {
   MyProfileWidget({super.key});
@@ -31,28 +32,48 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
       appBar: AppBar(
         title: const Text('My Profile'),
         actions: [
-          PopupMenuButton<MenuItem>(
-              //this figures out which navigation they are going to
-              onSelected: (value) {
-                if (value == MenuItem.myMemories) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const Memories()), //navigating to the My Memories page
-                  );
-                } else if (value == MenuItem.logOut) {
-                  //needs to log out here
-                }
-              },
-              itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: MenuItem.myMemories,
-                      child: Text('My Memories'),
-                    ),
-                    const PopupMenuItem(
-                        value: MenuItem.logOut, child: Text('Log out')),
-                  ]),
+          if (mainModel.getCurrentUserName() == 'User Name')
+              PopupMenuButton<MenuItem>(
+                  //this figures out which navigation they are going to
+                  onSelected: (value) {
+                    if (value == MenuItem.signIn) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const SignInPage()), 
+                      );
+                    }
+                  },
+                  itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: MenuItem.signIn,
+                          child: Text('Sign In'),
+                        ),
+                      ]),
+          if (mainModel.getCurrentUserName() != 'User Name')
+            PopupMenuButton<MenuItem>(
+                //this figures out which navigation they are going to
+                onSelected: (value) {
+                  if (value == MenuItem.myMemories) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const Memories()), //navigating to the My Memories page
+                    );
+                  } else if (value == MenuItem.signOut) {
+                    mainModel.userSignedOut();
+                  }
+                },
+                itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: MenuItem.myMemories,
+                        child: Text('My Memories'),
+                      ),
+                      const PopupMenuItem(
+                          value: MenuItem.signOut, child: Text('Sign out')),
+                    ]),
         ],
       ),
       body: Column(
@@ -63,10 +84,11 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             padding: const EdgeInsets.only(top: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text('Username:    '),
-                Text(
-                    'user_name') //this will be replaced with the actual user's username
+              children: [
+                const Text('Username:    '),
+                Text(mainModel
+                    .getCurrentUserName()
+                    .toString()) 
               ],
             ),
           ),
@@ -77,7 +99,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               children: const [
                 Text('Password:    '),
                 Text(
-                    '********') //this will be replaced with the actual user's password
+                    '********') 
               ],
             ),
           ),
@@ -125,7 +147,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               children: const [
                 Text('Home Address:    '),
                 Text(
-                    '123 address st, Oshkosh, WI 54901') //this will be replaced with the actual user's address
+                    '800 Algoma Blvd, Oshkosh, WI 54901') //this will be replaced with the actual user's address
               ],
             ),
           ),
@@ -138,7 +160,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: restaruant
-                    .length, //should not be hard coded, will need to be changed
+                    .length, 
                 itemBuilder: ((context, index) {
                   return ListTile(
                       title: Row(
