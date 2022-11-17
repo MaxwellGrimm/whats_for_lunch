@@ -9,6 +9,8 @@ class ChangePasswordWidget extends StatelessWidget {
   TextEditingController oldPassword = TextEditingController();
   TextEditingController newPassword = TextEditingController();
   TextEditingController retypePassword = TextEditingController();
+  var success =
+      false; //checks to see if password was changed successfully or not
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +79,45 @@ class ChangePasswordWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: ElevatedButton(
-                onPressed: _changePassword, child: const Text('Submit')),
+                onPressed: (() {
+                  _changePassword();
+
+                  if (success == true) {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: const Text('Successful'),
+                        content: const Text('Password was changed.'),
+                        actions: <Widget>[
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                            },
+                            child: const Text("Ok"),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: const Text('Unsuccessful'),
+                        content: const Text(
+                            'Password could not be changed. Your old password may have been incorrect or your passwords did not match!'),
+                        actions: <Widget>[
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                            },
+                            child: const Text('Ok'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                }),
+                child: const Text('Submit')),
           )
         ],
       ),
@@ -89,10 +129,7 @@ class ChangePasswordWidget extends StatelessWidget {
 //gives alert that password was changed successfully
 //should also return us to the My Profile page once we successfully change the password..
   _changePassword() async {
-    var passwordMatch = false;
-
     if (newPassword.text == retypePassword.text) {
-      passwordMatch = true;
       //Create an instance of the current user.
       var user = await FirebaseAuth.instance.currentUser!;
       //Must re-authenticate user before updating the password. Otherwise it may fail or user get signed out.
@@ -100,7 +137,9 @@ class ChangePasswordWidget extends StatelessWidget {
       final cred = await EmailAuthProvider.credential(
           email: user.email!, password: oldPassword.text);
       await user.reauthenticateWithCredential(cred).then((value) async {
+        //reauthorizes the user so that it doesnt get signed out
         await user.updatePassword(newPassword.text).then((_) {
+          success = true;
         }).catchError((error) {
           print(error);
         });

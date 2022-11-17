@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:whats_for_lunch/num_restaurants_model.dart';
+import 'package:whats_for_lunch/sign_in_page.dart';
 import 'main_model.dart';
 import 'memories.dart';
 import 'change_password_widget.dart';
 
-enum MenuItem { myMemories, signOut }
+enum MenuItem { myMemories, signOut, signIn }
 
 class MyProfileWidget extends StatefulWidget {
   MyProfileWidget({super.key});
@@ -31,6 +32,25 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
       appBar: AppBar(
         title: const Text('My Profile'),
         actions: [
+          if (mainModel.getCurrentUserName() == 'User Name')
+              PopupMenuButton<MenuItem>(
+                  //this figures out which navigation they are going to
+                  onSelected: (value) {
+                    if (value == MenuItem.signIn) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const SignInPage()), 
+                      );
+                    }
+                  },
+                  itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: MenuItem.signIn,
+                          child: Text('Sign In'),
+                        ),
+                      ]),
           if (mainModel.getCurrentUserName() != 'User Name')
             PopupMenuButton<MenuItem>(
                 //this figures out which navigation they are going to
@@ -68,7 +88,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                 const Text('Username:    '),
                 Text(mainModel
                     .getCurrentUserName()
-                    .toString()) //this will be replaced with the actual user's username
+                    .toString()) 
               ],
             ),
           ),
@@ -79,7 +99,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               children: const [
                 Text('Password:    '),
                 Text(
-                    '********') //this will be replaced with the actual user's password
+                    '********') 
               ],
             ),
           ),
@@ -140,7 +160,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: restaruant
-                    .length, //should not be hard coded, will need to be changed
+                    .length, 
                 itemBuilder: ((context, index) {
                   return ListTile(
                       title: Row(
