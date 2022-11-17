@@ -5,7 +5,7 @@ import 'main_model.dart';
 import 'memories.dart';
 import 'change_password_widget.dart';
 
-enum MenuItem { myMemories, logOut }
+enum MenuItem { myMemories, signOut }
 
 class MyProfileWidget extends StatefulWidget {
   MyProfileWidget({super.key});
@@ -41,7 +41,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                         builder: (context) =>
                             const Memories()), //navigating to the My Memories page
                   );
-                } else if (value == MenuItem.logOut) {
+                } else if (value == MenuItem.signOut) {
                   //needs to log out here
                 }
               },
@@ -51,7 +51,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                       child: Text('My Memories'),
                     ),
                     const PopupMenuItem(
-                        value: MenuItem.logOut, child: Text('Log out')),
+                        value: MenuItem.signOut, child: Text('Log out')),
                   ]),
         ],
       ),
@@ -63,10 +63,11 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             padding: const EdgeInsets.only(top: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text('Username:    '),
-                Text(
-                    'user_name') //this will be replaced with the actual user's username
+              children: [
+                const Text('Username:    '),
+                Text(mainModel
+                    .getCurrentUserName()
+                    .toString()) //this will be replaced with the actual user's username
               ],
             ),
           ),
@@ -125,7 +126,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               children: const [
                 Text('Home Address:    '),
                 Text(
-                    '123 address st, Oshkosh, WI 54901') //this will be replaced with the actual user's address
+                    '800 Algoma Blvd, Oshkosh, WI 54901') //this will be replaced with the actual user's address
               ],
             ),
           ),
