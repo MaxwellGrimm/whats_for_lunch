@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'restaurant.dart';
@@ -30,7 +31,15 @@ class MainModel extends ChangeNotifier {
     return signedIn;
   }
 
-  void userSignedOut() {
+  // void userSignedOut() {
+  //   this.signedIn = false;
+  //   this.userName = 'User Name';
+  //   this.userId = 'User ID';
+  //   notifyListeners();
+  // }
+
+  Future<void> userSignedOut() async {
+    await FirebaseAuth.instance.signOut();
     this.signedIn = false;
     this.userName = 'User Name';
     this.userId = 'User ID';

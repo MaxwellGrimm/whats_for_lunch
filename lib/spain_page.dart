@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable
 
 import 'dart:async';
+import 'dart:html';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,24 +38,39 @@ class SpinPage extends StatelessWidget {
       appBar: AppBar(
           title: const Center(child: Text('What\'s For Lunch')),
           actions: [
-            PopupMenuButton<MenuItem>(
-                //this figures out which navigation they are going to
-                onSelected: (value) {
-                  if (value == MenuItem.signIn) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              const SignInPage()), //navigating to the My Memories page
-                    );
-                  }
-                },
-                itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: MenuItem.signIn,
-                        child: Text('Sign In'),
-                      ),
-                    ]),
+            if (mainModel.getCurrentUserName() == 'User Name')
+              PopupMenuButton<MenuItem>(
+                  //this figures out which navigation they are going to
+                  onSelected: (value) {
+                    if (value == MenuItem.signIn) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const SignInPage()), //navigating to the My Memories page
+                      );
+                    }
+                  },
+                  itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: MenuItem.signIn,
+                          child: Text('Sign In'),
+                        ),
+                      ]),
+            if (mainModel.getCurrentUserName() != 'User Name')
+              PopupMenuButton<MenuItem>(
+                  //this figures out which navigation they are going to
+                  onSelected: (value) {
+                    if (value == MenuItem.signOut) {
+                      mainModel.userSignedOut();
+                    }
+                  },
+                  itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: MenuItem.signOut,
+                          child: Text('Sign Out'),
+                        ),
+                      ]),
           ]),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
