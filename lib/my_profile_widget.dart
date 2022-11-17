@@ -31,28 +31,29 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
       appBar: AppBar(
         title: const Text('My Profile'),
         actions: [
-          PopupMenuButton<MenuItem>(
-              //this figures out which navigation they are going to
-              onSelected: (value) {
-                if (value == MenuItem.myMemories) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const Memories()), //navigating to the My Memories page
-                  );
-                } else if (value == MenuItem.signOut) {
-                  //needs to log out here
-                }
-              },
-              itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      value: MenuItem.myMemories,
-                      child: Text('My Memories'),
-                    ),
-                    const PopupMenuItem(
-                        value: MenuItem.signOut, child: Text('Log out')),
-                  ]),
+          if (mainModel.getCurrentUserName() != 'User Name')
+            PopupMenuButton<MenuItem>(
+                //this figures out which navigation they are going to
+                onSelected: (value) {
+                  if (value == MenuItem.myMemories) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const Memories()), //navigating to the My Memories page
+                    );
+                  } else if (value == MenuItem.signOut) {
+                    mainModel.userSignedOut();
+                  }
+                },
+                itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: MenuItem.myMemories,
+                        child: Text('My Memories'),
+                      ),
+                      const PopupMenuItem(
+                          value: MenuItem.signOut, child: Text('Sign out')),
+                    ]),
         ],
       ),
       body: Column(

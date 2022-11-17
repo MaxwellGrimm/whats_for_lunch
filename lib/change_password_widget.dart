@@ -90,7 +90,6 @@ class ChangePasswordWidget extends StatelessWidget {
 //should also return us to the My Profile page once we successfully change the password..
   _changePassword() async {
     var passwordMatch = false;
-    bool success = false;
 
     if (newPassword.text == retypePassword.text) {
       passwordMatch = true;
@@ -102,7 +101,6 @@ class ChangePasswordWidget extends StatelessWidget {
           email: user.email!, password: oldPassword.text);
       await user.reauthenticateWithCredential(cred).then((value) async {
         await user.updatePassword(newPassword.text).then((_) {
-          success = true;
         }).catchError((error) {
           print(error);
         });
@@ -110,6 +108,5 @@ class ChangePasswordWidget extends StatelessWidget {
         print(err);
       });
     }
-    //return success;
   }
 }
