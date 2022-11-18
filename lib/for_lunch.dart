@@ -1,6 +1,8 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'MainModel.dart';
+import 'main_model.dart';
 
 ///list of states
 const List<String> states = [
@@ -165,22 +167,38 @@ class _ForLunchState extends State<ForLunch> {
                     hintText: 'i.e: 4 mi')),
           ),
           const Padding(
-
-              ///text
-              padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
-              child: Text(
-                  'Scroll through to remove Restaurants you do not want in the spin')),
+            ///text
+            padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
+          ),
+          Card(
+            child: Container(
+              color: Colors.black12,
+              height: 30,
+              child: const Center(
+                child: Text(
+                    'Instructions: Scroll through to remove Restaurants you do not want in the spin'),
+              ),
+            ),
+          ),
           Expanded(
 
               ///listView
               child: ListView.separated(
             itemCount: roles.length,
+
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
 
                   ///setting the title subtitle and trailing
                   title: Text(roles[index].locations),
-                  trailing: const Icon(Icons.delete));
+                  trailing: IconButton(
+                    onPressed: () {
+                      ///remove
+                      roles.removeAt(index);
+                      setState(() {});
+                    },
+                    icon: const Icon(Icons.delete),
+                  ));
             },
 
             ///for the divider between each element
