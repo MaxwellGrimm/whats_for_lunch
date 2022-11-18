@@ -21,11 +21,13 @@ import 'my_profile_widget.dart';
 import 'for_lunch.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized(); 
+  await Firebase.initializeApp( 
+    options: DefaultFirebaseOptions.currentPlatform, 
+  ); 
+
   runApp(ChangeNotifierProvider(
       child: const WhatsForLunch(), create: (context) => MainModel()));
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
 }
 
 ///Description: This is the main widget that is a consumer of the NavigationModel

@@ -60,7 +60,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              const Memories()), //navigating to the My Memories page
+                               Memories()), //navigating to the My Memories page
                     );
                   } else if (value == MenuItem.signOut) {
                     mainModel.userSignedOut();
