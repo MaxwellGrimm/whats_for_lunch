@@ -36,8 +36,9 @@ class WhatsForLunch extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'What\'s For Lunch',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
       home: ChangeNotifierProvider<NavigationModel>(
         child: Navigation(),

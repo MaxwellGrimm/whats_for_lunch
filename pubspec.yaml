@@ -47,6 +47,9 @@ dependencies:
   simple_animations: ^5.0.0+2
   google_directions_api: ^0.9.1
   cloud_firestore: ^4.1.0
+  location: ^4.4.0
+  flutter_polyline_points: ^1.0.0
+  url_launcher: ^6.1.6
 
 dev_dependencies:
   flutter_test:

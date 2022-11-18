@@ -14,11 +14,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 enum MenuItem { signIn, signOut }
 
 // ignore: must_be_immutable
-class SpinPage extends StatelessWidget {
-  SpinPage({super.key});
+class SpinPage extends StatefulWidget {
+  const SpinPage({super.key});
 
+  @override
+  State<SpinPage> createState() => _SpinPageState();
+}
+
+class _SpinPageState extends State<SpinPage> {
   //needed to use a BehaviorSubject<int> because we needed the .value method
-  //that the StreamController does not provide
   final wheelController = BehaviorSubject<int>();
 
   //These are the names of the restaurants that *will* be pulled by an api
@@ -27,7 +31,8 @@ class SpinPage extends StatelessWidget {
     'Dairy Queen',
     'Boba',
     'Mammas Noodles',
-    'Pizza Hut'
+    'Pizza Hut',
+    'Qdoba'
   ];
 
   @override
@@ -36,6 +41,7 @@ class SpinPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: const Center(child: Text('What\'s For Lunch')),
+          backgroundColor: Colors.red,
           actions: [
             if (mainModel.getCurrentUserName() == 'User Name')
               PopupMenuButton<MenuItem>(
