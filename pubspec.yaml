@@ -45,6 +45,8 @@ dependencies:
   firebase_core: ^2.2.0
   flutterfire_ui: ^0.4.3+20
   simple_animations: ^5.0.0+2
+  google_directions_api: ^0.9.1
+  cloud_firestore: ^4.1.0
 
 dev_dependencies:
   flutter_test:

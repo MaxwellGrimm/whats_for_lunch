@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'main_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_directions_api/google_directions_api.dart';
 
 // ignore: must_be_immutable
 class RestaurantView extends StatelessWidget {

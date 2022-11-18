@@ -29,6 +29,13 @@
             {
               "client_id": "736806620309-rlp378ucbckpvl18tlogvklfhsod0eok.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "736806620309-1kuj3669psd7rs9vnl3k1vdsr8ef1elm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.whatsForLunch"
+              }
             }
           ]
         }
