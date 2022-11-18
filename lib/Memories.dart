@@ -45,6 +45,10 @@ class Memories extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       TextFormField(
                                         controller: restaurantsTEC,
@@ -68,20 +72,20 @@ class Memories extends StatelessWidget {
                                           icon: Icon(Icons.message),
                                         ),
                                       ),
+                                      ElevatedButton(
+                                          child: const Text("Submit"),
+                                          onPressed: () {
+                                            _addMemory(
+                                                db,
+                                                restaurantsTEC.text,
+                                                int.parse(ratingTEC.text),
+                                                commentsTEC.text,
+                                                mainModel.userId,
+                                                mainModel.userName);
+                                          })
                                     ],
                                   ),
                                 ),
-                                ElevatedButton(
-                                    child: const Text("Submit"),
-                                    onPressed: () {
-                                      _addMemory(
-                                          db,
-                                          restaurantsTEC.text,
-                                          int.parse(ratingTEC.text),
-                                          commentsTEC.text,
-                                          mainModel.userId,
-                                          mainModel.userName);
-                                    })
                               ],
                             ));
                       });
@@ -97,7 +101,7 @@ class Memories extends StatelessWidget {
                 if (snapshot.hasError) {
                   print(snapshot.error);
                   return const Text("Error");
-                } else if (snapshot.connectionState ==
+                } else if (snapshot.connectionState == 
                     ConnectionState.waiting) {
                   return const Text("loading");
                 }
@@ -171,7 +175,7 @@ class Memories extends StatelessWidget {
                                                   thisMemory[index].restaruant),
                                               Text(
                                                   textAlign: TextAlign.center,
-                                                  style:const TextStyle(
+                                                  style: const TextStyle(
                                                       fontSize: 15,
                                                       fontWeight:
                                                           FontWeight.bold,
