@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:whats_for_lunch/num_restaurants_model.dart';
 import 'package:whats_for_lunch/sign_in_page.dart';
 import 'main_model.dart';
-import 'memories.dart';
+import 'Memories.dart';
 import 'change_password_widget.dart';
 
 enum MenuItem { myMemories, signOut, signIn }

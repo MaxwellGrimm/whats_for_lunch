@@ -15,7 +15,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'spain_page.dart';
 import 'restaurant_view.dart';
-import 'memories.dart';
+import 'Memories.dart';
 import 'main_model.dart';
 import 'my_profile_widget.dart';
 import 'for_lunch.dart';
