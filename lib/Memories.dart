@@ -7,6 +7,7 @@ import 'main_model.dart';
 class Memories extends StatelessWidget {
   Memories({super.key});
 
+  @override
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
     var db = mainModel.getDatabase();
@@ -127,22 +128,23 @@ class Memories extends StatelessWidget {
                                 child: Column(
                               children: [
                                 Text(
+                                  thisMemory['comments'],
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold,
                                         fontFamily: 'Rajdhani',
                                         color: Colors.white),
-                                    thisMemory[index].restaruant),
+                                    ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     ///will apply the correct amount of stars currently is not pulled from db
                                     for (int i = 0;
-                                        i < thisMemory[index].rating.ceil();
+                                        i < thisMemory['rating'].ceil();
                                         i++) ...<Icon>{
                                       const Icon(Icons.star,
-                                          color: Colors.yellow, size: 30),
+                                          color: Colors.yellow, size: 10),
                                     }
                                   ],
                                 )
@@ -165,6 +167,7 @@ class Memories extends StatelessWidget {
                                             ///will eventurally have the picture, rating, date, location shown in pop up
                                             children: [
                                               Text(
+                                                thisMemory['comments'],
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
                                                       fontSize: 15,
@@ -172,8 +175,9 @@ class Memories extends StatelessWidget {
                                                           FontWeight.bold,
                                                       fontFamily: 'Rajdhani',
                                                       color: Colors.blue),
-                                                  thisMemory[index].restaruant),
+                                                  ),
                                               Text(
+                                                thisMemory['date'].toString(),
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
                                                       fontSize: 15,
@@ -181,7 +185,7 @@ class Memories extends StatelessWidget {
                                                           FontWeight.bold,
                                                       fontFamily: 'Rajdhani',
                                                       color: Colors.blue),
-                                                  thisMemory[index].date),
+                                                  ),
                                               Row(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
@@ -191,13 +195,13 @@ class Memories extends StatelessWidget {
                                                   ///will apply the correct amount of stars currently is not pulled from db
                                                   for (int i = 0;
                                                       i <
-                                                          thisMemory[index]
-                                                              .rating
+                                                          thisMemory['rating']
+                                                              
                                                               .ceil();
                                                       i++) ...<Icon>{
                                                     const Icon(Icons.star,
                                                         color: Colors.yellow,
-                                                        size: 30),
+                                                        size: 10),
                                                   }
                                                 ],
                                               )
