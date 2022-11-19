@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:whats_for_lunch/num_restaurants_model.dart';
 import 'package:whats_for_lunch/sign_in_page.dart';
 import 'main_model.dart';
-import 'Memories.dart';
+import 'memories.dart';
 import 'change_password_widget.dart';
 import 'package:location/location.dart';
 
@@ -63,7 +63,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                               Memories()), //navigating to the My Memories page
+                              Memories()), //navigating to the My Memories page
                     );
                   } else if (value == MenuItem.signOut) {
                     mainModel.userSignedOut();
@@ -141,11 +141,12 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             padding: const EdgeInsets.only(top: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Home Address:    '),
-                Text(locationData
-                    .toString()) //this will be replaced with the actual user's address
-              ],
+              children: const [
+                Text('Home Address:    '),
+                Text(
+                    '800 Algoma Blvd, Oshkosh, WI 54901') // this will be replaced with the actual user's address
+              ], //locationData.toString() - this should replace this address but since we are connected to the emulator
+              //it doesnt retrieve the location... I feel that if we had a physical phone it would grab the location
             ),
           ),
           const Padding(
@@ -184,7 +185,6 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
   Future<bool> allowLocation() async {
     Location location = Location();
     bool serviceEnabled;
-    LocationData locationData;
 
     serviceEnabled =
         await location.serviceEnabled(); //if user wants to enable location
