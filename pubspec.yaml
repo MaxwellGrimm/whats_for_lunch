@@ -48,6 +48,7 @@ dependencies:
   google_directions_api: ^0.9.1
   cloud_firestore: ^4.1.0
   location: ^4.4.0
+  flutter_animated_icons: ^1.0.1
 
 dev_dependencies:
   flutter_test:

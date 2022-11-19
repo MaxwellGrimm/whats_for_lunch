@@ -10,15 +10,24 @@ import 'sign_in_page.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_animated_icons/icons8.dart';
+import 'package:flutter_animated_icons/lottiefiles.dart';
+import 'package:flutter_animated_icons/useanimations.dart';
+import 'package:lottie/lottie.dart';
 
 enum MenuItem { signIn, signOut }
 
 // ignore: must_be_immutable
-class SpinPage extends StatelessWidget {
+class SpinPage extends StatefulWidget {
   SpinPage({super.key});
 
+  @override
+  State<SpinPage> createState() => _SpinPageState();
+}
+
+class _SpinPageState extends State<SpinPage>
+    with SingleTickerProviderStateMixin {
   //needed to use a BehaviorSubject<int> because we needed the .value method
-  //that the StreamController does not provide
   final wheelController = BehaviorSubject<int>();
 
   //These are the names of the restaurants that *will* be pulled by an api
@@ -29,6 +38,28 @@ class SpinPage extends StatelessWidget {
     'Mammas Noodles',
     'Pizza Hut'
   ];
+
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    // Initializing our controller
+    _controller = AnimationController(
+      duration: const Duration(
+        milliseconds: 800,
+      ),
+      vsync: this,
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // Disposing controller
+    // when its not needed
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,13 +106,26 @@ class SpinPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(0, 100, 0, 0),
-              child: Text('Swipe to Spin',
+              child: IconButton(
+                splashRadius: 50,
+                iconSize: 100,
+                onPressed: () {
+                  if (_controller.status == AnimationStatus.dismissed) {
+                    _controller.reset();
+                    _controller.animateTo(0.6);
+                  } else {
+                    _controller.reverse();
+                  }
+                },
+                icon: Lottie.asset(Icons8.drag_left, controller: _controller),
+              ),
+              /*child: Text('Swipe to Spin',
                   style: TextStyle(
                       fontSize: 40,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Rajdhani')),
+                      fontFamily: 'Rajdhani')),*/
             ),
             if (mainModel.getCurrentUserName() != 'User Name')
               Text('Signed In As: ${mainModel.getCurrentUserName()}',
