@@ -5,11 +5,12 @@ import 'package:whats_for_lunch/sign_in_page.dart';
 import 'main_model.dart';
 import 'memories.dart';
 import 'change_password_widget.dart';
+import 'package:location/location.dart';
 
 enum MenuItem { myMemories, signOut, signIn }
 
 class MyProfileWidget extends StatefulWidget {
-  MyProfileWidget({super.key});
+  const MyProfileWidget({super.key});
 
   @override
   State<MyProfileWidget> createState() => _MyProfileWidgetState();
@@ -25,6 +26,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
     NumRestaruant(name: 'Culvers', numPicked: 14),
   ];
 
+  LocationData?
+      locationData; //stores location that user have shared with the app
+
   @override
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
@@ -33,24 +37,23 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
         title: const Text('My Profile'),
         actions: [
           if (mainModel.getCurrentUserName() == 'User Name')
-              PopupMenuButton<MenuItem>(
-                  //this figures out which navigation they are going to
-                  onSelected: (value) {
-                    if (value == MenuItem.signIn) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const SignInPage()), 
-                      );
-                    }
-                  },
-                  itemBuilder: (context) => [
-                        const PopupMenuItem(
-                          value: MenuItem.signIn,
-                          child: Text('Sign In'),
-                        ),
-                      ]),
+            PopupMenuButton<MenuItem>(
+                //this figures out which navigation they are going to
+                onSelected: (value) {
+                  if (value == MenuItem.signIn) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SignInPage()),
+                    );
+                  }
+                },
+                itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: MenuItem.signIn,
+                        child: Text('Sign In'),
+                      ),
+                    ]),
           if (mainModel.getCurrentUserName() != 'User Name')
             PopupMenuButton<MenuItem>(
                 //this figures out which navigation they are going to
@@ -60,7 +63,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              const Memories()), //navigating to the My Memories page
+                              Memories()), //navigating to the My Memories page
                     );
                   } else if (value == MenuItem.signOut) {
                     mainModel.userSignedOut();
@@ -86,9 +89,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('Username:    '),
-                Text(mainModel
-                    .getCurrentUserName()
-                    .toString()) 
+                Text(mainModel.getCurrentUserName().toString())
               ],
             ),
           ),
@@ -96,11 +97,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             padding: const EdgeInsets.only(top: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text('Password:    '),
-                Text(
-                    '********') 
-              ],
+              children: const [Text('Password:    '), Text('********')],
             ),
           ),
           Row(
@@ -147,8 +144,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               children: const [
                 Text('Home Address:    '),
                 Text(
-                    '800 Algoma Blvd, Oshkosh, WI 54901') //this will be replaced with the actual user's address
-              ],
+                    '800 Algoma Blvd, Oshkosh, WI 54901') // this will be replaced with the actual user's address
+              ], //locationData.toString() - this should replace this address but since we are connected to the emulator
+              //it doesnt retrieve the location... I feel that if we had a physical phone it would grab the location
             ),
           ),
           const Padding(
@@ -159,8 +157,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               flex: 10,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: restaruant
-                    .length, 
+                itemCount: restaruant.length,
                 itemBuilder: ((context, index) {
                   return ListTile(
                       title: Row(
@@ -184,7 +181,21 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
 
 //lets the customer share their location
 //this information will find nearest restaurants around customer
-  bool allowLocation() {
+//asks user if they are willing to share thier location with the app
+  Future<bool> allowLocation() async {
+    Location location = Location();
+    bool serviceEnabled;
+
+    serviceEnabled =
+        await location.serviceEnabled(); //if user wants to enable location
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService(); //will request service
+      if (!serviceEnabled) {
+        debugPrint('Location Denied once');
+      }
+    }
+
+    locationData = await location.getLocation(); //retrieves location from user
     return true;
   }
 

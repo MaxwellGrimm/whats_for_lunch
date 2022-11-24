@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,8 @@ class MainModel extends ChangeNotifier {
 
   List<Restaurant> resturantsNear = [];
 
+  var db = FirebaseFirestore.instance; 
+
   bool signedIn = false;
   String? userName = 'User Name';
   String? userId = 'User ID';
@@ -17,6 +20,10 @@ class MainModel extends ChangeNotifier {
     this.userName = userName;
     this.userId = userId;
     notifyListeners();
+  }
+
+  getDatabase(){
+    return db;
   }
 
   String? getCurrentUserName() {
