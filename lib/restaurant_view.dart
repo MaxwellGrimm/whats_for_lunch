@@ -35,9 +35,15 @@ class RestaurantView extends StatelessWidget {
   late GoogleMapController mapController;
 
   //either the address given for the user or the users location
-  final LatLng _start = const LatLng(44.001, -87.000);
+  //final LatLng _start = const LatLng(44.001, -87.000);
+  final startLat = 44.001;
+  final startLng = -87.000;
+
   //This will be filled in the with restaurants latitude and longitude
   final LatLng _end = const LatLng(44.040743157104785, -88.54306697845459);
+
+  final endLat = 44.040743157104785;
+  final endLng = -88.54306697845459;
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -72,12 +78,13 @@ class RestaurantView extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => MapView(
-                                _start.latitude,
-                                _start.longitude,
-                                _end.latitude,
-                                _end.longitude,
-                                startAddress,
-                                restaurantAddress)),
+                                startLat: startLat,
+                                startLng: startLng,
+                                endLat: endLat,
+                                endLng: endLng,
+                                startAddress: startAddress,
+                                endAddress: restaurantAddress
+                                )),
                       );
                     },
                     initialCameraPosition: CameraPosition(
