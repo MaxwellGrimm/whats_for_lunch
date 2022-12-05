@@ -120,10 +120,11 @@ class _SpinPageState extends State<SpinPage> {
                   onFling: () {
                     wheelController.add(Random().nextInt(fortuneItems.length));
 
-                    fortuneItems.forEach((restaurant) async {
-                      if (await searchQuery(
+                    fortuneItems.forEach((restaurant) {
+                      if (searchQuery(
                               restaurantName: restaurant.toString(),
-                              userID: mainModel.userId) ==
+                              userID: mainModel.userId,
+                              db: db) ==
                           false) {
                         //if returns false make it true so that it adds the restaurant to the database
                         addRestaurant(
@@ -186,36 +187,50 @@ class _SpinPageState extends State<SpinPage> {
   //searches for the resturant and checks to see if it already exist
   //if it does, then update the numpicked and return true,
   //if it doesnt, then return false
-  Future<bool> searchQuery(
-      {required String restaurantName, required var userID}) async {
+  bool searchQuery(
+      {required String restaurantName, required var userID, required db}) {
     int numPicked = 0; //number of times it has been picked
-    String docID = '';
+    String docID = 'thisis notworking';
     bool restaurantExist = false;
     int addOne = 1; //addes one if it has been picked
 
-    FirebaseFirestore.instance
-        .collection('NumRestaurantPicked')
-        .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) {
-      value.docs.forEach((element) {
-        docID = element.id;
-        numPicked = element['numPicked'];
-        restaurantExist = true;
+//this is not working
+    try {
+      db
+          .collection('NumRestaurantPicked')
+          .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .where('restaurantName', isEqualTo: restaurantName)
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          docID = doc.id;
+          numPicked = doc['numPicked'];
+          restaurantExist = true;
+        });
+      }).catchError((error) {
+        print('error querying: catching data is not working');
       });
-    }).catchError((error) {
-      print('error querying: catching data is not working');
-    });
+    } catch (ex) {
+      print(ex);
+    }
+
+//this is not working
+
+    print(docID
+        .toLowerCase()
+        .toString()); //this is null because the query above is not excuting
 
     int totalPicked = numPicked + addOne;
 //if the restaurant exist then update the numpicked for that specific restaurant
     if (restaurantExist) {
-      FirebaseFirestore.instance
-          .collection('NumRestaurantPicked')
-          .doc(docID)
-          .update({'numPicked': totalPicked.toString()});
+      try {
+        db
+            .collection('NumRestaurantPicked')
+            .doc(docID)
+            .update({'numPicked': totalPicked.toString()});
+      } catch (ex) {}
     }
-
+    print("hello>");
     return restaurantExist;
   }
 }
