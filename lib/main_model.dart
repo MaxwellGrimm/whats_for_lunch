@@ -22,8 +22,9 @@ class MainModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addRestaurant(Restaurant restaurant) {
-    restaurantsNear.add(restaurant);
+  void addRestaurant(List<Restaurant> restaurant) {
+    restaurantsNear = restaurant;
+    notifyListeners();
   }
 
   String? getCurrentUserName() {
