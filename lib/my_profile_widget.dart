@@ -6,6 +6,7 @@ import 'main_model.dart';
 import 'memories.dart';
 import 'change_password_widget.dart';
 import 'package:location/location.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum MenuItem { myMemories, signOut, signIn }
 
@@ -17,14 +18,14 @@ class MyProfileWidget extends StatefulWidget {
 }
 
 class _MyProfileWidgetState extends State<MyProfileWidget> {
-  final List<NumRestaruant> restaruant = [
+  /* final List<NumRestaruant> restaruant = [
     //will need to make a model and pass it through
     NumRestaruant(name: 'Arbys', numPicked: 46),
     NumRestaruant(name: 'Pizza Hut', numPicked: 12),
     NumRestaruant(name: 'McDonalds', numPicked: 2),
     NumRestaruant(name: 'Panda Express', numPicked: 8),
     NumRestaruant(name: 'Culvers', numPicked: 14),
-  ];
+  ];*/
 
   LocationData?
       locationData; //stores location that user have shared with the app
@@ -155,7 +156,30 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
           ),
           Expanded(
               flex: 10,
-              child: ListView.builder(
+              child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('NumRestaurantPicked')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: Text('No data yet'));
+                    } else if (snapshot.hasError) {
+                      return const Center(child: Text('Error!'));
+                    } else {
+                      return Expanded(
+                          child: ListView.builder(
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (context, index) => ListTile(
+                                    title: Text(
+                                      snapshot.data!.docs[index]
+                                          ['restaurantName'],
+                                    ), //Text('Oreos'),
+                                    subtitle: Text(snapshot
+                                        .data!.docs[index]['numPicked']
+                                        .toString()),
+                                  )));
+                    }
+                  }) /*ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: restaruant.length,
                 itemBuilder: ((context, index) {
@@ -173,7 +197,8 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
 
                       tileColor: const Color.fromARGB(255, 255, 255, 255));
                 }),
-              ))
+              )*/
+              )
         ],
       ),
     );

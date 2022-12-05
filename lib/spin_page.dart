@@ -4,12 +4,14 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:whats_for_lunch/for_lunch.dart';
 import 'main_model.dart';
 import 'restaurant_view.dart';
 import 'sign_in_page.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'num_restaurants_model.dart';
 
 enum MenuItem { signIn, signOut }
 
@@ -113,6 +115,20 @@ class _SpinPageState extends State<SpinPage> {
                   //This sets what whill happen when the wheele is spun
                   onFling: () {
                     wheelController.add(Random().nextInt(fortuneItems.length));
+                    //-------------------         THIS IS WHERE THE BUG IS ----------------------------------------------------//
+                    fortuneItems.forEach((restaurant) {
+                      NumRestaruant numRestuarantPicked =
+                          NumRestaruant(name: restaurant);
+                      if (!numRestuarantPicked.searchQuery(
+                          restaurantName: restaurant.toString())) {
+                        //if returns false make it true so that it adds the restaurant to the database
+                        numRestuarantPicked.addRestaurant(
+                            numPicked: 1,
+                            restaurantName: restaurant.toString());
+                      }
+                    });
+//-------------------         THIS IS WHERE THE BUG IS ----------------------------------------------------//
+
                     //This delays the changing of screens long enough for the
                     //wheel to finish spinning
                     Timer(const Duration(seconds: 6), () {
