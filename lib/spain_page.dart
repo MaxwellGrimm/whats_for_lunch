@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'Restaurant.dart';
 import 'main_model.dart';
 import 'restaurant_view.dart';
 import 'sign_in_page.dart';
@@ -24,16 +25,6 @@ class SpinPage extends StatefulWidget {
 class _SpinPageState extends State<SpinPage> {
   //needed to use a BehaviorSubject<int> because we needed the .value method
   final wheelController = BehaviorSubject<int>();
-
-  //These are the names of the restaurants that *will* be pulled by an api
-  List<String> fortuneItems = [
-    'McDonalds',
-    'Dairy Queen',
-    'Boba',
-    'Mammas Noodles',
-    'Pizza Hut',
-    'Qdoba'
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -112,18 +103,24 @@ class _SpinPageState extends State<SpinPage> {
                   // ),
                   //This sets what whill happen when the wheele is spun
                   onFling: () {
-                    wheelController.add(Random().nextInt(fortuneItems.length));
+                    wheelController.add(Random().nextInt(mainModel.restaurantsNear.length));
                     //This delays the changing of screens long enough for the
                     //wheel to finish spinning
                     Timer(const Duration(seconds: 6), () {
+                      int winningIndex = (wheelController.value == 0)
+                          ? mainModel.restaurantsNear.length - 1
+                          : wheelController.value - 1;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => RestaurantView(
-                                restaurantName: fortuneItems[
-                                    (wheelController.value == 0)
-                                        ? fortuneItems.length - 1
-                                        : wheelController.value - 1])),
+                                startLat: mainModel.getUserCurrentLat(),
+                                startLng: mainModel.getUserCurrentLng(),
+                                endLat: mainModel.restaurantsNear[winningIndex]
+                                    .getLat(),
+                                endLng: mainModel.restaurantsNear[winningIndex]
+                                    .getLng(),
+                                restaurantName: mainModel.restaurantsNear[winningIndex].getName())),
                       );
                     });
                   },
@@ -133,14 +130,14 @@ class _SpinPageState extends State<SpinPage> {
                   //the array items
                   items: [
                     for (int i = 0;
-                        i < fortuneItems.length;
+                        i < mainModel.restaurantsNear.length;
                         i++) ...<FortuneItem>{
                       FortuneItem(
                           style: const FortuneItemStyle(
                               borderWidth: 3,
                               borderColor: Colors.red,
                               color: Color.fromARGB(80, 251, 142, 161)),
-                          child: Text(fortuneItems[i],
+                          child: Text(mainModel.restaurantsNear[i].getName(),
                               style: const TextStyle(
                                   fontFamily: 'Rajdhani', fontSize: 30))),
                     },

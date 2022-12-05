@@ -1,19 +1,50 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'directions.dart';
+import 'auth/secrets.dart';
 import 'main_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_directions_api/google_directions_api.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 // ignore: must_be_immutable
-class RestaurantView extends StatelessWidget {
-  String restaurantName;
-  double numStars = 3.5;
-  double fracStars = .5;
-  RestaurantView({super.key, this.restaurantName = ''});
+class RestaurantView extends StatefulWidget {
+  RestaurantView({
+    startLat,
+    startLng,
+    endLat,
+    endLng,
+    restaurantName,
+    restaurantAddress,
+    numStars,
+    fracStars,
+  });
 
+  static String restaurantName = '';
+
+  static String restaurantAddress = '1863 Jackson St, Oshkosh WI';
+
+  static double startLat = 44.001;
+
+  static double startLng = -88.000;
+
+  static double endLat = 44.040743157104785;
+
+  static double endLng = -88.54306697845459;
+
+  static double numStars = 0.0;
+
+  static double fracStart = .5;
+
+  @override
+  State<RestaurantView> createState() => _RestaurantViewState();
+}
+
+class _RestaurantViewState extends State<RestaurantView> {
   //These are the names of the reviews that will probably end up being in the
-  //google cloud database
   List<String> reviewNames = [
     'Mary Loo',
     'Jane Doe',
@@ -22,7 +53,6 @@ class RestaurantView extends StatelessWidget {
   ];
 
   //These are the reviews related with the names that will probably end up
-  //being in the google cloud database
   List<String> reviews = [
     'Great Food!',
     'Hard to find the enterance',
@@ -31,32 +61,48 @@ class RestaurantView extends StatelessWidget {
   ];
 
   //controller for a google map instance, will need to change the api to the
-  //google directions
-  late GoogleMapController mapController;
+  Completer<GoogleMapController> _controller = Completer();
+  final startLocation = LatLng(RestaurantView.endLat, RestaurantView.endLng);
 
+  static final CameraPosition _kGoogle = const CameraPosition(
+    target: LatLng(40.00, -88.00),
+    zoom: 14,
+  );
   //either the address given for the user or the users location
-  //final LatLng _start = const LatLng(44.001, -87.000);
-  final startLat = 44.001;
-  final startLng = -87.000;
-
   //This will be filled in the with restaurants latitude and longitude
   final LatLng _end = const LatLng(44.040743157104785, -88.54306697845459);
 
-  final endLat = 44.040743157104785;
-  final endLng = -88.54306697845459;
+  final Set<Marker> _markers = {};
 
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
+  List<LatLng> latLen = [
+    LatLng(RestaurantView.startLat, RestaurantView.startLng),
+    LatLng(RestaurantView.endLat, RestaurantView.endLng)
+  ];
+
+  void initState() {
+    _markers.add(Marker(
+      markerId: MarkerId('Start Location'),
+      position: latLen[0],
+      infoWindow: InfoWindow(
+        title: 'Current Location',
+      ),
+      icon: BitmapDescriptor.defaultMarker,
+    ));
+    _markers.add(Marker(
+      markerId: MarkerId('Restaurant Location'),
+      position: latLen[1],
+      infoWindow: InfoWindow(
+        title: 'Restaurant Location',
+      ),
+      icon: BitmapDescriptor.defaultMarker,
+    ));
   }
-
-  final String startAddress = '1010 Wright Street, Oshkosh WI';
-  final String restaurantAddress = '1863 Jackson St, Oshkosh WI';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(restaurantName),
+          title: Text(RestaurantView.restaurantName),
           backgroundColor: Colors.red,
           toolbarHeight: 40,
         ),
@@ -70,26 +116,25 @@ class RestaurantView extends StatelessWidget {
                   //cuts page in half taking the app bar into account
                   height: (MediaQuery.of(context).size.height - 80) / 2.ceil(),
                   //waits for the maps creation and then makes a controller for it
-                  child: GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    myLocationEnabled: true,
-                    onTap: (ma) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MapView(
-                                startLat: startLat,
-                                startLng: startLng,
-                                endLat: endLat,
-                                endLng: endLng,
-                                startAddress: startAddress,
-                                endAddress: restaurantAddress
-                                )),
-                      );
-                    },
-                    initialCameraPosition: CameraPosition(
-                      target: _end,
-                      zoom: 13.0,
+                  child: SafeArea(
+                    child: GoogleMap(
+                      //given camera position
+                      initialCameraPosition: _kGoogle,
+                      // on below line we have given map type
+                      mapType: MapType.normal,
+                      // specified set of markers below
+                      markers: _markers,
+                      // on below line we have enabled location
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: true,
+                      // on below line we have enabled compass location
+                      compassEnabled: true,
+                      // displayed google map
+                      onMapCreated: (GoogleMapController controller) {
+                        _controller.complete(controller);
+                        controller.animateCamera(CameraUpdate.newCameraPosition(
+                            CameraPosition(target: startLocation, zoom: 16)));
+                      },
                     ),
                   ),
                 ),
@@ -132,13 +177,15 @@ class RestaurantView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text('${numStars.ceil()} Stars',
+                            Text('${RestaurantView.numStars.ceil()} Stars',
                                 style: const TextStyle(
                                   fontFamily: 'Rajdhani',
                                   fontSize: 20,
                                   color: Colors.white,
                                 )),
-                            for (int i = 0; i < numStars.ceil(); i++) ...<Icon>{
+                            for (int i = 0;
+                                i < RestaurantView.numStars.ceil();
+                                i++) ...<Icon>{
                               const Icon(
                                 Icons.star,
                                 color: Colors.yellow,
