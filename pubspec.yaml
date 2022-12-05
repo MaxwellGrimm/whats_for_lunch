@@ -50,6 +50,9 @@ dependencies:
   location: ^4.4.0
   flutter_animated_icons: ^1.0.1
 
+  url_launcher: ^6.1.6
+  flutter_polyline_points: ^1.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

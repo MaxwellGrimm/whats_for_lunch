@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'spain_page.dart';
+import 'spin_page.dart';
 import 'restaurant_view.dart';
 import 'Memories.dart';
 import 'main_model.dart';
@@ -21,10 +21,10 @@ import 'my_profile_widget.dart';
 import 'for_lunch.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized(); 
-  await Firebase.initializeApp( 
-    options: DefaultFirebaseOptions.currentPlatform, 
-  ); 
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(ChangeNotifierProvider(
       child: const WhatsForLunch(), create: (context) => MainModel()));
@@ -38,8 +38,9 @@ class WhatsForLunch extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'What\'s For Lunch',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
       home: ChangeNotifierProvider<NavigationModel>(
         child: Navigation(),
