@@ -1,8 +1,17 @@
-import 'dart:html';
-
+//import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'main_model.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart';
+
+import 'nearby_response.dart';
 
 ///list of states
 const List<String> states = [
@@ -77,6 +86,17 @@ class ForLunch extends StatefulWidget {
 }
 
 class _ForLunchState extends State<ForLunch> {
+
+  ///for the google places.
+  String apiKey = "AIzaSyBDc-kxnaAiAdfxARv4AFpkB5ankImFj0I";
+  String radius = "3000";
+
+  NearbyPlacesResponse nearbyPlacesResponse = NearbyPlacesResponse();
+
+   ///lat and lon values hard coded for now.
+  double latitude = 31.5111093;
+  double longitude = 74.279664;
+
   ///for textfields not implemented
   TextEditingController Address = TextEditingController();
   TextEditingController Zip = TextEditingController();
@@ -84,6 +104,21 @@ class _ForLunchState extends State<ForLunch> {
 
   ///drop down values
   String dropdownvalue = states.first;
+
+   ///gets nearby places.
+   getNearbyPlaces() async {
+     var url = Uri.parse(
+        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&type=restaurant&key=$apiKey');
+    var response = await http.get(url);
+    final values = jsonDecode(response.body);
+    final List result = values['results'];
+    print(result);
+    // setState(() {});
+
+
+  }
+
+  
 
   ///listview
   List<restaurants> roles = [
@@ -98,7 +133,7 @@ class _ForLunchState extends State<ForLunch> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Whats For Lunch'),
+        title: const Text('Whats For Lunch'),   
       ),
       body: Column(
         children: [
@@ -213,4 +248,6 @@ class _ForLunchState extends State<ForLunch> {
       ),
     );
   }
+
+  
 }
