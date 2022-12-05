@@ -124,7 +124,7 @@ class _SpinPageState extends State<SpinPage> {
                       if (searchQuery(
                               restaurantName: restaurant.toString(),
                               userID: mainModel.userId,
-                              db: db) ==
+                              db: numRestaurantDB) ==
                           false) {
                         //if returns false make it true so that it adds the restaurant to the database
                         addRestaurant(
@@ -197,7 +197,7 @@ class _SpinPageState extends State<SpinPage> {
 //this is not working
     try {
       db
-          .collection('NumRestaurantPicked')
+          //.collection('NumRestaurantPicked')
           .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
           .where('restaurantName', isEqualTo: restaurantName)
           .get()
@@ -225,7 +225,7 @@ class _SpinPageState extends State<SpinPage> {
     if (restaurantExist) {
       try {
         db
-            .collection('NumRestaurantPicked')
+            //.collection('NumRestaurantPicked')
             .doc(docID)
             .update({'numPicked': totalPicked.toString()});
       } catch (ex) {}

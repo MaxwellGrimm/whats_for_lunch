@@ -7,9 +7,12 @@ import 'restaurant.dart';
 class MainModel extends ChangeNotifier {
   MainModel();
 
-  List<Restaurant> resturantsNear = [];
+  List<Restaurant> restaurantsNear = [];
 
-  var db = FirebaseFirestore.instance; 
+  double userCurrentLat = 44.0;
+  double userCurrentLng = -88.0;
+
+  var db = FirebaseFirestore.instance;
 
   bool signedIn = false;
   String? userName = 'User Name';
@@ -22,8 +25,13 @@ class MainModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  getDatabase(){
+  getDatabase() {
     return db;
+  }
+  
+  void addRestaurant(List<Restaurant> restaurant) {
+    restaurantsNear = restaurant;
+    notifyListeners();
   }
 
   String? getCurrentUserName() {
@@ -37,6 +45,10 @@ class MainModel extends ChangeNotifier {
   bool isUserSignedIn() {
     return signedIn;
   }
+
+  double getUserCurrentLat() => userCurrentLat;
+
+  double getUserCurrentLng() => userCurrentLng;
 
   // void userSignedOut() {
   //   this.signedIn = false;

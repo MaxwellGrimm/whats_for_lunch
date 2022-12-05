@@ -52,6 +52,10 @@ dependencies:
 
   url_launcher: ^6.1.6
   flutter_polyline_points: ^1.0.0
+  dio: ^4.0.6
+  geocoding: ^2.0.5
+  geolocator: ^9.0.2
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:
