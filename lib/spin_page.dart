@@ -119,7 +119,7 @@ class _SpinPageState extends State<SpinPage> {
                   //This sets what whill happen when the wheele is spun
                   onFling: () {
                     wheelController.add(Random().nextInt(fortuneItems.length));
-                    //-------------------         THIS IS WHERE THE BUG IS ----------------------------------------------------//
+
                     fortuneItems.forEach((restaurant) async {
                       if (await searchQuery(
                               restaurantName: restaurant.toString(),
@@ -133,7 +133,6 @@ class _SpinPageState extends State<SpinPage> {
                             db: db);
                       }
                     });
-//-------------------         THIS IS WHERE THE BUG IS ----------------------------------------------------//
 
                     //This delays the changing of screens long enough for the
                     //wheel to finish spinning
@@ -200,11 +199,9 @@ class _SpinPageState extends State<SpinPage> {
         .get()
         .then((value) {
       value.docs.forEach((element) {
-        setState(() {
-          docID = element.id;
-          numPicked = element['numPicked'];
-          restaurantExist = true;
-        });
+        docID = element.id;
+        numPicked = element['numPicked'];
+        restaurantExist = true;
       });
     }).catchError((error) {
       print('error querying: catching data is not working');

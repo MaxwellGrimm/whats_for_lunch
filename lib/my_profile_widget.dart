@@ -33,6 +33,8 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
   @override
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
+    var db = mainModel.getDatabase();
+    CollectionReference numRestaurantDB = db.collection('NumResturantPicked');
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Profile'),
