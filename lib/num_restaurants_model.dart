@@ -32,27 +32,37 @@ class NumRestaruant {
   //searches for the resturant and checks to see if it already exist
   //if it does, then update the numpicked and return true,
   //if it doesnt, then return false
-  bool searchQuery({required restaurantName}) {
-    //int numPicked = 0; //number of times it has been picked
+  Future<bool> searchQuery({required String restaurantName}) async {
+    int numPicked = 0; //number of times it has been picked
+    String docID = '';
     bool restaurantExist = false;
     int addOne = 1; //addes one if it has been picked
-    FirebaseFirestore.instance
+
+    var collection = FirebaseFirestore.instance.collection('users');
+    var docSnapshot = await collection.doc(restaurantName).get();
+    if (docSnapshot.exists) {
+      Map<String, dynamic>? data = docSnapshot.data();
+      numPicked = data?['numPicked'];
+      restaurantExist = true;
+    }
+    /*FirebaseFirestore.instance
         .collection('NumRestaurantPicked')
         .where('restaurantName', isEqualTo: [restaurantName])
         .get()
-        .then((QuerySnapshot querySnapshot) {
+        .then((QuerySnapshot querySnapshot) {//its not going in here .. why?
           querySnapshot.docs.forEach((doc) {
             numPicked = doc['numPicked'];
+            docID = doc.id;
+            restaurantExist = true;
           });
-          restaurantExist = true;
-        });
+        });*/
 
-    int totalPicked = numPicked! + addOne;
+    int totalPicked = numPicked + addOne;
 //if the restaurant exist then update the numpicked for that specific restaurant
     if (restaurantExist) {
       FirebaseFirestore.instance
           .collection('NumRestaurantPicked')
-          .doc(restaurantName)
+          .doc(docID)
           .update({'numPicked': totalPicked.toString()});
     }
 
