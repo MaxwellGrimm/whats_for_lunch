@@ -149,7 +149,7 @@ class _SpinPageState extends State<SpinPage> {
                                 restaurantName: fortuneItems[
                                     (wheelController.value == 0)
                                         ? fortuneItems.length - 1
-                                        : wheelController.value - 1])),
+                                        : wheelController.value?? - 1])),
                       );
                     });
                   },
