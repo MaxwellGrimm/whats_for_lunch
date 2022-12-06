@@ -1,4 +1,5 @@
 ///json code from the api converted to dart.
+///may not be used
 class NearbyPlacesResponse {
   List<Results>? results;
   String? status;
