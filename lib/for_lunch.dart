@@ -88,7 +88,7 @@ class ForLunch extends StatefulWidget {
 class _ForLunchState extends State<ForLunch> {
 
   ///for the google places.
-  String apiKey = "API KEY";
+  String apiKey = "AIzaSyBV9aerOFm5L8p6VYFvdoNLjpBjRO-HLek";
   String radius = "3000";
 
   NearbyPlacesResponse nearbyPlacesResponse = NearbyPlacesResponse();
