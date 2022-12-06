@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'main_model.dart';
-import 'spain_page.dart';
+import 'spin_page.dart';
 import 'auth/secrets.dart';
 
 class SignInPage extends StatelessWidget {

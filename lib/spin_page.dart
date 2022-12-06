@@ -109,7 +109,7 @@ class _SpinPageState extends State<SpinPage> {
                     Timer(const Duration(seconds: 6), () {
                       int winningIndex = (wheelController.value == 0)
                           ? mainModel.restaurantsNear.length - 1
-                          : wheelController.value - 1;
+                          : wheelController.value! - 1;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
