@@ -1,10 +1,10 @@
 //import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:whats_for_lunch/restaurant.dart';
 import 'main_model.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:flutter/material.dart';
@@ -13,70 +13,8 @@ import 'package:google_maps_webservice/places.dart';
 
 import 'nearby_response.dart';
 
-///list of states
-const List<String> states = [
-  "AK",
-  "AL",
-  "AR",
-  "AS",
-  "AZ",
-  "CA",
-  "CO",
-  "CT",
-  "DC",
-  "DE",
-  "FL",
-  "GA",
-  "GU",
-  "HI",
-  "IA",
-  "ID",
-  "IL",
-  "IN",
-  "KS",
-  "KY",
-  "LA",
-  "MA",
-  "MD",
-  "ME",
-  "MI",
-  "MN",
-  "MO",
-  "MS",
-  "MT",
-  "NC",
-  "ND",
-  "NE",
-  "NH",
-  "NJ",
-  "NM",
-  "NV",
-  "NY",
-  "OH",
-  "OK",
-  "OR",
-  "PA",
-  "PR",
-  "RI",
-  "SC",
-  "SD",
-  "TN",
-  "TX",
-  "UT",
-  "VA",
-  "VI",
-  "VT",
-  "WA",
-  "WI",
-  "WV",
-  "WY"
-];
 
-///listview
-class restaurants {
-  String locations;
-  restaurants({required this.locations});
-}
+
 
 class ForLunch extends StatefulWidget {
   const ForLunch({super.key});
@@ -86,120 +24,79 @@ class ForLunch extends StatefulWidget {
 }
 
 class _ForLunchState extends State<ForLunch> {
-
   ///for the google places.
   String apiKey = "AIzaSyBV9aerOFm5L8p6VYFvdoNLjpBjRO-HLek";
   String radius = "3000";
 
   NearbyPlacesResponse nearbyPlacesResponse = NearbyPlacesResponse();
 
-   ///lat and lon values hard coded for now.
-  double latitude = 31.5111093;
-  double longitude = 74.279664;
+  ///lat and lon values hard coded for now.
+
+  double latitude = 44.034294;
+  double longitude = -88.547745;
 
   ///for textfields not implemented
-  TextEditingController Address = TextEditingController();
-  TextEditingController Zip = TextEditingController();
-  TextEditingController Radius = TextEditingController();
+  final radiusTEC = TextEditingController();
+   ///listview
+  List<Restaurant> roles = [];
 
-  ///drop down values
-  String dropdownvalue = states.first;
+  @override
+  Widget build(BuildContext context) {
 
-   ///gets nearby places.
-   getNearbyPlaces() async {
-     var url = Uri.parse(
+MainModel mainModel = Provider.of<MainModel>(context);
+      ///gets nearby places.
+  getNearbyPlaces(radius) async {
+    var url = Uri.parse(
         'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&type=restaurant&key=$apiKey');
     var response = await http.get(url);
     final values = jsonDecode(response.body);
     final List result = values['results'];
-    print(result);
-    // setState(() {});
+    //print(result);
+    //print(values['results'][0]['geometry']['location']['lat']);
 
+    setState(() {
+      var i = result.length - 1;
+      while (i > 0) {
+        var temp = Restaurant(name: values['results'][i]['name'], lat: values['results'][0]['geometry']['location']['lat'], lng: values['results'][0]['geometry']['location']['lng']); 
+        roles.add(temp);
+        i--;
+      }
+
+    });
+    mainModel.addRestaurant(roles);
 
   }
 
-  
-
-  ///listview
-  List<restaurants> roles = [
-    restaurants(locations: 'Culvers'),
-    restaurants(locations: 'Mammas'),
-    restaurants(locations: 'Nikos'),
-    restaurants(locations: 'Panda Express'),
-    restaurants(locations: 'Pizza Hut'),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
+    
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Whats For Lunch'),   
+        title: const Text('Whats For Lunch'),
+        actions: [
+           IconButton(
+            icon:const Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              getNearbyPlaces(radiusTEC.text);
+            },
+          )
+        ],
       ),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
-
-            ///text field for address
-            child: TextField(
-                decoration: InputDecoration(
-                    fillColor: Colors.black12,
-                    filled: true,
-                    border: OutlineInputBorder(),
-                    labelText: 'Address: ')),
-          ),
           Padding(
+            padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
 
-              ///drop down button as a form field
-              padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
-              child: DropdownButtonFormField<String>(
-                icon: const Icon(Icons.arrow_downward),
-                elevation: 16,
+            ///text field for radius with hint text sense this one is not obvious what the user needs to fill out
+            child: TextFormField(
+                controller: radiusTEC,
                 decoration: const InputDecoration(
                     fillColor: Colors.black12,
                     filled: true,
                     border: OutlineInputBorder(),
-                    labelText: 'State'),
-
-                ///setting the value for drop down
-                value: dropdownvalue,
-
-                ///putting list of states in drop down
-                onChanged: (String? value) {
-                  setState(() {
-                    dropdownvalue = value!;
-                  });
-                },
-                items: states.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              )),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
-
-            ///text field for zip
-            child: TextField(
-                decoration: InputDecoration(
-              fillColor: Colors.black12,
-              filled: true,
-              border: OutlineInputBorder(),
-              labelText: 'Zip: ',
-            )),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
-
-            ///text field for radius with hint text sense this one is not obvious what the user needs to fill out
-            child: TextField(
-                decoration: InputDecoration(
-                    fillColor: Colors.black12,
-                    filled: true,
-                    border: OutlineInputBorder(),
                     labelText: 'Radius: ',
-                    hintText: 'i.e: 4 mi')),
+                    hintText: 'i.e: 4 m')),
           ),
           const Padding(
             ///text
@@ -225,7 +122,7 @@ class _ForLunchState extends State<ForLunch> {
               return ListTile(
 
                   ///setting the title subtitle and trailing
-                  title: Text(roles[index].locations),
+                  title: Text(roles[index].name),
                   trailing: IconButton(
                     onPressed: () {
                       ///remove
@@ -248,6 +145,4 @@ class _ForLunchState extends State<ForLunch> {
       ),
     );
   }
-
-  
 }
