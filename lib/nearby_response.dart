@@ -1,4 +1,6 @@
 ///json code from the api converted to dart.
+// ignore_for_file: unnecessary_this, prefer_collection_literals
+
 class NearbyPlacesResponse {
   List<Results>? results;
   String? status;

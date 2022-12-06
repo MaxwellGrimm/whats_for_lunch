@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// ignore: unused_import
 import 'package:rxdart/rxdart.dart';
 import 'main_model.dart';
 
+// ignore: must_be_immutable
 class ChangePasswordWidget extends StatelessWidget {
   ChangePasswordWidget({super.key});
   TextEditingController oldPassword = TextEditingController();
@@ -131,9 +133,11 @@ class ChangePasswordWidget extends StatelessWidget {
   _changePassword() async {
     if (newPassword.text == retypePassword.text) {
       //Create an instance of the current user.
+      // ignore: await_only_futures
       var user = await FirebaseAuth.instance.currentUser!;
       //Must re-authenticate user before updating the password. Otherwise it may fail or user get signed out.
 
+      // ignore: await_only_futures
       final cred = await EmailAuthProvider.credential(
           email: user.email!, password: oldPassword.text);
       await user.reauthenticateWithCredential(cred).then((value) async {

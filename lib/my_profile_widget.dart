@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:whats_for_lunch/num_restaurants_model.dart';
+// ignore: unused_import
 import 'package:whats_for_lunch/sign_in_page.dart';
 import 'main_model.dart';
 import 'memories.dart';
@@ -34,6 +34,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
     var db = mainModel.getDatabase();
+    // ignore: unused_local_variable
     CollectionReference numRestaurantDB = db.collection('NumResturantPicked');
     return Scaffold(
       appBar: AppBar(
@@ -66,6 +67,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
+                              // ignore: prefer_const_constructors
                               Memories()), //navigating to the My Memories page
                     );
                   } else if (value == MenuItem.signOut) {

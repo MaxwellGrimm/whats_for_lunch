@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+// ignore: unused_import
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'restaurant.dart';
@@ -59,8 +60,11 @@ class MainModel extends ChangeNotifier {
 
   Future<void> userSignedOut() async {
     await FirebaseAuth.instance.signOut();
+    // ignore: unnecessary_this
     this.signedIn = false;
+    // ignore: unnecessary_this
     this.userName = 'User Name';
+    // ignore: unnecessary_this
     this.userId = 'User ID';
     notifyListeners();
   }
