@@ -4,16 +4,13 @@ import 'dart:async';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_icons/flutter_animated_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:whats_for_lunch/for_lunch.dart';
 import 'main_model.dart';
 import 'restaurant_view.dart';
 import 'sign_in_page.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'num_restaurants_model.dart';
 
 enum MenuItem { signIn, signOut }
 
@@ -122,9 +119,11 @@ class _SpinPageState extends State<SpinPage> {
                   // ),
                   //This sets what whill happen when the wheele is spun
                   onFling: () {
-                    wheelController.add(Random().nextInt(fortuneItems.length));
+                    wheelController.add(
+                        Random().nextInt(mainModel.restaurantsNear.length));
 
-                    fortuneItems.forEach((restaurant) async {
+                    mainModel.restaurantsNear.forEach((restaurant) async {
+                      // ignore: unrelated_type_equality_checks
                       if (searchQuery(
                               restaurantName: restaurant.toString(),
                               userID: mainModel.userId,
@@ -142,14 +141,22 @@ class _SpinPageState extends State<SpinPage> {
                     //This delays the changing of screens long enough for the
                     //wheel to finish spinning
                     Timer(const Duration(seconds: 6), () {
+                      int winningIndex = (wheelController.value == 0)
+                          ? mainModel.restaurantsNear.length - 1
+                          : wheelController.value! - 1;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => RestaurantView(
-                                restaurantName: fortuneItems[
-                                    (wheelController.value == 0)
-                                        ? fortuneItems.length - 1
-                                        : wheelController.value?? - 1])),
+                                startLat: mainModel.getUserCurrentLat(),
+                                startLng: mainModel.getUserCurrentLng(),
+                                endLat: mainModel.restaurantsNear[winningIndex]
+                                    .getLat(),
+                                endLng: mainModel.restaurantsNear[winningIndex]
+                                    .getLng(),
+                                restaurantName: mainModel
+                                    .restaurantsNear[winningIndex]
+                                    .getName())),
                       );
                     });
                   },
@@ -159,14 +166,14 @@ class _SpinPageState extends State<SpinPage> {
                   //the array items
                   items: [
                     for (int i = 0;
-                        i < fortuneItems.length;
+                        i < mainModel.restaurantsNear.length;
                         i++) ...<FortuneItem>{
                       FortuneItem(
                           style: const FortuneItemStyle(
                               borderWidth: 3,
                               borderColor: Colors.red,
                               color: Color.fromARGB(80, 251, 142, 161)),
-                          child: Text(fortuneItems[i],
+                          child: Text(mainModel.restaurantsNear[i].getName(),
                               style: const TextStyle(
                                   fontFamily: 'Rajdhani', fontSize: 30))),
                     },
@@ -204,6 +211,7 @@ class _SpinPageState extends State<SpinPage> {
           db.where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
       Query query = query2.where('restaurantName', isEqualTo: 'Mammas Noodles');
       await query.get().then((querySnapshot) {
+        // ignore: avoid_function_literals_in_foreach_calls
         querySnapshot.docs.forEach((doc) {
           docID = doc.id;
           numPicked = doc['numPicked'];
@@ -230,11 +238,13 @@ class _SpinPageState extends State<SpinPage> {
         print('error querying: catching data is not working');
       });*/
     } catch (ex) {
+      // ignore: avoid_print
       print(ex);
     }
 
 //this is not working
 
+    // ignore: avoid_print
     print(docID
         .toLowerCase()
         .toString()); //this is null because the query above is not excuting
@@ -249,7 +259,6 @@ class _SpinPageState extends State<SpinPage> {
         await query.update({'numPicked': totalPicked.toString()});
       } catch (ex) {}
     }
-    print("hello>");
     return restaurantExist;
   }
 }
