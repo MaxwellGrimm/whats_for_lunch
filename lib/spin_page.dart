@@ -2,15 +2,18 @@
 
 import 'dart:async';
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_icons/flutter_animated_icons.dart';
 import 'package:provider/provider.dart';
-import 'Restaurant.dart';
+import 'package:whats_for_lunch/for_lunch.dart';
 import 'main_model.dart';
 import 'restaurant_view.dart';
 import 'sign_in_page.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'num_restaurants_model.dart';
 
 enum MenuItem { signIn, signOut }
 
@@ -26,9 +29,25 @@ class _SpinPageState extends State<SpinPage> {
   //needed to use a BehaviorSubject<int> because we needed the .value method
   final wheelController = BehaviorSubject<int>();
 
+  //These are the names of the restaurants that *will* be pulled by an api
+  List<String> fortuneItems = [
+    'McDonalds',
+    'Dairy Queen',
+    'Boba',
+    'Mammas Noodles',
+    'Pizza Hut',
+    'Qdoba'
+  ];
+
+  int numPicked = 0; //number of times it has been picked
+  String docID = 'thisis notworking';
+  bool restaurantExist = false;
+
   @override
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
+    var db = mainModel.getDatabase();
+    CollectionReference numRestaurantDB = db.collection('NumResturantPicked');
     return Scaffold(
       appBar: AppBar(
           title: const Center(child: Text('What\'s For Lunch')),
@@ -104,6 +123,23 @@ class _SpinPageState extends State<SpinPage> {
                   //This sets what whill happen when the wheele is spun
                   onFling: () {
                     wheelController.add(Random().nextInt(mainModel.restaurantsNear.length));
+
+                    mainModel.restaurantsNear.forEach((restaurant) async {
+                      // ignore: unrelated_type_equality_checks
+                      if (searchQuery(
+                              restaurantName: restaurant.toString(),
+                              userID: mainModel.userId,
+                              db: numRestaurantDB) ==
+                          false) {
+                        //if returns false make it true so that it adds the restaurant to the database
+                        addRestaurant(
+                            numPicked: 1,
+                            restaurantName: restaurant.toString(),
+                            userId: mainModel.userId,
+                            db: db);
+                      }
+                    });
+
                     //This delays the changing of screens long enough for the
                     //wheel to finish spinning
                     Timer(const Duration(seconds: 6), () {
@@ -145,5 +181,82 @@ class _SpinPageState extends State<SpinPage> {
             ),
           ]),
     );
+  }
+
+//adds restaurant with the number of times it picks to the database
+  Future<void> addRestaurant(
+      {required int numPicked,
+      required String restaurantName,
+      required var userId,
+      required var db}) {
+    return db.collection('NumRestaurantPicked').add({
+      'userId': userId,
+      'numPicked': numPicked,
+      'restaurantName': restaurantName
+    });
+  }
+
+  //searches for the resturant and checks to see if it already exist
+  //if it does, then update the numpicked and return true,
+  //if it doesnt, then return false
+  Future<bool> searchQuery(
+      {required String restaurantName,
+      required var userID,
+      required db}) async {
+    int addOne = 1; //addes one if it has been picked
+
+//this is not working
+    try {
+      Query query2 =
+          db.where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
+      Query query = query2.where('restaurantName', isEqualTo: 'Mammas Noodles');
+      await query.get().then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          docID = doc.id;
+          numPicked = doc['numPicked'];
+          restaurantExist = true;
+          // print('id: ${doc.id}');
+          //  print('picked: ${doc['numPicked']}');
+        });
+      }).catchError((error) {
+        // print('error querying: #error');
+      });
+      /* var query = db
+          //.collection('NumRestaurantPicked')
+          .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
+      var query2 = query.where('restaurantName', isEqualTo: restaurantName);
+      query2.get().then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          docID = doc.id;
+          numPicked = doc['numPicked'];
+          restaurantExist = true;
+          print('id: ${doc.id}');
+          print('picked: ${doc['numPicked']}');
+        });
+      }).catchError((error) {
+        print('error querying: catching data is not working');
+      });*/
+    } catch (ex) {
+      print(ex);
+    }
+
+//this is not working
+
+    print(docID
+        .toLowerCase()
+        .toString()); //this is null because the query above is not excuting
+
+    int totalPicked = numPicked + addOne;
+//if the restaurant exist then update the numpicked for that specific restaurant
+    if (restaurantExist) {
+      try {
+        var query = db
+            //.collection('NumRestaurantPicked')
+            .doc(docID);
+        await query.update({'numPicked': totalPicked.toString()});
+      } catch (ex) {}
+    }
+    print("hello>");
+    return restaurantExist;
   }
 }
