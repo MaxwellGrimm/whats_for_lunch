@@ -39,6 +39,10 @@ class _SpinPageState extends State<SpinPage> {
     'Qdoba'
   ];
 
+  int numPicked = 0; //number of times it has been picked
+  String docID = 'thisis notworking';
+  bool restaurantExist = false;
+
   @override
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
@@ -172,6 +176,7 @@ class _SpinPageState extends State<SpinPage> {
     );
   }
 
+//adds restaurant with the number of times it picks to the database
   Future<void> addRestaurant(
       {required int numPicked,
       required String restaurantName,
@@ -189,27 +194,39 @@ class _SpinPageState extends State<SpinPage> {
   //if it doesnt, then return false
   bool searchQuery(
       {required String restaurantName, required var userID, required db}) {
-    int numPicked = 0; //number of times it has been picked
-    String docID = 'thisis notworking';
-    bool restaurantExist = false;
     int addOne = 1; //addes one if it has been picked
 
 //this is not working
     try {
-      db
-          //.collection('NumRestaurantPicked')
-          .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-          .where('restaurantName', isEqualTo: restaurantName)
-          .get()
-          .then((querySnapshot) {
+      Query query2 =
+          db.where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
+      Query query = query2.where('restaurantName', isEqualTo: restaurantName);
+      query.get().then((querySnapshot) {
         querySnapshot.docs.forEach((doc) {
           docID = doc.id;
           numPicked = doc['numPicked'];
           restaurantExist = true;
+          print('id: ${doc.id}');
+          print('picked: ${doc['numPicked']}');
+        });
+      }).catchError((error) {
+        print('error querying: #error');
+      });
+      /* var query = db
+          //.collection('NumRestaurantPicked')
+          .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
+      var query2 = query.where('restaurantName', isEqualTo: restaurantName);
+      query2.get().then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          docID = doc.id;
+          numPicked = doc['numPicked'];
+          restaurantExist = true;
+          print('id: ${doc.id}');
+          print('picked: ${doc['numPicked']}');
         });
       }).catchError((error) {
         print('error querying: catching data is not working');
-      });
+      });*/
     } catch (ex) {
       print(ex);
     }
@@ -224,10 +241,10 @@ class _SpinPageState extends State<SpinPage> {
 //if the restaurant exist then update the numpicked for that specific restaurant
     if (restaurantExist) {
       try {
-        db
+        var query = db
             //.collection('NumRestaurantPicked')
-            .doc(docID)
-            .update({'numPicked': totalPicked.toString()});
+            .doc(docID);
+        query.update({'numPicked': totalPicked.toString()});
       } catch (ex) {}
     }
     print("hello>");
