@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, unused_import, prefer_const_declarations, prefer_final_fields
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +14,7 @@ import 'package:geolocator/geolocator.dart';
 
 // ignore: must_be_immutable
 class RestaurantView extends StatefulWidget {
+  // ignore: prefer_const_constructors_in_immutables
   RestaurantView({
     startLat,
     startLng,
@@ -81,17 +84,17 @@ class _RestaurantViewState extends State<RestaurantView> {
 
   void initState() {
     _markers.add(Marker(
-      markerId: MarkerId('Start Location'),
+      markerId: const MarkerId('Start Location'),
       position: latLen[0],
-      infoWindow: InfoWindow(
+      infoWindow: const InfoWindow(
         title: 'Current Location',
       ),
       icon: BitmapDescriptor.defaultMarker,
     ));
     _markers.add(Marker(
-      markerId: MarkerId('Restaurant Location'),
+      markerId: const MarkerId('Restaurant Location'),
       position: latLen[1],
-      infoWindow: InfoWindow(
+      infoWindow: const InfoWindow(
         title: 'Restaurant Location',
       ),
       icon: BitmapDescriptor.defaultMarker,

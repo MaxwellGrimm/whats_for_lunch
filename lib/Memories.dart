@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// ignore: unused_import
 import 'package:whats_for_lunch/for_lunch.dart';
 import 'main_model.dart';
 
@@ -90,6 +91,7 @@ class Memories extends StatelessWidget {
               stream: db.collection('memories').where('userID', isEqualTo: mainModel.userId).snapshots(), //get only user memories 
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
+                  // ignore: avoid_print
                   print(snapshot.error);
                   return const Text("Error");
                 } else if (snapshot.connectionState == 
@@ -169,6 +171,7 @@ class Memories extends StatelessWidget {
                                                       color: Colors.blue),
                                                   ),
                                               Text(
+                                                // ignore: prefer_interpolation_to_compose_strings
                                                 "Comments: " + thisMemory['comments'],
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(

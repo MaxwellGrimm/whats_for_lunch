@@ -26,16 +26,6 @@ class _SpinPageState extends State<SpinPage> {
   //needed to use a BehaviorSubject<int> because we needed the .value method
   final wheelController = BehaviorSubject<int>();
 
-  //These are the names of the restaurants that *will* be pulled by an api
-  List<String> fortuneItems = [
-    'McDonalds',
-    'Dairy Queen',
-    'Boba',
-    'Mammas Noodles',
-    'Pizza Hut',
-    'Qdoba'
-  ];
-
   int numPicked = 0; //number of times it has been picked
   String docID = 'thisis notworking';
   bool restaurantExist = false;
@@ -222,21 +212,6 @@ class _SpinPageState extends State<SpinPage> {
       }).catchError((error) {
         // print('error querying: #error');
       });
-      /* var query = db
-          //.collection('NumRestaurantPicked')
-          .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
-      var query2 = query.where('restaurantName', isEqualTo: restaurantName);
-      query2.get().then((querySnapshot) {
-        querySnapshot.docs.forEach((doc) {
-          docID = doc.id;
-          numPicked = doc['numPicked'];
-          restaurantExist = true;
-          print('id: ${doc.id}');
-          print('picked: ${doc['numPicked']}');
-        });
-      }).catchError((error) {
-        print('error querying: catching data is not working');
-      });*/
     } catch (ex) {
       // ignore: avoid_print
       print(ex);
