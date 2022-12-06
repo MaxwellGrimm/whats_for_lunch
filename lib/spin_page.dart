@@ -124,7 +124,7 @@ class _SpinPageState extends State<SpinPage> {
                   onFling: () {
                     wheelController.add(Random().nextInt(fortuneItems.length));
 
-                    fortuneItems.forEach((restaurant) {
+                    fortuneItems.forEach((restaurant) async {
                       if (searchQuery(
                               restaurantName: restaurant.toString(),
                               userID: mainModel.userId,
@@ -192,25 +192,27 @@ class _SpinPageState extends State<SpinPage> {
   //searches for the resturant and checks to see if it already exist
   //if it does, then update the numpicked and return true,
   //if it doesnt, then return false
-  bool searchQuery(
-      {required String restaurantName, required var userID, required db}) {
+  Future<bool> searchQuery(
+      {required String restaurantName,
+      required var userID,
+      required db}) async {
     int addOne = 1; //addes one if it has been picked
 
 //this is not working
     try {
       Query query2 =
           db.where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
-      Query query = query2.where('restaurantName', isEqualTo: restaurantName);
-      query.get().then((querySnapshot) {
+      Query query = query2.where('restaurantName', isEqualTo: 'Mammas Noodles');
+      await query.get().then((querySnapshot) {
         querySnapshot.docs.forEach((doc) {
           docID = doc.id;
           numPicked = doc['numPicked'];
           restaurantExist = true;
-          print('id: ${doc.id}');
-          print('picked: ${doc['numPicked']}');
+          // print('id: ${doc.id}');
+          //  print('picked: ${doc['numPicked']}');
         });
       }).catchError((error) {
-        print('error querying: #error');
+        // print('error querying: #error');
       });
       /* var query = db
           //.collection('NumRestaurantPicked')
@@ -244,7 +246,7 @@ class _SpinPageState extends State<SpinPage> {
         var query = db
             //.collection('NumRestaurantPicked')
             .doc(docID);
-        query.update({'numPicked': totalPicked.toString()});
+        await query.update({'numPicked': totalPicked.toString()});
       } catch (ex) {}
     }
     print("hello>");
