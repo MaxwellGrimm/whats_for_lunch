@@ -1,4 +1,6 @@
 //import 'dart:html';
+// ignore_for_file: depend_on_referenced_packages, unused_import, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:whats_for_lunch/restaurant.dart';
@@ -8,7 +10,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:google_api_headers/google_api_headers.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';
 
@@ -84,13 +85,18 @@ class _ForLunchState extends State<ForLunch> {
   ///listview
   List<Restaurant> roles = [];
 
+  double _currentSliderValue = 1;
+
   @override
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
 
     ///gets nearby places.
     getNearbyPlaces(radius) async {
-      _getCurrentPosition();
+      radius = radius * 1000;
+      setState(() {
+        _getCurrentPosition();
+      });
       double? latitude = _currentPosition?.latitude;
       double? longitude = _currentPosition?.longitude;
       mainModel.setUserCurrentLat(latitude);
@@ -119,7 +125,7 @@ class _ForLunchState extends State<ForLunch> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Whats For Lunch'),
+        title: const Text('What\'s For Lunch'),
         actions: [
           IconButton(
             icon: const Icon(
@@ -127,26 +133,35 @@ class _ForLunchState extends State<ForLunch> {
               color: Colors.white,
             ),
             onPressed: () {
-              getNearbyPlaces(radiusTEC.text);
+              getNearbyPlaces(_currentSliderValue);
             },
           )
         ],
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
-
-            ///text field for radius with hint text sense this one is not obvious what the user needs to fill out
-            child: TextFormField(
-                controller: radiusTEC,
-                decoration: const InputDecoration(
-                    fillColor: Colors.black12,
-                    filled: true,
-                    border: OutlineInputBorder(),
-                    labelText: 'Radius: ',
-                    hintText: 'i.e: 4 m')),
+          const Padding(
+            padding: EdgeInsets.fromLTRB(30,20, 20,5),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text("Radius:", style: TextStyle(color: Colors.red, fontSize: 24, fontFamily: 'Rajdhani')))
           ),
+          Padding(
+              padding: const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 5.0),
+
+              ///text field for radius with hint text sense this one is not obvious what the user needs to fill out
+              child: Slider(
+                value: _currentSliderValue,
+                max: 6,
+                divisions: 6,
+                label: _currentSliderValue.round().toString(),
+                onChanged: (double value) {
+                  setState(() {
+                    _currentSliderValue = value;
+                  });
+                },
+              )
+              ),
           const Padding(
             ///text
             padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
@@ -154,10 +169,10 @@ class _ForLunchState extends State<ForLunch> {
           Card(
             child: Container(
               color: Colors.black12,
-              height: 30,
+              height: 50,
               child: const Center(
                 child: Text(
-                    'Instructions: Scroll through to remove Restaurants you do not want in the spin'),
+                    'Instructions: Set the radius and hit the search icon. Then scroll through and remove any restaurants you don\'t want in the spin.'),
               ),
             ),
           ),
@@ -185,8 +200,8 @@ class _ForLunchState extends State<ForLunch> {
             ///for the divider between each element
             separatorBuilder: (BuildContext context, int index) {
               return const Divider(
-                color: Colors.blue,
-                thickness: 2,
+                color: Colors.red,
+                thickness: 1,
               );
             },
           )),

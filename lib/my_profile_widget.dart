@@ -18,14 +18,6 @@ class MyProfileWidget extends StatefulWidget {
 }
 
 class _MyProfileWidgetState extends State<MyProfileWidget> {
-  /* final List<NumRestaruant> restaruant = [
-    //will need to make a model and pass it through
-    NumRestaruant(name: 'Arbys', numPicked: 46),
-    NumRestaruant(name: 'Pizza Hut', numPicked: 12),
-    NumRestaruant(name: 'McDonalds', numPicked: 2),
-    NumRestaruant(name: 'Panda Express', numPicked: 8),
-    NumRestaruant(name: 'Culvers', numPicked: 14),
-  ];*/
 
   LocationData?
       locationData; //stores location that user have shared with the app

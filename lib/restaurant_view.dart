@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors, unused_import, prefer_const_declarations, prefer_final_fields
+// ignore_for_file: use_key_in_widget_constructors, unused_import, prefer_const_declarations, prefer_final_fields, prefer_initializing_formals
 
 import 'dart:async';
 import 'package:flutter/material.dart';
@@ -25,6 +25,8 @@ class RestaurantView extends StatefulWidget {
   static double endLat = 44.040743157104785;
 
   static double endLng = -88.54306697845459;
+
+  static double numStars = 4.5;
 
   RestaurantView({
     startLat,
@@ -71,6 +73,7 @@ class _RestaurantViewState extends State<RestaurantView> {
   );
   //either the address given for the user or the users location
   //This will be filled in the with restaurants latitude and longitude
+  // ignore: unused_field
   final LatLng _end = const LatLng(44.040743157104785, -88.54306697845459);
 
   final Set<Marker> _markers = {};
@@ -80,6 +83,7 @@ class _RestaurantViewState extends State<RestaurantView> {
     LatLng(RestaurantView.endLat, RestaurantView.endLng)
   ];
 
+  // ignore: must_call_super, annotate_overrides
   void initState() {
     _markers.add(Marker(
       markerId: const MarkerId('Start Location'),
@@ -146,55 +150,49 @@ class _RestaurantViewState extends State<RestaurantView> {
                   color: const Color.fromARGB(100, 54, 47, 47),
                   child: Column(children: [
                     const Padding(
-                      padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                      padding: EdgeInsets.fromLTRB(6, 0, 6, 0),
                       child: Align(
-                          alignment: Alignment.topLeft,
-                          child: Text('Address',
+                          alignment: Alignment.topCenter,
+                          child: Text(
+                              'Tap the marker then choose Direction/Maps for directions to the restaurant.',
                               style: TextStyle(
                                   fontFamily: 'Rajdhani',
-                                  fontSize: 26,
+                                  fontSize: 20,
                                   color: Colors.white))),
                     ),
-                    const Align(
-                        alignment: Alignment.center,
-                        child: Text('2038 Main St. Oshkosh WI, 54901',
-                            style: TextStyle(
-                                fontFamily: 'Rajdhani',
-                                fontSize: 20,
-                                color: Colors.white))),
                     const Padding(
-                      padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                      padding: EdgeInsets.fromLTRB(10, 15, 0, 0),
                       child: Align(
-                          alignment: Alignment.topLeft,
+                          alignment: Alignment.bottomLeft,
                           child: Text('Reviews',
                               style: TextStyle(
                                   fontFamily: 'Rajdhani',
                                   fontSize: 26,
                                   color: Colors.white))),
                     ),
-                    // Align(
-                    //   alignment: Alignment.center,
-                    //   child: Row(
-                    //       mainAxisAlignment: MainAxisAlignment.center,
-                    //       crossAxisAlignment: CrossAxisAlignment.center,
-                    //       children: [
-                    //         Text('${RestaurantView.numStars.ceil()} Stars',
-                    //             style: const TextStyle(
-                    //               fontFamily: 'Rajdhani',
-                    //               fontSize: 20,
-                    //               color: Colors.white,
-                    //             )),
-                    //         for (int i = 0;
-                    //             i < RestaurantView.numStars.ceil();
-                    //             i++) ...<Icon>{
-                    //           const Icon(
-                    //             Icons.star,
-                    //             color: Colors.yellow,
-                    //             size: 20,
-                    //           ),
-                    //         },
-                    //       ]),
-                    // ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text('${RestaurantView.numStars.ceil()} Stars',
+                                style: const TextStyle(
+                                  fontFamily: 'Rajdhani',
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                )),
+                            for (int i = 0;
+                                i < RestaurantView.numStars.ceil();
+                                i++) ...<Icon>{
+                              const Icon(
+                                Icons.star,
+                                color: Colors.yellow,
+                                size: 20,
+                              ),
+                            },
+                          ]),
+                    ),
                   ]),
                 ),
                 Expanded(
@@ -206,7 +204,7 @@ class _RestaurantViewState extends State<RestaurantView> {
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         title: Text('${reviewNames[index]}: '),
-                        subtitle: Text(reviews[index]),
+                        trailing: Text(reviews[index]),
                         tileColor: const Color.fromARGB(80, 200, 200, 200),
                         shape: const RoundedRectangleBorder(
                             borderRadius:

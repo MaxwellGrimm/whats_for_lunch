@@ -1,5 +1,7 @@
 //import 'dart:js_util';
 
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:whats_for_lunch/for_lunch.dart';

@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable
+// ignore_for_file: unused_local_variable, empty_catches
 
 import 'dart:async';
 import 'dart:math';
@@ -100,18 +100,16 @@ class _SpinPageState extends State<SpinPage> {
                     borderWidth: 3,
                   ),
                   visibleItemCount: 1,
+                  // ignore: prefer_const_literals_to_create_immutables
                   indicators: [],
                   height: 400,
                   fullWidth: true,
-                  // physics: CircularPanPhysics(
-                  //   duration: const Duration(seconds: 0),
-                  //   curve: Curves.decelerate,
-                  // ),
                   //This sets what whill happen when the wheele is spun
                   onFling: () {
                     wheelController.add(
                         Random().nextInt(mainModel.restaurantsNear.length));
 
+                    // ignore: avoid_function_literals_in_foreach_calls
                     mainModel.restaurantsNear.forEach((restaurant) async {
                       // ignore: unrelated_type_equality_checks
                       if (searchQuery(

@@ -13,6 +13,7 @@ import 'auth/secrets.dart';
 class SignInPage extends StatelessWidget {
   const SignInPage({Key? key}) : super(key: key);
 
+  @override
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
 
