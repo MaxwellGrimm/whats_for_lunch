@@ -15,20 +15,8 @@ import 'package:geolocator/geolocator.dart';
 // ignore: must_be_immutable
 class RestaurantView extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
-  RestaurantView({
-    startLat,
-    startLng,
-    endLat,
-    endLng,
-    restaurantName,
-    restaurantAddress,
-    numStars,
-    fracStars,
-  });
 
   static String restaurantName = '';
-
-  static String restaurantAddress = '1863 Jackson St, Oshkosh WI';
 
   static double startLat = 44.001;
 
@@ -38,9 +26,19 @@ class RestaurantView extends StatefulWidget {
 
   static double endLng = -88.54306697845459;
 
-  static double numStars = 0.0;
-
-  static double fracStart = .5;
+  RestaurantView({
+    startLat,
+    startLng,
+    endLat,
+    endLng,
+    restaurantName,
+  }) {
+    RestaurantView.restaurantName = restaurantName;
+    RestaurantView.startLat = startLat;
+    RestaurantView.startLng = startLng;
+    RestaurantView.endLat = endLat;
+    RestaurantView.endLng = endLng;
+  }
 
   @override
   State<RestaurantView> createState() => _RestaurantViewState();
@@ -174,29 +172,29 @@ class _RestaurantViewState extends State<RestaurantView> {
                                   fontSize: 26,
                                   color: Colors.white))),
                     ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text('${RestaurantView.numStars.ceil()} Stars',
-                                style: const TextStyle(
-                                  fontFamily: 'Rajdhani',
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                )),
-                            for (int i = 0;
-                                i < RestaurantView.numStars.ceil();
-                                i++) ...<Icon>{
-                              const Icon(
-                                Icons.star,
-                                color: Colors.yellow,
-                                size: 20,
-                              ),
-                            },
-                          ]),
-                    ),
+                    // Align(
+                    //   alignment: Alignment.center,
+                    //   child: Row(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       crossAxisAlignment: CrossAxisAlignment.center,
+                    //       children: [
+                    //         Text('${RestaurantView.numStars.ceil()} Stars',
+                    //             style: const TextStyle(
+                    //               fontFamily: 'Rajdhani',
+                    //               fontSize: 20,
+                    //               color: Colors.white,
+                    //             )),
+                    //         for (int i = 0;
+                    //             i < RestaurantView.numStars.ceil();
+                    //             i++) ...<Icon>{
+                    //           const Icon(
+                    //             Icons.star,
+                    //             color: Colors.yellow,
+                    //             size: 20,
+                    //           ),
+                    //         },
+                    //       ]),
+                    // ),
                   ]),
                 ),
                 Expanded(

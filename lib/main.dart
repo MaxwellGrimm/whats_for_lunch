@@ -87,7 +87,7 @@ class _NavigationState extends State<Navigation> {
             label: 'Location',
           ),
           BottomNavigationBarItem(
-            icon: new Icon(Icons.home),
+            icon: new Icon(Icons.cyclone),
             label: 'Spin',
           ),
           const BottomNavigationBarItem(

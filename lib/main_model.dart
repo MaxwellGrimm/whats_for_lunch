@@ -10,8 +10,8 @@ class MainModel extends ChangeNotifier {
 
   List<Restaurant> restaurantsNear = [];
 
-  double userCurrentLat = 44.0;
-  double userCurrentLng = -88.0;
+  double? userCurrentLat = 44.0;
+  double? userCurrentLng = -88.0;
 
   var db = FirebaseFirestore.instance;
 
@@ -29,7 +29,7 @@ class MainModel extends ChangeNotifier {
   getDatabase() {
     return db;
   }
-  
+
   void addRestaurant(List<Restaurant> restaurant) {
     restaurantsNear = restaurant;
     notifyListeners();
@@ -47,9 +47,22 @@ class MainModel extends ChangeNotifier {
     return signedIn;
   }
 
-  double getUserCurrentLat() => userCurrentLat;
+  double? getUserCurrentLat() => userCurrentLat;
 
-  double getUserCurrentLng() => userCurrentLng;
+  void setUserCurrentLat(double? lat) {
+    userCurrentLat = lat;
+  }
+
+  double? getUserCurrentLng() => userCurrentLng;
+
+  void setUserCurrentLng(double? lng) {
+    userCurrentLng = lng;
+  }
+
+  void removeAt(int index) {
+    restaurantsNear.removeAt(index);
+    notifyListeners();
+  }
 
   // void userSignedOut() {
   //   this.signedIn = false;
