@@ -141,11 +141,14 @@ class _ForLunchState extends State<ForLunch> {
       body: Column(
         children: [
           const Padding(
-            padding: EdgeInsets.fromLTRB(30,20, 20,5),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text("Radius:", style: TextStyle(color: Colors.red, fontSize: 24, fontFamily: 'Rajdhani')))
-          ),
+              padding: EdgeInsets.fromLTRB(30, 20, 20, 5),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Radius:",
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 24,
+                          fontFamily: 'Rajdhani')))),
           Padding(
               padding: const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 5.0),
 
@@ -160,8 +163,7 @@ class _ForLunchState extends State<ForLunch> {
                     _currentSliderValue = value;
                   });
                 },
-              )
-              ),
+              )),
           const Padding(
             ///text
             padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
