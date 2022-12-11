@@ -108,8 +108,13 @@ class MainModel extends ChangeNotifier {
     int num = 1;
     bool restaurantExist = true;
     // ignore: unrelated_type_equality_checks
-    if (getRestaruant == restaurantExist) {
-      num += 1;
+    if (getRestaruant(restaurantName: restaurantName) == restaurantExist) {
+      _restaruant.forEach((restaurant) {
+        if (restaurant.getName() == restaurantName) {
+          num = restaurant.getNumPicked() + 1;
+          restaurant.setNumPicked(num: num);
+        }
+      });
     }
     notifyListeners();
     return num;

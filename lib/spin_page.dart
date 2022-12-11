@@ -111,12 +111,12 @@ class _SpinPageState extends State<SpinPage> {
                     mainModel.restaurantsNear.forEach((restaurant) {
                       // ignore: unrelated_type_equality_checks
                       if (updateRestaurantPicked(
-                              restaurantName: restaurant.toString(),
+                              restaurantName: restaurant.getName(),
                               model: mainModel) ==
                           false) {
                         addRestaurantToList(
                             numPicked: numPicked,
-                            restaurantName: restaurant.name,
+                            restaurantName: restaurant.getName(),
                             model: mainModel);
                         addRestaurant(
                             numPicked: numPicked,
@@ -187,7 +187,7 @@ class _SpinPageState extends State<SpinPage> {
   void addRestaurantToList(
       {required int numPicked,
       required String restaurantName,
-      required model}) {
+      required MainModel model}) {
     NumRestaurant numRestaruantModel =
         NumRestaurant(name: restaurantName, numPicked: numPicked);
 
@@ -199,7 +199,7 @@ class _SpinPageState extends State<SpinPage> {
   }
 
   bool updateRestaurantPicked(
-      {required String restaurantName, required var model}) {
+      {required String restaurantName, required MainModel model}) {
     bool restaurantExist = false;
 
     try {
