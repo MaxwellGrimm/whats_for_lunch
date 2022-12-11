@@ -34,7 +34,22 @@ class _SpinPageState extends State<SpinPage> {
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
     var db = mainModel.getDatabase();
-    CollectionReference numRestaurantDB = db.collection('NumResturantPicked');
+    CollectionReference numRestaurantDB = db.collection('NumRestaurantPicked');
+    mainModel.restaurantsNear.forEach((restaurant) async {
+      // ignore: unrelated_type_equality_checks
+      if (searchQuery(
+              restaurantName: restaurant.toString(),
+              userID: mainModel.userId,
+              db: numRestaurantDB) ==
+          false) {
+        //if returns false make it true so that it adds the restaurant to the database
+        addRestaurant(
+            numPicked: 1,
+            restaurantName: restaurant.toString(),
+            userId: mainModel.userId,
+            db: db);
+      }
+    });
     return Scaffold(
       appBar: AppBar(
           title: const Center(child: Text('What\'s For Lunch')),
