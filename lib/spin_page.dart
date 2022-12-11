@@ -193,9 +193,7 @@ class _SpinPageState extends State<SpinPage> {
 
     try {
       model.addNumRestaruant(restaruant: numRestaruantModel);
-    } catch (e) {
-      print("thisis adding");
-    }
+    } catch (e) {}
   }
 
   bool updateRestaurantPicked(
@@ -207,71 +205,7 @@ class _SpinPageState extends State<SpinPage> {
         numPicked = model.updateNumPicked(restaurantName: restaurantName);
         restaurantExist = true;
       }
-    } catch (e) {
-      print("this is updating");
-    }
-
+    } catch (e) {}
     return restaurantExist;
   }
-
-  //searches for the resturant and checks to see if it already exist
-  //if it does, then update the numpicked and return true,
-  //if it doesnt, then return false
-  /* Future<bool> searchQuery(
-      {required String restaurantName,
-      required var userID,
-      required db}) async {
-    int addOne = 1; //addes one if it has been picked
-
-//this is not working
-    try {
-      await db
-          .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-          .where('restaurantName', isEqualTo: restaurantName)
-          .get()
-          .then((querySnapshot) {
-        // ignore: avoid_function_literals_in_foreach_calls
-        querySnapshot.doc.forEach((doc) {
-          docID = doc.id;
-          numPicked = doc['numPicked'];
-          restaurantExist = true;
-          print('id: ${doc.id}');
-          print('picked: ${doc['numPicked']}');
-        });
-      }).catchError((error) {
-        print('hello');
-      });
-    } catch (ex) {
-      // ignore: avoid_print
-      print(ex);
-    }
-
-//this is not working
-
-    // ignore: avoid_print
-    print(docID
-        .toLowerCase()
-        .toString()); //this is null because the query above is not excuting
-
-    int totalPicked = numPicked + addOne;
-    _updateNumPicked(
-        restaurantExist: restaurantExist, db: db, totalPicked: totalPicked);
-
-    return restaurantExist;
-  }
-
-//if the restaurant exist then update the numpicked for that specific restaurant
- void _updateNumPicked(
-      {required bool restaurantExist,
-      required var db,
-      required int totalPicked}) {
-    if (restaurantExist) {
-      try {
-        var query = db
-            //.collection('NumRestaurantPicked')
-            .doc(docID);
-        query.update({'numPicked': totalPicked.toString()});
-      } catch (ex) {}
-    }
-  }*/
 }
