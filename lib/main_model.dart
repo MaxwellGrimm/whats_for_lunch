@@ -3,12 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 // ignore: unused_import
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'num_restaurants_model.dart';
 import 'restaurant.dart';
 
 class MainModel extends ChangeNotifier {
   MainModel();
 
   List<Restaurant> restaurantsNear = [];
+  final List<NumRestaurant> _restaruant = [];
 
   double? userCurrentLat = 44.0;
   double? userCurrentLng = -88.0;
@@ -80,5 +82,50 @@ class MainModel extends ChangeNotifier {
     // ignore: unnecessary_this
     this.userId = 'User ID';
     notifyListeners();
+  }
+
+  bool addNumRestaruant({required NumRestaurant restaruant}) {
+    try {
+      _restaruant.add(restaruant);
+      notifyListeners();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  bool getRestaruant({required String restaurantName}) {
+    bool restaurantExist = false;
+    _restaruant.forEach((restaurant) {
+      if (restaurant.getName() == restaurantName) {
+        restaurantExist = true;
+      }
+    });
+    return restaurantExist;
+  }
+
+  int updateNumPicked({required String restaurantName}) {
+    int num = 1;
+    bool restaurantExist = true;
+    // ignore: unrelated_type_equality_checks
+    if (getRestaruant == restaurantExist) {
+      num += 1;
+    }
+    notifyListeners();
+    return num;
+  }
+
+  int numRestaurant() {
+    return _restaruant.length;
+  }
+
+  int getNumPickedRestaurant({required int at}) {
+    NumRestaurant restaurant = _restaruant[at];
+    return restaurant.getNumPicked();
+  }
+
+  String getNameRestaurant({required int at}) {
+    NumRestaurant restaurant = _restaruant[at];
+    return restaurant.getName();
   }
 }

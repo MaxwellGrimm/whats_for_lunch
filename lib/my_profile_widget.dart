@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:whats_for_lunch/num_restaurants_model.dart';
 // ignore: unused_import
 import 'package:whats_for_lunch/sign_in_page.dart';
 import 'main_model.dart';
@@ -18,7 +19,6 @@ class MyProfileWidget extends StatefulWidget {
 }
 
 class _MyProfileWidgetState extends State<MyProfileWidget> {
-
   LocationData?
       locationData; //stores location that user have shared with the app
 
@@ -150,51 +150,29 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             padding: EdgeInsets.only(left: 8.0, top: 55.0),
             child: Text('Recently Selected:'),
           ),
-          Expanded(
-              flex: 10,
-              child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('NumRestaurantPicked')
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: Text('No data yet'));
-                    } else if (snapshot.hasError) {
-                      return const Center(child: Text('Error!'));
-                    } else {
-                      return Expanded(
-                          child: ListView.builder(
-                              itemCount: snapshot.data!.docs.length,
-                              itemBuilder: (context, index) => ListTile(
-                                    title: Text(
-                                      snapshot.data!.docs[index]
-                                          ['restaurantName'],
-                                    ), //Text('Oreos'),
-                                    subtitle: Text(snapshot
-                                        .data!.docs[index]['numPicked']
-                                        .toString()),
-                                  )));
-                    }
-                  }) /*ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: restaruant.length,
-                itemBuilder: ((context, index) {
-                  return ListTile(
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '${restaruant[index].name!}:      ',
-                            textAlign: TextAlign.left,
-                          ),
-                          Text(restaruant[index].numPicked!.toString())
-                        ],
-                      ), //this will need to call the getRestauant({required int at})
-
-                      tileColor: const Color.fromARGB(255, 255, 255, 255));
-                }),
-              )*/
-              )
+          StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('NumRestaurantPicked')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: Text('No data yet'));
+                } else if (snapshot.hasError) {
+                  return const Center(child: Text('Error!'));
+                } else {
+                  return Expanded(
+                      child: ListView.builder(
+                          itemCount: mainModel.numRestaurant(),
+                          itemBuilder: (context, index) => ListTile(
+                                title: Text(
+                                  mainModel.getNameRestaurant(at: index),
+                                ),
+                                subtitle: Text(mainModel
+                                    .getNumPickedRestaurant(at: index)
+                                    .toString()),
+                              )));
+                }
+              })
         ],
       ),
     );

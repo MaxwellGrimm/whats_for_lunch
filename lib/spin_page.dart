@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:whats_for_lunch/num_restaurants_model.dart';
 import 'main_model.dart';
 import 'restaurant_view.dart';
 import 'sign_in_page.dart';
@@ -25,16 +26,13 @@ class SpinPage extends StatefulWidget {
 class _SpinPageState extends State<SpinPage> {
   //needed to use a BehaviorSubject<int> because we needed the .value method
   final wheelController = BehaviorSubject<int>();
-
-  int numPicked = 0; //number of times it has been picked
-  String docID = 'thisis notworking';
-  bool restaurantExist = false;
+  int numPicked = 1;
 
   @override
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
     var db = mainModel.getDatabase();
-    CollectionReference numRestaurantDB = db.collection('NumResturantPicked');
+    CollectionReference numRestaurantDB = db.collection('NumRestaurantPicked');
     return Scaffold(
       appBar: AppBar(
           title: const Center(child: Text('What\'s For Lunch')),
@@ -110,17 +108,19 @@ class _SpinPageState extends State<SpinPage> {
                         Random().nextInt(mainModel.restaurantsNear.length));
 
                     // ignore: avoid_function_literals_in_foreach_calls
-                    mainModel.restaurantsNear.forEach((restaurant) async {
+                    mainModel.restaurantsNear.forEach((restaurant) {
                       // ignore: unrelated_type_equality_checks
-                      if (searchQuery(
+                      if (updateRestaurantPicked(
                               restaurantName: restaurant.toString(),
-                              userID: mainModel.userId,
-                              db: numRestaurantDB) ==
+                              model: mainModel) ==
                           false) {
-                        //if returns false make it true so that it adds the restaurant to the database
+                        addRestaurantToList(
+                            numPicked: numPicked,
+                            restaurantName: restaurant.name,
+                            model: mainModel);
                         addRestaurant(
-                            numPicked: 1,
-                            restaurantName: restaurant.toString(),
+                            numPicked: numPicked,
+                            restaurantName: restaurant.getName(),
                             userId: mainModel.userId,
                             db: db);
                       }
@@ -184,10 +184,40 @@ class _SpinPageState extends State<SpinPage> {
     });
   }
 
+  void addRestaurantToList(
+      {required int numPicked,
+      required String restaurantName,
+      required model}) {
+    NumRestaurant numRestaruantModel =
+        NumRestaurant(name: restaurantName, numPicked: numPicked);
+
+    try {
+      model.addNumRestaruant(restaruant: numRestaruantModel);
+    } catch (e) {
+      print("thisis adding");
+    }
+  }
+
+  bool updateRestaurantPicked(
+      {required String restaurantName, required var model}) {
+    bool restaurantExist = false;
+
+    try {
+      if (model.getRestaruant(restaurantName: restaurantName)) {
+        numPicked = model.updateNumPicked(restaurantName: restaurantName);
+        restaurantExist = true;
+      }
+    } catch (e) {
+      print("this is updating");
+    }
+
+    return restaurantExist;
+  }
+
   //searches for the resturant and checks to see if it already exist
   //if it does, then update the numpicked and return true,
   //if it doesnt, then return false
-  Future<bool> searchQuery(
+  /* Future<bool> searchQuery(
       {required String restaurantName,
       required var userID,
       required db}) async {
@@ -195,20 +225,21 @@ class _SpinPageState extends State<SpinPage> {
 
 //this is not working
     try {
-      Query query2 =
-          db.where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid);
-      Query query = query2.where('restaurantName', isEqualTo: 'Mammas Noodles');
-      await query.get().then((querySnapshot) {
+      await db
+          .where('userId', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .where('restaurantName', isEqualTo: restaurantName)
+          .get()
+          .then((querySnapshot) {
         // ignore: avoid_function_literals_in_foreach_calls
-        querySnapshot.docs.forEach((doc) {
+        querySnapshot.doc.forEach((doc) {
           docID = doc.id;
           numPicked = doc['numPicked'];
           restaurantExist = true;
-          // print('id: ${doc.id}');
-          //  print('picked: ${doc['numPicked']}');
+          print('id: ${doc.id}');
+          print('picked: ${doc['numPicked']}');
         });
       }).catchError((error) {
-        // print('error querying: #error');
+        print('hello');
       });
     } catch (ex) {
       // ignore: avoid_print
@@ -223,15 +254,24 @@ class _SpinPageState extends State<SpinPage> {
         .toString()); //this is null because the query above is not excuting
 
     int totalPicked = numPicked + addOne;
+    _updateNumPicked(
+        restaurantExist: restaurantExist, db: db, totalPicked: totalPicked);
+
+    return restaurantExist;
+  }
+
 //if the restaurant exist then update the numpicked for that specific restaurant
+ void _updateNumPicked(
+      {required bool restaurantExist,
+      required var db,
+      required int totalPicked}) {
     if (restaurantExist) {
       try {
         var query = db
             //.collection('NumRestaurantPicked')
             .doc(docID);
-        await query.update({'numPicked': totalPicked.toString()});
+        query.update({'numPicked': totalPicked.toString()});
       } catch (ex) {}
     }
-    return restaurantExist;
-  }
+  }*/
 }
