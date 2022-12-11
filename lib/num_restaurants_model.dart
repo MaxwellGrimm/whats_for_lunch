@@ -9,7 +9,6 @@ import 'package:whats_for_lunch/for_lunch.dart';
 //this class keeps track of how many times the user has picked a restaurant
 
 class NumRestaurant {
-  //final List<NumRestaurant> _restaruant = [];
   String? name;
   int? numPicked;
 
