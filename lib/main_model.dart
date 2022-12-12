@@ -6,6 +6,14 @@ import 'package:flutter/material.dart';
 import 'num_restaurants_model.dart';
 import 'restaurant.dart';
 
+// ignore: slash_for_doc_comments
+/**
+Name:
+Date:
+Description:
+Bugs: 
+Reflection: 
+*/
 class MainModel extends ChangeNotifier {
   MainModel();
 

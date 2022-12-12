@@ -12,6 +12,14 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
+// ignore: slash_for_doc_comments
+/**
+Name:
+Date:
+Description:
+Bugs: 
+Reflection: 
+*/
 // ignore: must_be_immutable
 class RestaurantView extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables

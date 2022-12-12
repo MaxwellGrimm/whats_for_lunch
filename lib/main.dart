@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_new, unused_import
 
 /*
-*Names: Max Grimm, Scott Webber, Xee    , Micheal Meisenburg
+*Names: Max Grimm, Scott Webber, Xee Lo, Micheal Meisenburg
 *Description: This is the main file for Whats For Lunch. Right now we just have
   the basic elements of our GUI. There will be more refining and changes as we
   continue to move forward.

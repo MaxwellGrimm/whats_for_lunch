@@ -10,6 +10,15 @@ import 'change_password_widget.dart';
 import 'package:location/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// ignore: slash_for_doc_comments
+/**
+Name: Xee Lo
+Date: December 12 2022
+Description: Profile view that displays the user's information. User is also allowed 
+to change password from here. This also displays how many times a user has chosen a restaurant 
+Bugs: N/A
+Reflection: learned how to navigate through pages and doing a pop-up menu. 
+*/
 enum MenuItem { myMemories, signOut, signIn }
 
 class MyProfileWidget extends StatefulWidget {

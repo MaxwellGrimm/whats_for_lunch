@@ -1,6 +1,14 @@
 //import 'dart:html';
 // ignore_for_file: depend_on_referenced_packages, unused_import, use_build_context_synchronously
 
+// ignore: slash_for_doc_comments
+/**
+Name:
+Date:
+Description:
+Bugs: 
+Reflection: 
+*/
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:whats_for_lunch/restaurant.dart';
