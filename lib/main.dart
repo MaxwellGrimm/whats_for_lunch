@@ -74,12 +74,18 @@ class _NavigationState extends State<Navigation> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<NavigationModel>(context);
+    MainModel mainModel = Provider.of<MainModel>(context);
     return Scaffold(
       body: currentTab[provider.getCurrentIndex()],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: provider.getCurrentIndex(),
         onTap: (index) {
-          provider.setCurrentIndex(index);
+          // ignore: prefer_is_empty
+          if (mainModel.restaurantsNear.length > 0) {
+            provider.setCurrentIndex(index);
+          } else {
+            provider.setCurrentIndex(0);
+          }
         },
         items: [
           BottomNavigationBarItem(
@@ -102,7 +108,7 @@ class _NavigationState extends State<Navigation> {
 
 ///This is the model that assists with the tabbed navigation
 class NavigationModel with ChangeNotifier {
-  int _currentIndex = 1;
+  int _currentIndex = 0;
 
   int getCurrentIndex() {
     return _currentIndex;

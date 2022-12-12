@@ -11,7 +11,6 @@ import 'restaurant_view.dart';
 import 'sign_in_page.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 enum MenuItem { signIn, signOut }
 
@@ -24,6 +23,7 @@ class SpinPage extends StatefulWidget {
 }
 
 class _SpinPageState extends State<SpinPage> {
+
   //needed to use a BehaviorSubject<int> because we needed the .value method
   final wheelController = BehaviorSubject<int>();
   int numPicked = 1;
@@ -31,6 +31,7 @@ class _SpinPageState extends State<SpinPage> {
   @override
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
+
     var db = mainModel.getDatabase();
     CollectionReference numRestaurantDB = db.collection('NumRestaurantPicked');
     return Scaffold(
@@ -171,7 +172,7 @@ class _SpinPageState extends State<SpinPage> {
     );
   }
 
-//adds restaurant with the number of times it picks to the database
+// //adds restaurant with the number of times it picks to the database
   Future<void> addRestaurant(
       {required int numPicked,
       required String restaurantName,

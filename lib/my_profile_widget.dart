@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// ignore: unused_import
 import 'package:whats_for_lunch/num_restaurants_model.dart';
 // ignore: unused_import
 import 'package:whats_for_lunch/sign_in_page.dart';

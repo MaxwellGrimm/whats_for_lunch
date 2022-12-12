@@ -20,12 +20,31 @@ class MainModel extends ChangeNotifier {
   bool signedIn = false;
   String? userName = 'User Name';
   String? userId = 'User ID';
+  int radius = 1;
+  String areRestaurantsPopulated =
+      'Before you can spin you must hit the search to find restaurants near you!';
 
   void setCurrentUser(String? userName, String? userId) {
     signedIn = true;
     this.userName = userName;
     this.userId = userId;
     notifyListeners();
+  }
+
+  int getRadius() {
+    return radius;
+  }
+
+  void setRadius(rad) {
+    radius = rad;
+  }
+
+  String getAreRestaurantsPopulated() {
+    return areRestaurantsPopulated;
+  }
+
+  void setAreRestaurantsPopulated(String message) {
+    areRestaurantsPopulated = message;
   }
 
   getDatabase() {
@@ -96,6 +115,7 @@ class MainModel extends ChangeNotifier {
 
   bool getRestaruant({required String restaurantName}) {
     bool restaurantExist = false;
+    // ignore: avoid_function_literals_in_foreach_calls
     _restaruant.forEach((restaurant) {
       if (restaurant.getName() == restaurantName) {
         restaurantExist = true;
@@ -109,6 +129,7 @@ class MainModel extends ChangeNotifier {
     bool restaurantExist = true;
     // ignore: unrelated_type_equality_checks
     if (getRestaruant(restaurantName: restaurantName) == restaurantExist) {
+      // ignore: avoid_function_literals_in_foreach_calls
       _restaruant.forEach((restaurant) {
         if (restaurant.getName() == restaurantName) {
           num = restaurant.getNumPicked() + 1;
