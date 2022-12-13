@@ -4,22 +4,19 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 // ignore: unused_import
 import 'package:whats_for_lunch/num_restaurants_model.dart';
-// ignore: unused_import
 import 'package:whats_for_lunch/sign_in_page.dart';
 import 'main_model.dart';
 import 'memories.dart';
 import 'change_password_widget.dart';
-//import 'package:location/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // ignore: slash_for_doc_comments
 /**
 Name: Xee Lo
-Date: December 12 2022
-Description: Profile view that displays the user's information. User is also allowed 
-to change password from here. This also displays how many times a user has chosen a restaurant 
-Bugs: N/A
-Reflection: learned how to navigate through pages and doing a pop-up menu. 
+Date: Decemeber 13, 2021
+Description: displays users information
+Bugs: N/a 
+Reflection: learned how to display info and ask for location
 */
 enum MenuItem { myMemories, signOut, signIn }
 
@@ -31,8 +28,6 @@ class MyProfileWidget extends StatefulWidget {
 }
 
 class _MyProfileWidgetState extends State<MyProfileWidget> {
-  //LocationData?
-  //    locationData; //stores location that user have shared with the app
   String? _currentAddress;
   Position? _currentPosition;
 
@@ -182,25 +177,12 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
 //this information will find nearest restaurants around customer
 //asks user if they are willing to share thier location with the app
   Future<bool> allowLocation() async {
-    /* Location location = Location();
-    bool serviceEnabled;
-
-    serviceEnabled =
-        await location.serviceEnabled(); //if user wants to enable location
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService(); //will request service
-      if (!serviceEnabled) {
-        debugPrint('Location Denied once');
-      }
-    }
-
-    locationData = await location.getLocation(); //retrieves location from user
-    return true;*/
     bool serviceEnabled;
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
               'Location services are disabled. Please enable the services')));
@@ -210,12 +192,14 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Location permissions are denied')));
         return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
               'Location permissions are permanently denied, we cannot request permissions.')));
@@ -224,6 +208,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
     return true;
   }
 
+//gets current position of the user
   Future<void> _getCurrentPosition() async {
     final hasPermission = await allowLocation();
 
@@ -237,6 +222,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
     });
   }
 
+//gets the address from the current position
   Future<void> _getAddressFromLatLng(Position position) async {
     await placemarkFromCoordinates(
             _currentPosition!.latitude, _currentPosition!.longitude)
