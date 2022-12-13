@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+// ignore: unused_import
 import 'package:whats_for_lunch/num_restaurants_model.dart';
 // ignore: unused_import
 import 'package:whats_for_lunch/sign_in_page.dart';
@@ -11,6 +12,15 @@ import 'change_password_widget.dart';
 //import 'package:location/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+// ignore: slash_for_doc_comments
+/**
+Name: Xee Lo
+Date: December 12 2022
+Description: Profile view that displays the user's information. User is also allowed 
+to change password from here. This also displays how many times a user has chosen a restaurant 
+Bugs: N/A
+Reflection: learned how to navigate through pages and doing a pop-up menu. 
+*/
 enum MenuItem { myMemories, signOut, signIn }
 
 class MyProfileWidget extends StatefulWidget {

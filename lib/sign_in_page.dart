@@ -10,6 +10,14 @@ import 'main_model.dart';
 import 'spin_page.dart';
 import 'auth/secrets.dart';
 
+// ignore: slash_for_doc_comments
+/**
+Name: 
+Date:
+Description:
+Bugs: 
+Reflection: 
+*/
 class SignInPage extends StatelessWidget {
   const SignInPage({Key? key}) : super(key: key);
 

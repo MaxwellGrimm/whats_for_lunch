@@ -47,7 +47,6 @@ class ChangePasswordWidget extends StatelessWidget {
               ],
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
             child: TextField(
@@ -60,8 +59,7 @@ class ChangePasswordWidget extends StatelessWidget {
                 border: OutlineInputBorder(),
               ),
             ),
-          ), //this will be replaced with the actual user's password
-
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
             child: TextField(
@@ -74,7 +72,6 @@ class ChangePasswordWidget extends StatelessWidget {
                 border: OutlineInputBorder(),
               ),
             ),
-            //this will be replaced with the actual user's password
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
@@ -113,6 +110,7 @@ class ChangePasswordWidget extends StatelessWidget {
                     );
                   } else {
                     showDialog(
+                      //pop to show if password change was successful or not
                       context: context,
                       builder: (ctx) => AlertDialog(
                         title: const Text('Unsuccessful'),

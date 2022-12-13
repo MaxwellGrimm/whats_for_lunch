@@ -2,6 +2,14 @@
 ///may not be used
 // ignore_for_file: prefer_collection_literals, unnecessary_this
 
+// ignore: slash_for_doc_comments
+/**
+Name:
+Date:
+Description:
+Bugs: 
+Reflection: 
+*/
 class NearbyPlacesResponse {
   List<Results>? results;
   String? status;

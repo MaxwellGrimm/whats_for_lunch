@@ -2,6 +2,15 @@
 
 // ignore: unused_import
 import 'package:flutter/material.dart';
+
+// ignore: slash_for_doc_comments
+/**
+Name:
+Date:
+Description:
+Bugs: 
+Reflection: 
+*/
 class Restaurant {
   String name = '';
   String? address;

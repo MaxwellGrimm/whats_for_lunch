@@ -13,6 +13,17 @@ import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+// ignore: slash_for_doc_comments
+/**
+Name: Max Grimm, Xee Lo
+Date: Decemeber 12, 2023
+Description: 
+
+This is where NumRestaurant gets populated from the list and gets stored in the main model. 
+That then displays on the profile page.
+Bugs: 
+Reflection: 
+*/
 enum MenuItem { signIn, signOut }
 
 // ignore: must_be_immutable
@@ -111,6 +122,7 @@ class _SpinPageState extends State<SpinPage> {
                     mainModel.restaurantsNear.forEach((restaurant) {
                       // ignore: unrelated_type_equality_checks
                       if (updateRestaurantPicked(
+                              //if this is false then it goes and adds the restaurant for the first time
                               restaurantName: restaurant.getName(),
                               model: mainModel) ==
                           false) {
@@ -184,6 +196,7 @@ class _SpinPageState extends State<SpinPage> {
     });
   }
 
+//adds the restaurant to the list in the main model
   void addRestaurantToList(
       {required int numPicked,
       required String restaurantName,
@@ -196,13 +209,15 @@ class _SpinPageState extends State<SpinPage> {
     } catch (e) {}
   }
 
+//update restaurant
   bool updateRestaurantPicked(
       {required String restaurantName, required MainModel model}) {
     bool restaurantExist = false;
 
     try {
       if (model.getRestaruant(restaurantName: restaurantName)) {
-        numPicked = model.updateNumPicked(restaurantName: restaurantName);
+        numPicked = model.updateNumPicked(
+            restaurantName: restaurantName); //update the numpicked number
         restaurantExist = true;
       }
     } catch (e) {}

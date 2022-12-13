@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_new, unused_import
 
 /*
-*Names: Max Grimm, Scott Webber, Xee    , Micheal Meisenburg
+*Names: Max Grimm, Scott Webber, Xee Lo, Micheal Meisenburg
 *Description: This is the main file for Whats For Lunch. Right now we just have
   the basic elements of our GUI. There will be more refining and changes as we
   continue to move forward.
@@ -74,12 +74,18 @@ class _NavigationState extends State<Navigation> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<NavigationModel>(context);
+    MainModel mainModel = Provider.of<MainModel>(context);
     return Scaffold(
       body: currentTab[provider.getCurrentIndex()],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: provider.getCurrentIndex(),
         onTap: (index) {
-          provider.setCurrentIndex(index);
+          // ignore: prefer_is_empty
+          if (mainModel.restaurantsNear.length > 0) {
+            provider.setCurrentIndex(index);
+          } else {
+            provider.setCurrentIndex(0);
+          }
         },
         items: [
           BottomNavigationBarItem(
@@ -102,7 +108,7 @@ class _NavigationState extends State<Navigation> {
 
 ///This is the model that assists with the tabbed navigation
 class NavigationModel with ChangeNotifier {
-  int _currentIndex = 1;
+  int _currentIndex = 0;
 
   int getCurrentIndex() {
     return _currentIndex;

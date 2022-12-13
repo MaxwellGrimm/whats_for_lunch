@@ -7,6 +7,14 @@ import 'package:provider/provider.dart';
 import 'package:whats_for_lunch/for_lunch.dart';
 import 'main_model.dart';
 
+// ignore: slash_for_doc_comments
+/**
+Name:
+Date:
+Description:
+Bugs: 
+Reflection: 
+*/
 class Memories extends StatelessWidget {
   const Memories({super.key});
 
@@ -15,8 +23,6 @@ class Memories extends StatelessWidget {
     MainModel mainModel = Provider.of<MainModel>(context);
     var db = mainModel.getDatabase();
     //CollectionReference userMemories = db.collection('memories');
-
-
 
     final restaurantsTEC = TextEditingController();
     final ratingTEC = TextEditingController();
@@ -90,13 +96,16 @@ class Memories extends StatelessWidget {
         body: Column(
           children: [
             StreamBuilder<QuerySnapshot>(
-              stream: db.collection('memories').where('userID', isEqualTo: mainModel.userId).snapshots(), //get only user memories 
+              stream: db
+                  .collection('memories')
+                  .where('userID', isEqualTo: mainModel.userId)
+                  .snapshots(), //get only user memories
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   // ignore: avoid_print
                   print(snapshot.error);
                   return const Text("Error");
-                } else if (snapshot.connectionState == 
+                } else if (snapshot.connectionState ==
                     ConnectionState.waiting) {
                   return const Text("loading");
                 }
@@ -120,18 +129,18 @@ class Memories extends StatelessWidget {
                             ///will be just an image eventually, once tapping image you then get more info
                             child: Center(
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   thisMemory['restaurant'],
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Rajdhani',
-                                        color: Colors.white),
-                                    ),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Rajdhani',
+                                      color: Colors.white),
+                                ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -164,35 +173,33 @@ class Memories extends StatelessWidget {
                                             children: [
                                               Text(
                                                 thisMemory['restaurant'],
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily: 'Rajdhani',
-                                                      color: Colors.blue),
-                                                  ),
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Rajdhani',
+                                                    color: Colors.blue),
+                                              ),
                                               Text(
                                                 // ignore: prefer_interpolation_to_compose_strings
-                                                "Comments: " + thisMemory['comments'],
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily: 'Rajdhani',
-                                                      color: Colors.blue),
-                                                  ),
-                                                  Text(
+                                                "Comments: " +
+                                                    thisMemory['comments'],
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Rajdhani',
+                                                    color: Colors.blue),
+                                              ),
+                                              Text(
                                                 "Memory From: ${thisMemory['date'].toDate()}",
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily: 'Rajdhani',
-                                                      color: Colors.blue),
-                                                  ),
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Rajdhani',
+                                                    color: Colors.blue),
+                                              ),
                                               Row(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
@@ -202,7 +209,6 @@ class Memories extends StatelessWidget {
                                                   for (int i = 0;
                                                       i <
                                                           thisMemory['rating']
-                                                              
                                                               .ceil();
                                                       i++) ...<Icon>{
                                                     const Icon(Icons.star,

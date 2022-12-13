@@ -1,6 +1,14 @@
 //import 'dart:html';
 // ignore_for_file: depend_on_referenced_packages, unused_import, use_build_context_synchronously
 
+// ignore: slash_for_doc_comments
+/**
+Name:
+Date:
+Description:
+Bugs: 
+Reflection: 
+*/
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:whats_for_lunch/restaurant.dart';
@@ -70,19 +78,9 @@ class _ForLunchState extends State<ForLunch> {
 
   ///for the google places.
   String apiKey = "AIzaSyBV9aerOFm5L8p6VYFvdoNLjpBjRO-HLek";
-  String radius = "3000";
 
   NearbyPlacesResponse nearbyPlacesResponse = NearbyPlacesResponse();
 
-  ///lat and lon values hard coded for now.
-
-  // double latitude = 44.034294;
-  // double longitude = -88.547745;
-
-  ///for textfields not implemented
-  final radiusTEC = TextEditingController();
-
-  ///listview
   List<Restaurant> roles = [];
 
   double _currentSliderValue = 1;
@@ -94,9 +92,7 @@ class _ForLunchState extends State<ForLunch> {
     ///gets nearby places.
     getNearbyPlaces(radius) async {
       radius = radius * 1000;
-      setState(() {
-        _getCurrentPosition();
-      });
+      _getCurrentPosition();
       double? latitude = _currentPosition?.latitude;
       double? longitude = _currentPosition?.longitude;
       mainModel.setUserCurrentLat(latitude);
@@ -109,18 +105,17 @@ class _ForLunchState extends State<ForLunch> {
       //print(result);
       //print(values['results'][0]['geometry']['location']['lat']);
 
-      setState(() {
-        var i = result.length - 1;
-        while (i > 0) {
-          var temp = Restaurant(
-              name: values['results'][i]['name'],
-              lat: values['results'][i]['geometry']['location']['lat'],
-              lng: values['results'][i]['geometry']['location']['lng']);
-          roles.add(temp);
-          i--;
-        }
-      });
+      var i = result.length - 1;
+      while (i > 0) {
+        var temp = Restaurant(
+            name: values['results'][i]['name'],
+            lat: values['results'][i]['geometry']['location']['lat'],
+            lng: values['results'][i]['geometry']['location']['lng']);
+        roles.add(temp);
+        i--;
+      }
       mainModel.addRestaurant(roles);
+      mainModel.setAreRestaurantsPopulated('');
     }
 
     return Scaffold(
@@ -178,6 +173,10 @@ class _ForLunchState extends State<ForLunch> {
               ),
             ),
           ),
+          Padding(
+              padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
+              child: Text(mainModel.getAreRestaurantsPopulated(),
+                  style: const TextStyle(fontSize: 20))),
           Expanded(
 
               ///listView
