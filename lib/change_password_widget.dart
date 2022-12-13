@@ -8,6 +8,15 @@ import 'package:rxdart/rxdart.dart';
 import 'main_model.dart';
 
 // ignore: must_be_immutable
+// ignore: slash_for_doc_comments
+/**
+Name: Xee Lo 
+Date: Decemeber 12, 2023
+Description: this is where the user will change their password
+Bugs: NOT A BUG but user can not change password if they use a google sign in and 
+did not register an account with us 
+Reflection: Learned how to change password which was very useful 
+*/
 class ChangePasswordWidget extends StatelessWidget {
   ChangePasswordWidget({super.key});
   TextEditingController oldPassword = TextEditingController();

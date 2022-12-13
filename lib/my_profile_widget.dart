@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:whats_for_lunch/num_restaurants_model.dart';
 // ignore: unused_import
@@ -6,7 +8,7 @@ import 'package:whats_for_lunch/sign_in_page.dart';
 import 'main_model.dart';
 import 'memories.dart';
 import 'change_password_widget.dart';
-import 'package:location/location.dart';
+//import 'package:location/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum MenuItem { myMemories, signOut, signIn }
@@ -19,8 +21,10 @@ class MyProfileWidget extends StatefulWidget {
 }
 
 class _MyProfileWidgetState extends State<MyProfileWidget> {
-  LocationData?
-      locationData; //stores location that user have shared with the app
+  //LocationData?
+  //    locationData; //stores location that user have shared with the app
+  String? _currentAddress;
+  Position? _currentPosition;
 
   @override
   Widget build(BuildContext context) {
@@ -123,10 +127,10 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
-                  onPressed: allowLocation,
+                  onPressed: _getCurrentPosition,
                   child: const Text('yes'),
                 ),
-              ), //buttons will need to be active
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
@@ -138,41 +142,27 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             padding: const EdgeInsets.only(top: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text('Home Address:    '),
-                Text(
-                    '800 Algoma Blvd, Oshkosh, WI 54901') // this will be replaced with the actual user's address
-              ], //locationData.toString() - this should replace this address but since we are connected to the emulator
-              //it doesnt retrieve the location... I feel that if we had a physical phone it would grab the location
+              children: [
+                const Text('Home Address:    '),
+                Text(_currentAddress ?? "")
+              ],
             ),
           ),
           const Padding(
             padding: EdgeInsets.only(left: 8.0, top: 55.0),
             child: Text('Recently Selected:'),
           ),
-          StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection('NumRestaurantPicked')
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: Text('No data yet'));
-                } else if (snapshot.hasError) {
-                  return const Center(child: Text('Error!'));
-                } else {
-                  return Expanded(
-                      child: ListView.builder(
-                          itemCount: mainModel.numRestaurant(),
-                          itemBuilder: (context, index) => ListTile(
-                                title: Text(
-                                  mainModel.getNameRestaurant(at: index),
-                                ),
-                                subtitle: Text(mainModel
-                                    .getNumPickedRestaurant(at: index)
-                                    .toString()),
-                              )));
-                }
-              })
+          Expanded(
+              child: ListView.builder(
+                  itemCount: mainModel.numRestaurant(),
+                  itemBuilder: (context, index) => ListTile(
+                        title: Text(
+                          mainModel.getNameRestaurant(at: index),
+                        ),
+                        subtitle: Text(mainModel
+                            .getNumPickedRestaurant(at: index)
+                            .toString()),
+                      )))
         ],
       ),
     );
@@ -182,7 +172,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
 //this information will find nearest restaurants around customer
 //asks user if they are willing to share thier location with the app
   Future<bool> allowLocation() async {
-    Location location = Location();
+    /* Location location = Location();
     bool serviceEnabled;
 
     serviceEnabled =
@@ -195,7 +185,60 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
     }
 
     locationData = await location.getLocation(); //retrieves location from user
+    return true;*/
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
     return true;
+  }
+
+  Future<void> _getCurrentPosition() async {
+    final hasPermission = await allowLocation();
+
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+      _getAddressFromLatLng(_currentPosition!);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    await placemarkFromCoordinates(
+            _currentPosition!.latitude, _currentPosition!.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        _currentAddress =
+            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+      });
+    }).catchError((e) {
+      debugPrint(e);
+    });
   }
 
 //the customer will not be sharing their location
