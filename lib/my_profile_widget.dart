@@ -132,7 +132,9 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
-                  onPressed: _getCurrentPosition,
+                  onPressed: () async {
+                    _getCurrentPosition(mainModel);
+                  },
                   child: const Text('yes'),
                 ),
               ),
@@ -149,7 +151,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('Home Address:    '),
-                Text(_currentAddress ?? "")
+                Text(mainModel.getUserAddress() ?? "")
               ],
             ),
           ),
@@ -209,21 +211,22 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
   }
 
 //gets current position of the user
-  Future<void> _getCurrentPosition() async {
+  Future<void> _getCurrentPosition(MainModel mainModel) async {
     final hasPermission = await allowLocation();
 
     if (!hasPermission) return;
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
       setState(() => _currentPosition = position);
-      _getAddressFromLatLng(_currentPosition!);
+      _getAddressFromLatLng(_currentPosition!, mainModel);
     }).catchError((e) {
       debugPrint(e);
     });
   }
 
 //gets the address from the current position
-  Future<void> _getAddressFromLatLng(Position position) async {
+  Future<void> _getAddressFromLatLng(
+      Position position, MainModel mainModel) async {
     await placemarkFromCoordinates(
             _currentPosition!.latitude, _currentPosition!.longitude)
         .then((List<Placemark> placemarks) {
@@ -235,6 +238,8 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
     }).catchError((e) {
       debugPrint(e);
     });
+
+    await mainModel.setUserAddress(address: _currentAddress);
   }
 
 //the customer will not be sharing their location

@@ -22,6 +22,7 @@ class MainModel extends ChangeNotifier {
 
   double? userCurrentLat = 44.0;
   double? userCurrentLng = -88.0;
+  String? userAddress;
 
   var db = FirebaseFirestore.instance;
 
@@ -161,5 +162,13 @@ class MainModel extends ChangeNotifier {
   String getNameRestaurant({required int at}) {
     NumRestaurant restaurant = _restaruant[at];
     return restaurant.getName();
+  }
+
+  String? setUserAddress({required String? address}) {
+    userAddress = address;
+  }
+
+  String? getUserAddress() {
+    return userAddress ?? "";
   }
 }
