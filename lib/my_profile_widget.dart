@@ -14,7 +14,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 /**
 Name: Xee Lo
 Date: Decemeber 13, 2021
-Description: displays users information
+Description: displays users information, also asks for permission for user's location
 Bugs: N/a 
 Reflection: learned how to display info and ask for location
 */
@@ -184,6 +184,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      //this popups the snackbar to tell the user to enable their location for the app
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
@@ -239,7 +240,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
       debugPrint(e);
     });
 
-    await mainModel.setUserAddress(address: _currentAddress);
+    mainModel.setUserAddress(address: _currentAddress);
   }
 
 //the customer will not be sharing their location

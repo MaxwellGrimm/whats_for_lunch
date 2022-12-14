@@ -8,9 +8,13 @@ import 'restaurant.dart';
 
 // ignore: slash_for_doc_comments
 /**
-Name:
+Name: Max Grimm, Xee Lo
 Date:
 Description:
+
+-Stores all the number of restaurants the user has picked to spin. 
+-It also updates the list when something is added 
+-this also stores the user's current address in userAddress 
 Bugs: 
 Reflection: 
 */
