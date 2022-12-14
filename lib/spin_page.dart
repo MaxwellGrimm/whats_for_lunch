@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable, empty_catches
 
 import 'dart:async';
+
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,7 @@ class _SpinPageState extends State<SpinPage> {
   //needed to use a BehaviorSubject<int> because we needed the .value method
   final wheelController = BehaviorSubject<int>();
   int numPicked = 1;
+  int? winningRestaurantIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -118,32 +120,27 @@ class _SpinPageState extends State<SpinPage> {
                     wheelController.add(
                         Random().nextInt(mainModel.restaurantsNear.length));
 
-                    // ignore: avoid_function_literals_in_foreach_calls
-                    mainModel.restaurantsNear.forEach((restaurant) {
-                      // ignore: unrelated_type_equality_checks
-                      if (updateRestaurantPicked(
-                              //if this is false then it goes and adds the restaurant for the first time
-                              restaurantName: restaurant.getName(),
-                              model: mainModel) ==
-                          false) {
-                        addRestaurantToList(
-                            numPicked: numPicked,
-                            restaurantName: restaurant.getName(),
-                            model: mainModel);
-                        addRestaurant(
-                            numPicked: numPicked,
-                            restaurantName: restaurant.getName(),
-                            userId: mainModel.userId,
-                            db: db);
-                      }
-                    });
-
                     //This delays the changing of screens long enough for the
                     //wheel to finish spinning
                     Timer(const Duration(seconds: 6), () {
                       int winningIndex = (wheelController.value == 0)
                           ? mainModel.restaurantsNear.length - 1
                           : wheelController.value! - 1;
+                      winningRestaurantIndex = winningIndex;
+                      if (updateRestaurantPicked(
+                              //if this is false then it goes and adds the restaurant for the first time
+                              restaurantName: mainModel
+                                  .restaurantsNear[winningRestaurantIndex!]
+                                  .getName(),
+                              model: mainModel) ==
+                          false) {
+                        addRestaurantToList(
+                            numPicked: numPicked,
+                            restaurantName: mainModel
+                                .restaurantsNear[winningRestaurantIndex!]
+                                .getName(),
+                            model: mainModel);
+                      }
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -181,19 +178,6 @@ class _SpinPageState extends State<SpinPage> {
             ),
           ]),
     );
-  }
-
-//adds restaurant with the number of times it picks to the database
-  Future<void> addRestaurant(
-      {required int numPicked,
-      required String restaurantName,
-      required var userId,
-      required var db}) {
-    return db.collection('NumRestaurantPicked').add({
-      'userId': userId,
-      'numPicked': numPicked,
-      'restaurantName': restaurantName
-    });
   }
 
 //adds the restaurant to the list in the main model
