@@ -92,7 +92,7 @@ class _ForLunchState extends State<ForLunch> {
     ///gets nearby places.
     getNearbyPlaces(radius) async {
       radius = radius * 1000;
-      _getCurrentPosition();
+      //_getCurrentPosition();
       double? latitude = _currentPosition?.latitude;
       double? longitude = _currentPosition?.longitude;
       mainModel.setUserCurrentLat(latitude);
@@ -111,10 +111,11 @@ class _ForLunchState extends State<ForLunch> {
           name: values['results'][i]['name'],
           lat: values['results'][i]['geometry']['location']['lat'],
           lng: values['results'][i]['geometry']['location']['lng'],
-          //stars: values['results'][i]['rating'],
+          //stars: values['results'][i]['rating'], not working
           //open: values['results'][i]['opening_hours']
         );
 
+        //print(values['results'][i]['']['photos'].toString());
         //print(values['results'][i]['geometry']['location']['lat']);
         //print(values['results'][i]['opening_hours']);
         roles.add(temp);
@@ -134,9 +135,12 @@ class _ForLunchState extends State<ForLunch> {
               color: Colors.white,
             ),
             onPressed: () {
-              getNearbyPlaces(_currentSliderValue);
+              setState(() {
+                _getCurrentPosition();
+                getNearbyPlaces(_currentSliderValue);
+              });
             },
-          )
+          ),
         ],
       ),
       body: Column(

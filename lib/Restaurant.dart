@@ -15,7 +15,7 @@ class Restaurant {
   String name = '';
   String? address;
   String? reviews;
-  double? stars;
+  double? stars = 0.0;
   double lat = 44.00;
   double lng = -88.00;
   Restaurant({
@@ -37,5 +37,9 @@ class Restaurant {
 
   double getLng() {
     return lng;
+  }
+
+  double? getStar() {
+    return stars;
   }
 }
