@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.whats_for_lunch">
+   
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
    <application
         android:label="whats_for_lunch"
         android:name="${applicationName}"
@@ -7,6 +10,7 @@
 
         <meta-data android:name="com.google.android.geo.API_KEY"
                android:value="AIzaSyCFzhdDh7D6nI42hPxirs_qTQQp5TQkils"/>
+        
 
         <activity
             android:name=".MainActivity"

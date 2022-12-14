@@ -214,7 +214,7 @@ class _RestaurantViewState extends State<RestaurantView> {
                               itemBuilder: (context, index) {
                                 var thisMemory = currMemory[index];
                                 return ListTile(
-                                  title: Text(thisMemory.toString()),
+                                  title: Text(thisMemory['comments']),
                                 );
                               },
                               separatorBuilder: (context, index) =>
