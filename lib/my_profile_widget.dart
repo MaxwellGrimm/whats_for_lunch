@@ -14,7 +14,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 /**
 Name: Xee Lo
 Date: Decemeber 13, 2021
-Description: displays users information, also asks for permission for user's location
+Description: displays users information like username and address, 
+also asks for permission for user's location
+this is where users could also change their password
+they also navigate to Memories from here 
 Bugs: N/a 
 Reflection: learned how to display info and ask for location
 */
@@ -28,8 +31,9 @@ class MyProfileWidget extends StatefulWidget {
 }
 
 class _MyProfileWidgetState extends State<MyProfileWidget> {
-  String? _currentAddress;
-  Position? _currentPosition;
+  String? _currentAddress; //stores the current address that is readable
+  Position?
+      _currentPosition; //stores the position of the user in latitude and longtitude
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +45,10 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
       appBar: AppBar(
         title: const Text('My Profile'),
         actions: [
-          if (mainModel.getCurrentUserName() == 'User Name')
+          if (mainModel.getCurrentUserName() ==
+              'User Name') //if the username is not signed in
             PopupMenuButton<MenuItem>(
-                //this figures out which navigation they are going to
+                //they have the option to sign in
                 onSelected: (value) {
                   if (value == MenuItem.signIn) {
                     Navigator.push(
@@ -59,11 +64,13 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                         child: Text('Sign In'),
                       ),
                     ]),
-          if (mainModel.getCurrentUserName() != 'User Name')
+          if (mainModel.getCurrentUserName() !=
+              'User Name') //if the user is signed in
             PopupMenuButton<MenuItem>(
                 //this figures out which navigation they are going to
                 onSelected: (value) {
                   if (value == MenuItem.myMemories) {
+                    //they have the option to go to memories or sign out of the application
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -77,11 +84,14 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                 },
                 itemBuilder: (context) => [
                       const PopupMenuItem(
+                        //navigates to memories
                         value: MenuItem.myMemories,
                         child: Text('My Memories'),
                       ),
                       const PopupMenuItem(
-                          value: MenuItem.signOut, child: Text('Sign out')),
+                          //signout
+                          value: MenuItem.signOut,
+                          child: Text('Sign out')),
                     ]),
         ],
       ),
@@ -90,19 +100,21 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 20.0),
+            padding: const EdgeInsets.only(top: 20.0, left: 10.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                //displays the username of the user
                 const Text('Username:    '),
                 Text(mainModel.getCurrentUserName().toString())
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 20.0),
+            //displays the password
+            padding: const EdgeInsets.only(top: 20.0, left: 10.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: const [Text('Password:    '), Text('********')],
             ),
           ),
@@ -118,7 +130,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                               (context) => //this takes you to the Change Passoword Page
                                   ChangePasswordWidget()), //needs to pass in the model for information --user information--
                     );
-                  },
+                  }, //displays the change password
                   child: const Text(
                     'change password?',
                     style: TextStyle(color: Colors.blue),
@@ -126,29 +138,26 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            //displays location and asks if you allow it
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const Text('Allow Location:    '),
+              const Text('   Allow Location:    '),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: () async {
                     _getCurrentPosition(mainModel);
                   },
-                  child: const Text('yes'),
+                  child: const Text('ALLOW'),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                    onPressed: disallowLocation, child: const Text('no')),
-              )
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 20.0),
+            //displays home address
+            padding: const EdgeInsets.only(top: 20.0, left: 10.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const Text('Home Address:    '),
                 Text(mainModel.getUserAddress() ?? "")
@@ -161,6 +170,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
           ),
           Expanded(
               child: ListView.builder(
+                  //displays the restaurant name and the number of times it was picked
                   itemCount: mainModel.numRestaurant(),
                   itemBuilder: (context, index) => ListTile(
                         title: Text(
@@ -212,10 +222,13 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
   }
 
 //gets current position of the user
+  //required MainModel mainModel - the main model storing all the data
   Future<void> _getCurrentPosition(MainModel mainModel) async {
     final hasPermission = await allowLocation();
 
-    if (!hasPermission) return;
+    if (!hasPermission)
+      // ignore: curly_braces_in_flow_control_structures
+      return; //returns the given position the user is at and calls that _getAddressFromLatLng to convert it into a readable address
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
       setState(() => _currentPosition = position);
@@ -226,6 +239,8 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
   }
 
 //gets the address from the current position
+  //required MainModel mainModel - the main model storing all the data
+  //required Position position - the current position of the user in longtitude and latitude
   Future<void> _getAddressFromLatLng(
       Position position, MainModel mainModel) async {
     await placemarkFromCoordinates(
@@ -233,18 +248,15 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
       setState(() {
-        _currentAddress =
+        _currentAddress = // grabs the address and stores it into currentAddress
             '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
       });
     }).catchError((e) {
       debugPrint(e);
     });
 
-    mainModel.setUserAddress(address: _currentAddress);
-  }
-
-//the customer will not be sharing their location
-  bool disallowLocation() {
-    return false;
+    mainModel.setUserAddress(
+        address:
+            _currentAddress); //calls the mainModel class setUserAddress to the current address and stores it there
   }
 }

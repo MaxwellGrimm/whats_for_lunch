@@ -20,9 +20,12 @@ Reflection: Learned how to change password which was very useful
 // ignore: must_be_immutable
 class ChangePasswordWidget extends StatelessWidget {
   ChangePasswordWidget({super.key});
-  TextEditingController oldPassword = TextEditingController();
-  TextEditingController newPassword = TextEditingController();
-  TextEditingController retypePassword = TextEditingController();
+  TextEditingController oldPassword =
+      TextEditingController(); //stores old password
+  TextEditingController newPassword =
+      TextEditingController(); //stores new password
+  TextEditingController retypePassword =
+      TextEditingController(); //stores the retype new password
   var success =
       false; //checks to see if password was changed successfully or not
 
@@ -41,17 +44,16 @@ class ChangePasswordWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                //dispplays the user's name
                 const Text('Username:    '),
-                Text(mainModel
-                    .getCurrentUserName()
-                    .toString()) //this will be replaced with the actual user's username
+                Text(mainModel.getCurrentUserName().toString())
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
             child: TextField(
-              controller: oldPassword,
+              controller: oldPassword, //takes the input for the old password
               obscureText: true,
               decoration: const InputDecoration(
                 fillColor: Colors.black12,
@@ -64,7 +66,7 @@ class ChangePasswordWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
             child: TextField(
-              controller: newPassword,
+              controller: newPassword, //takes the input for the new password
               obscureText: true,
               decoration: const InputDecoration(
                 fillColor: Colors.black12,
@@ -77,7 +79,8 @@ class ChangePasswordWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
             child: TextField(
-              controller: retypePassword,
+              controller:
+                  retypePassword, //takes the input for the retype new password
               obscureText: true,
               decoration: const InputDecoration(
                 fillColor: Colors.black12,
@@ -91,13 +94,14 @@ class ChangePasswordWidget extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: ElevatedButton(
                 onPressed: (() {
-                  _changePassword();
+                  _changePassword(); //button to press if you want your password to be changed
 
                   if (success == true) {
                     showDialog(
                       context: context,
                       builder: (ctx) => AlertDialog(
-                        title: const Text('Successful'),
+                        title: const Text(
+                            'Successful'), //if it was successful a popup would tell you
                         content: const Text('Password was changed.'),
                         actions: <Widget>[
                           ElevatedButton(
@@ -111,7 +115,7 @@ class ChangePasswordWidget extends StatelessWidget {
                     );
                   } else {
                     showDialog(
-                      //pop to show if password change was successful or not
+                      //pop to show if password change was unsucessful
                       context: context,
                       builder: (ctx) => AlertDialog(
                         title: const Text('Unsuccessful'),
@@ -139,7 +143,7 @@ class ChangePasswordWidget extends StatelessWidget {
 //checks to see if the old password is correct, checks if new passwords are identical
 //changes old password to new password
 //gives alert that password was changed successfully
-//should also return us to the My Profile page once we successfully change the password..
+//should also return us to the My Profile page once we successfully change the password.
   _changePassword() async {
     if (newPassword.text == retypePassword.text) {
       //Create an instance of the current user.

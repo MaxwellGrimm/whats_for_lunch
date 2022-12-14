@@ -22,13 +22,14 @@ Date: Decemeber 12, 2023
 Description: This page has the fortune wheele and a sign in option
 you swipe the card either way to spin and get a random restaurant from
 those loaded given your location.
-
 This is where NumRestaurant gets populated from the list and gets stored in the main model. 
 That then displays on the profile page.
 Bugs: The Fortune wheele can't be empty so this page is not allowed to be loaded
 until the main model's list of restaurants are filled.
 Reflection: I would have liked to add photos but we didn't get the api connected
 until recently. 
+This is where NumRestaurant gets populated from the list and gets stored in the main model.
+ 
 */
 enum MenuItem { signIn, signOut }
 
@@ -143,6 +144,7 @@ class _SpinPageState extends State<SpinPage> {
                                   .getName(),
                               model: mainModel) ==
                           false) {
+                        //adds the restaurant to the list if it has never been picked
                         addRestaurantToList(
                             numPicked: numPicked,
                             restaurantName: mainModel
@@ -194,28 +196,36 @@ class _SpinPageState extends State<SpinPage> {
   }
 
 //adds the restaurant to the list in the main model
+//required int numPicked - number of times it was picked
+// required String restaurantName - restaurantName
+  //required MainModel model - the main model storing all the data
   void addRestaurantToList(
       {required int numPicked,
       required String restaurantName,
       required MainModel model}) {
-    NumRestaurant numRestaruantModel =
+    NumRestaurant
+        numRestaruantModel = //create an object instance of NumRestaurant so that you can store it into the list in MainModel
         NumRestaurant(name: restaurantName, numPicked: numPicked);
 
     try {
+      //adds it to the list
       model.addNumRestaruant(restaruant: numRestaruantModel);
     } catch (e) {}
   }
 
-//update restaurant
+//update restaurant and returns true or false if it does exist
+// required String restaurantName - restaurantName
+  //required MainModel model - the main model storing all the data
   bool updateRestaurantPicked(
       {required String restaurantName, required MainModel model}) {
     bool restaurantExist = false;
 
     try {
+      //finds to see if the restaurant exists in the list and then updates the numpicked number
       if (model.getRestaruant(restaurantName: restaurantName)) {
         numPicked = model.updateNumPicked(
             restaurantName: restaurantName); //update the numpicked number
-        restaurantExist = true;
+        restaurantExist = true; //restaurant exist is true
       }
     } catch (e) {}
     return restaurantExist;

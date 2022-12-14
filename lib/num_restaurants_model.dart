@@ -15,19 +15,26 @@ Bugs: N/A
 Reflection: helps stores information
 */
 class NumRestaurant {
-  String? name;
-  int? numPicked;
+  String? name; //name of restaurant
+  int? numPicked; //number of times it was picked
 
+//contructor for NumRestaurant
   NumRestaurant({this.name, this.numPicked});
 
+//this returns the name of the restaurant
+//returns - the name of restaurant
   String getName() {
     return name!;
   }
 
+//returns the number of times it was picked
+//returns - the number of times it was picked
   int getNumPicked() {
     return numPicked!;
   }
 
+//sets the number of times the restaurant
+//required int num - the number that needs to be updated
   void setNumPicked({required int num}) {
     numPicked = numPicked! + 1;
   }
