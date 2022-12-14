@@ -31,6 +31,8 @@ until recently.
 This is where NumRestaurant gets populated from the list and gets stored in the main model.
  
 */
+
+//for switching the option depending if the user is signed in or not
 enum MenuItem { signIn, signOut }
 
 // ignore: must_be_immutable
@@ -45,6 +47,7 @@ class _SpinPageState extends State<SpinPage> {
   //needed to use a BehaviorSubject<int> because we needed the .value method
   final wheelController = BehaviorSubject<int>();
   int numPicked = 1;
+  //for later when the fling is called
   int? winningRestaurantIndex;
 
   @override
@@ -104,14 +107,17 @@ class _SpinPageState extends State<SpinPage> {
               child: Text('Swipe to Spin',
                   style: TextStyle(
                       fontSize: 40,
+                      //this is a custom font 
                       fontFamily: 'Rajdhani')),
             ),
+            //displays the username if the user is signed in
             if (mainModel.getCurrentUserName() != 'User Name')
               Text('Signed In As: ${mainModel.getCurrentUserName()}',
                   style: const TextStyle(
                       fontSize: 20,
                       fontFamily: 'Rajdhani')),
             FittedBox(
+              //this is the fortuneBar where all of the restaurants will be held
               child: FortuneBar(
                   styleStrategy: const UniformStyleStrategy(
                     color: Color.fromARGB(80, 253, 115, 91),
@@ -119,6 +125,8 @@ class _SpinPageState extends State<SpinPage> {
                     borderWidth: 3,
                   ),
                   visibleItemCount: 1,
+                  //since only one restaurant will be displayed on the screen
+                  //we don't need an indicator
                   // ignore: prefer_const_literals_to_create_immutables
                   indicators: [],
                   height: 400,

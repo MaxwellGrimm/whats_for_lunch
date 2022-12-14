@@ -31,6 +31,10 @@ class SignInPage extends StatelessWidget {
       actions: [
         AuthStateChangeAction<SignedIn>((context, _) {
           if (FirebaseAuth.instance.currentUser != null) {
+            //this sets in the main model the current signed in user email
+            //that way we don't need to keep asking firbase
+            //it kind of works like a session so if you clear your history on the 
+            //app you will be signed out 
             mainModel.setCurrentUser(FirebaseAuth.instance.currentUser?.email,
                 FirebaseAuth.instance.currentUser?.uid);
           }

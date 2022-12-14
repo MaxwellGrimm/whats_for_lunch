@@ -59,6 +59,9 @@ class _ForLunchState extends State<ForLunch> {
         return false;
       }
     }
+    //gives a pop up at the bottom.
+    //it will ask for permissions again when you try so don't worry if you see this
+    //our app needs the user location to work
     if (permission == LocationPermission.deniedForever) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
@@ -68,6 +71,7 @@ class _ForLunchState extends State<ForLunch> {
     return true;
   }
 
+//this method will get the current location of the user if permisions are granted
   Future<void> _getCurrentPosition() async {
     final hasPermission = await _handleLocationPermission();
     if (!hasPermission) return;
@@ -86,6 +90,7 @@ class _ForLunchState extends State<ForLunch> {
 
   List<Restaurant> roles = [];
 
+//initial slider value
   double _currentSliderValue = 1;
 
   @override
@@ -94,7 +99,9 @@ class _ForLunchState extends State<ForLunch> {
 
     ///gets nearby places.
     getNearbyPlaces(radius) async {
+      //we multiply by 1000 here because the api likes the radius in meters
       radius = radius * 1000;
+      //this is called to make sure we have access to the user location
       _getCurrentPosition();
       double? latitude = _currentPosition?.latitude;
       double? longitude = _currentPosition?.longitude;
@@ -108,7 +115,8 @@ class _ForLunchState extends State<ForLunch> {
       //print(result);
       //print(values['results'][0]['geometry']['location']['lat']);
 
-//this adds the restaurant to the main model list
+//this adds all the restaurants to the main model list
+//it is extracting it from the JSON 
       var i = result.length - 1;
       while (i > 0) {
         var temp = Restaurant(
@@ -132,6 +140,8 @@ class _ForLunchState extends State<ForLunch> {
               color: Colors.white,
             ),
             onPressed: () {
+              //the magnifing glass icon on the top will call this method when
+              //pressed
               getNearbyPlaces(_currentSliderValue);
             },
           )
@@ -156,6 +166,7 @@ class _ForLunchState extends State<ForLunch> {
                 value: _currentSliderValue,
                 max: 6,
                 divisions: 6,
+                //the label above the slider with km for kilometers
                 label: '${_currentSliderValue.round()} km',
                 onChanged: (double value) {
                   setState(() {
@@ -179,6 +190,8 @@ class _ForLunchState extends State<ForLunch> {
           ),
           Padding(
               padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
+              //this will display text if the number of restaurants in the main
+              //model is 0
               child: Text(mainModel.getAreRestaurantsPopulated(),
                   style: const TextStyle(fontSize: 20))),
           Expanded(

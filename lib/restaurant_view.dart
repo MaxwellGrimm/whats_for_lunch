@@ -32,6 +32,8 @@ results until very recently.
 class RestaurantView extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
 
+//gave them all initial values incase something goes wrong with the code so it
+//won't crash
   static String restaurantName = '';
 
   static double startLat = 44.001;
@@ -51,6 +53,8 @@ class RestaurantView extends StatefulWidget {
     endLng,
     restaurantName,
   }) {
+    //these are all given by the api and will be the values for the restaurant
+    //that the fortunebar ended on
     RestaurantView.restaurantName = restaurantName;
     RestaurantView.startLat = startLat;
     RestaurantView.startLng = startLng;
@@ -78,6 +82,7 @@ class _RestaurantViewState extends State<RestaurantView> {
 
   final Set<Marker> _markers = {};
 
+//this is a list of the user location and the restaurant location
   List<LatLng> latLen = [
     LatLng(RestaurantView.startLat, RestaurantView.startLng),
     LatLng(RestaurantView.endLat, RestaurantView.endLng)
@@ -85,7 +90,7 @@ class _RestaurantViewState extends State<RestaurantView> {
 
   // ignore: must_call_super, annotate_overrides
   void initState() {
-    //adds a marker for the user and the restaurant 
+    //adds a marker for the user and the restaurant
     _markers.add(Marker(
       markerId: const MarkerId('Start Location'),
       position: latLen[0],
@@ -157,6 +162,8 @@ class _RestaurantViewState extends State<RestaurantView> {
                       padding: EdgeInsets.fromLTRB(6, 0, 6, 0),
                       child: Align(
                           alignment: Alignment.topCenter,
+                          //this is some text to let the user know how to pull up
+                          //the directions on the map
                           child: Text(
                               'Tap the marker then choose Direction/Maps for directions to the restaurant.',
                               style: TextStyle(
@@ -201,7 +208,7 @@ class _RestaurantViewState extends State<RestaurantView> {
                     ),
                   ]),
                 ),
-                //this code grabs the memories from the db based off of 
+                //this code grabs the memories from the db based off of
                 //the restaurant name
                 StreamBuilder<QuerySnapshot>(
                     stream: db
@@ -226,6 +233,7 @@ class _RestaurantViewState extends State<RestaurantView> {
                               itemBuilder: (context, index) {
                                 var thisMemory = currMemory[index];
                                 return ListTile(
+                                  //this is the text from the database
                                   title: Text(thisMemory['comments']),
                                 );
                               },

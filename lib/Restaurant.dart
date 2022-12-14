@@ -30,14 +30,17 @@ class Restaurant {
     required this.lng,
   });
 
+//gets the name of the restaurant
   String getName() {
     return name;
   }
 
+//gets the latitude of the restaurant
   double getLat() {
     return lat;
   }
 
+//gets the longitude of the restaurant
   double getLng() {
     return lng;
   }
