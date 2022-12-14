@@ -9,11 +9,19 @@ import 'main_model.dart';
 
 // ignore: slash_for_doc_comments
 /**
-Name:
-Date:
-Description:
-Bugs: 
-Reflection: 
+Name:Scott Webber
+Date:12/14/2022
+Description:This page allows for pulls and addition to the database. A user if
+signed in can make a memory about a restaurant and save it to our database.
+They can see all of their saved memories. They have the restaurant name, stars,
+and comments about their experience.
+Bugs: There are no bugs that we know of at this time.
+Reflection: I think the styling of the memories went really well. I did find it
+a lot harder than origionally anticipated to add user photos. We were using
+firebase and there are ways to store images using the cloud. However, they had
+maximum sizes for the images that could be saved and retrieved dynamically. A
+person taking a picture with their camera greatly over exceeds the image size
+that is allowed. 
 */
 class Memories extends StatelessWidget {
   const Memories({super.key});
@@ -32,6 +40,7 @@ class Memories extends StatelessWidget {
         appBar: AppBar(
           title: const Text('My Memories'),
           actions: [
+            //this is the add a memories button
             IconButton(
                 onPressed: () {
                   showDialog(
@@ -50,6 +59,7 @@ class Memories extends StatelessWidget {
                                         CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
+                                      //text feild for inputing restaurant name
                                       TextFormField(
                                         controller: restaurantsTEC,
                                         decoration: const InputDecoration(
@@ -57,6 +67,7 @@ class Memories extends StatelessWidget {
                                           icon: Icon(Icons.restaurant),
                                         ),
                                       ),
+                                      //text field for inputing a rating
                                       TextFormField(
                                         controller: ratingTEC,
                                         keyboardType: TextInputType.number,
@@ -65,6 +76,7 @@ class Memories extends StatelessWidget {
                                           icon: Icon(Icons.star),
                                         ),
                                       ),
+                                      //text form for entering comments
                                       TextFormField(
                                         controller: commentsTEC,
                                         decoration: const InputDecoration(
@@ -72,9 +84,11 @@ class Memories extends StatelessWidget {
                                           icon: Icon(Icons.message),
                                         ),
                                       ),
+                                      //the submit button that will add the memory
                                       ElevatedButton(
                                           child: const Text("Submit"),
                                           onPressed: () {
+                                            //this will add the memory to the database under the userId which is saved in the main model
                                             _addMemory(
                                                 db,
                                                 restaurantsTEC.text,
@@ -95,6 +109,9 @@ class Memories extends StatelessWidget {
         ),
         body: Column(
           children: [
+            //this is a display for all of the memories that are queried from firestore
+            //they are queried based on userID which is unique so everyone has there own
+            //set of personal memories
             StreamBuilder<QuerySnapshot>(
               stream: db
                   .collection('memories')
@@ -205,6 +222,7 @@ class Memories extends StatelessWidget {
                                                     CrossAxisAlignment.center,
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
+                                                //this displays the stars based on the rating saved in the database
                                                 children: [
                                                   for (int i = 0;
                                                       i <
@@ -232,6 +250,8 @@ class Memories extends StatelessWidget {
         ));
   }
 
+//this method takes in the database instance, and all the values from the text fields at the top
+//It then adds the memory to the database under the collection memories
   Future<void> _addMemory(var db, var restaurant, var rating, var comments,
       var userID, var userName) {
     return db.collection('memories').add({
