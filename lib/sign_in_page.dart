@@ -12,11 +12,13 @@ import 'auth/secrets.dart';
 
 // ignore: slash_for_doc_comments
 /**
-Name: 
-Date:
-Description:
-Bugs: 
-Reflection: 
+Name: Maxwell Grimm
+Date: 12/14/2022
+Description: This is the firebase sign in page
+Bugs: Google sign in does not always work I think it may have to do with 
+someone pushed a commit that got rid of some permissions.
+Reflection: This was not hard with firebase but some git problems are what 
+caused the errors I think
 */
 class SignInPage extends StatelessWidget {
   const SignInPage({Key? key}) : super(key: key);

@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 
 // ignore: slash_for_doc_comments
 /**
-Name:
-Date:
-Description:
-Bugs: 
-Reflection: 
+Name:Maxwell Grimm 
+Date:12/14/2022
+Description:This is the class for a restaurant that is used primarily in the 
+main model
+Bugs: none that I know of
+Reflection: This was created when I first made the app and I think it was a good
+abstraction I wish we could have implemented things faster so we could have 
+more time to fix bugs and make more features
 */
 class Restaurant {
   String name = '';

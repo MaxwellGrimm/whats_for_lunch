@@ -19,12 +19,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 /**
 Name: Max Grimm, Xee Lo
 Date: Decemeber 12, 2023
-Description: 
+Description: This page has the fortune wheele and a sign in option
+you swipe the card either way to spin and get a random restaurant from
+those loaded given your location.
 
 This is where NumRestaurant gets populated from the list and gets stored in the main model. 
 That then displays on the profile page.
-Bugs: 
-Reflection: 
+Bugs: The Fortune wheele can't be empty so this page is not allowed to be loaded
+until the main model's list of restaurants are filled.
+Reflection: I would have liked to add photos but we didn't get the api connected
+until recently. 
 */
 enum MenuItem { signIn, signOut }
 
@@ -44,11 +48,15 @@ class _SpinPageState extends State<SpinPage> {
 
   @override
   Widget build(BuildContext context) {
+    //main model to populate the fortune wheel
     MainModel mainModel = Provider.of<MainModel>(context);
+    //this is the db from the model that was supposed to be used for adding
+    //recently spun values 
     var db = mainModel.getDatabase();
     CollectionReference numRestaurantDB = db.collection('NumRestaurantPicked');
     return Scaffold(
       appBar: AppBar(
+        //adds the sign in and sign out functionality 
           title: const Center(child: Text('What\'s For Lunch')),
           backgroundColor: Colors.red,
           actions: [
@@ -95,14 +103,12 @@ class _SpinPageState extends State<SpinPage> {
               child: Text('Swipe to Spin',
                   style: TextStyle(
                       fontSize: 40,
-                      fontWeight: FontWeight.bold,
                       fontFamily: 'Rajdhani')),
             ),
             if (mainModel.getCurrentUserName() != 'User Name')
               Text('Signed In As: ${mainModel.getCurrentUserName()}',
                   style: const TextStyle(
                       fontSize: 20,
-                      fontWeight: FontWeight.bold,
                       fontFamily: 'Rajdhani')),
             FittedBox(
               child: FortuneBar(
@@ -124,6 +130,8 @@ class _SpinPageState extends State<SpinPage> {
                     //This delays the changing of screens long enough for the
                     //wheel to finish spinning
                     Timer(const Duration(seconds: 6), () {
+                      //there was an error where the fortune wheel was not
+                      //pulling up the correct restaurant 
                       int winningIndex = (wheelController.value == 0)
                           ? mainModel.restaurantsNear.length - 1
                           : wheelController.value! - 1;
@@ -142,6 +150,9 @@ class _SpinPageState extends State<SpinPage> {
                                 .getName(),
                             model: mainModel);
                       }
+                      //this navigates the page to the dynamically created
+                      //restaurant view page for the restaurant that the 
+                      //fortune wheel lands on
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -173,7 +184,8 @@ class _SpinPageState extends State<SpinPage> {
                               color: Color.fromARGB(80, 251, 142, 161)),
                           child: Text(mainModel.restaurantsNear[i].getName(),
                               style: const TextStyle(
-                                  fontFamily: 'Rajdhani', fontSize: 30))),
+                                  fontFamily: 'Rajdhani', fontSize: 30,
+                                  fontWeight: FontWeight.bold,))),
                     },
                   ]),
             ),

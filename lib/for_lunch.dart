@@ -3,10 +3,12 @@
 
 // ignore: slash_for_doc_comments
 /**
-Name:
-Date:
-Description:
-Bugs: 
+Name:Scott Weber, Michael, Maxwell Grimm 
+Date:12/14/2022
+Description:This is the page where you search for the restaurants arround your
+current location. 
+Bugs: You have to push the search button a few times for it to get the api 
+results. I am not sure why.
 Reflection: 
 */
 import 'package:flutter/material.dart';
@@ -36,6 +38,7 @@ class _ForLunchState extends State<ForLunch> {
   Position? _currentPosition;
   String? error;
 
+//this handles all options for device and app location access
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -105,6 +108,7 @@ class _ForLunchState extends State<ForLunch> {
       //print(result);
       //print(values['results'][0]['geometry']['location']['lat']);
 
+//this adds the restaurant to the main model list
       var i = result.length - 1;
       while (i > 0) {
         var temp = Restaurant(
@@ -152,7 +156,7 @@ class _ForLunchState extends State<ForLunch> {
                 value: _currentSliderValue,
                 max: 6,
                 divisions: 6,
-                label: _currentSliderValue.round().toString(),
+                label: '${_currentSliderValue.round()} km',
                 onChanged: (double value) {
                   setState(() {
                     _currentSliderValue = value;

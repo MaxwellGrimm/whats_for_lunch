@@ -15,11 +15,18 @@ import 'package:geolocator/geolocator.dart';
 
 // ignore: slash_for_doc_comments
 /**
-Name:
-Date:
-Description:
-Bugs: 
-Reflection: 
+Name:Maxwell Grimm
+Date:12/14/2022
+Description:This is a page loaded to represent a restaurant. It loads a map 
+based off of the lat and lng grabbed by the api. It also grabs the name, and
+if possible grabs the stars. The bottom shows the reviews that others have
+posted on the app about that restaurant. The reviews are posted in a list view.
+If you tap on the marker of the restaurant you can then get the directions from
+your current location to the restaurant.
+Bugs: The stars are not dynamic. For some reason not all of the api results have
+a value for the number of stars. 
+Reflection: This took a while to implement because we did not have the api 
+results until very recently. 
 */
 // ignore: must_be_immutable
 class RestaurantView extends StatefulWidget {
@@ -78,6 +85,7 @@ class _RestaurantViewState extends State<RestaurantView> {
 
   // ignore: must_call_super, annotate_overrides
   void initState() {
+    //adds a marker for the user and the restaurant 
     _markers.add(Marker(
       markerId: const MarkerId('Start Location'),
       position: latLen[0],
@@ -172,6 +180,8 @@ class _RestaurantViewState extends State<RestaurantView> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
+                            //this code displays the number of stars based on
+                            //the num stars given
                             Text('${RestaurantView.numStars.ceil()} Stars',
                                 style: const TextStyle(
                                   fontFamily: 'Rajdhani',
@@ -191,6 +201,8 @@ class _RestaurantViewState extends State<RestaurantView> {
                     ),
                   ]),
                 ),
+                //this code grabs the memories from the db based off of 
+                //the restaurant name
                 StreamBuilder<QuerySnapshot>(
                     stream: db
                         .collection('memories')
@@ -222,6 +234,8 @@ class _RestaurantViewState extends State<RestaurantView> {
                               itemCount: currMemory.length),
                         );
                       } else {
+                        //this will be displayed if the query returns empty
+                        //just some text so the user isn't confused
                         return const Expanded(
                             child: Padding(
                                 padding: EdgeInsets.all(20.0),
