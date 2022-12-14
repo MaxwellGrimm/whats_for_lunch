@@ -21,8 +21,7 @@ Name: Max Grimm, Xee Lo
 Date: Decemeber 12, 2023
 Description: 
 
-This is where NumRestaurant gets populated from the list and gets stored in the main model. 
-That then displays on the profile page.
+This is where NumRestaurant gets populated from the list and gets stored in the main model.
 Bugs: 
 Reflection: 
 */
@@ -135,6 +134,7 @@ class _SpinPageState extends State<SpinPage> {
                                   .getName(),
                               model: mainModel) ==
                           false) {
+                        //adds the restaurant to the list if it has never been picked
                         addRestaurantToList(
                             numPicked: numPicked,
                             restaurantName: mainModel
@@ -182,28 +182,36 @@ class _SpinPageState extends State<SpinPage> {
   }
 
 //adds the restaurant to the list in the main model
+//required int numPicked - number of times it was picked
+// required String restaurantName - restaurantName
+  //required MainModel model - the main model storing all the data
   void addRestaurantToList(
       {required int numPicked,
       required String restaurantName,
       required MainModel model}) {
-    NumRestaurant numRestaruantModel =
+    NumRestaurant
+        numRestaruantModel = //create an object instance of NumRestaurant so that you can store it into the list in MainModel
         NumRestaurant(name: restaurantName, numPicked: numPicked);
 
     try {
+      //adds it to the list
       model.addNumRestaruant(restaruant: numRestaruantModel);
     } catch (e) {}
   }
 
-//update restaurant
+//update restaurant and returns true or false if it does exist
+// required String restaurantName - restaurantName
+  //required MainModel model - the main model storing all the data
   bool updateRestaurantPicked(
       {required String restaurantName, required MainModel model}) {
     bool restaurantExist = false;
 
     try {
+      //finds to see if the restaurant exists in the list and then updates the numpicked number
       if (model.getRestaruant(restaurantName: restaurantName)) {
         numPicked = model.updateNumPicked(
             restaurantName: restaurantName); //update the numpicked number
-        restaurantExist = true;
+        restaurantExist = true; //restaurant exist is true
       }
     } catch (e) {}
     return restaurantExist;
