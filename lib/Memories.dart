@@ -1,29 +1,28 @@
+// ignore_for_file: file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// ignore: unused_import
 import 'package:whats_for_lunch/for_lunch.dart';
 import 'main_model.dart';
 
+// ignore: slash_for_doc_comments
+/**
+Name:
+Date:
+Description:
+Bugs: 
+Reflection: 
+*/
 class Memories extends StatelessWidget {
-  Memories({super.key});
+  const Memories({super.key});
 
   @override
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
     var db = mainModel.getDatabase();
-    CollectionReference userMemories = db.collection('memories');
-
-    ///will eventually not be ard coded and pulled from data
-    // List<String> memoriesListTemp = [
-    //   'Great Food!',
-    //   'Hard to find the enterance',
-    //   'God Bless America',
-    //   'The worst place I have ever eaten!',
-    //   'This was okay',
-    //   'I will never come back',
-    //   'I did enjoy this quite a bit'
-    // ];
-    // double numStars = 3.5;
+    //CollectionReference userMemories = db.collection('memories');
 
     final restaurantsTEC = TextEditingController();
     final ratingTEC = TextEditingController();
@@ -97,12 +96,16 @@ class Memories extends StatelessWidget {
         body: Column(
           children: [
             StreamBuilder<QuerySnapshot>(
-              stream: userMemories.snapshots(),
+              stream: db
+                  .collection('memories')
+                  .where('userID', isEqualTo: mainModel.userId)
+                  .snapshots(), //get only user memories
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
+                  // ignore: avoid_print
                   print(snapshot.error);
                   return const Text("Error");
-                } else if (snapshot.connectionState == 
+                } else if (snapshot.connectionState ==
                     ConnectionState.waiting) {
                   return const Text("loading");
                 }
@@ -114,32 +117,34 @@ class Memories extends StatelessWidget {
                       gridDelegate:
                           const SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent: 150,
-                        childAspectRatio: .5,
+                        childAspectRatio: 1,
                       ),
 
                       ///is just a card right now but would like images to be pulled from data
                       itemBuilder: (context, index) {
                         var thisMemory = currMemory[index];
                         return Card(
-                          color: Colors.blue,
+                          color: Colors.redAccent,
                           child: InkResponse(
                             ///will be just an image eventually, once tapping image you then get more info
                             child: Center(
                                 child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  thisMemory['comments'],
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'Rajdhani',
-                                        color: Colors.white),
-                                    ),
+                                  thisMemory['restaurant'],
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Rajdhani',
+                                      color: Colors.white),
+                                ),
                                 Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    ///will apply the correct amount of stars currently is not pulled from db
                                     for (int i = 0;
                                         i < thisMemory['rating'].ceil();
                                         i++) ...<Icon>{
@@ -167,36 +172,43 @@ class Memories extends StatelessWidget {
                                             ///will eventurally have the picture, rating, date, location shown in pop up
                                             children: [
                                               Text(
-                                                thisMemory['comments'],
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily: 'Rajdhani',
-                                                      color: Colors.blue),
-                                                  ),
+                                                thisMemory['restaurant'],
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Rajdhani',
+                                                    color: Colors.blue),
+                                              ),
                                               Text(
-                                                thisMemory['date'].toString(),
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily: 'Rajdhani',
-                                                      color: Colors.blue),
-                                                  ),
+                                                // ignore: prefer_interpolation_to_compose_strings
+                                                "Comments: " +
+                                                    thisMemory['comments'],
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Rajdhani',
+                                                    color: Colors.blue),
+                                              ),
+                                              Text(
+                                                "Memory From: ${thisMemory['date'].toDate()}",
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Rajdhani',
+                                                    color: Colors.blue),
+                                              ),
                                               Row(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
-                                                  ///will apply the correct amount of stars currently is not pulled from db
                                                   for (int i = 0;
                                                       i <
                                                           thisMemory['rating']
-                                                              
                                                               .ceil();
                                                       i++) ...<Icon>{
                                                     const Icon(Icons.star,

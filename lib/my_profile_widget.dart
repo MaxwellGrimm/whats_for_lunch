@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
+// ignore: unused_import
 import 'package:whats_for_lunch/num_restaurants_model.dart';
 import 'package:whats_for_lunch/sign_in_page.dart';
 import 'main_model.dart';
-import 'Memories.dart';
+import 'memories.dart';
 import 'change_password_widget.dart';
-import 'package:location/location.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
+// ignore: slash_for_doc_comments
+/**
+Name: Xee Lo
+Date: Decemeber 13, 2021
+Description: displays users information, also asks for permission for user's location
+Bugs: N/a 
+Reflection: learned how to display info and ask for location
+*/
 enum MenuItem { myMemories, signOut, signIn }
 
 class MyProfileWidget extends StatefulWidget {
@@ -17,21 +28,15 @@ class MyProfileWidget extends StatefulWidget {
 }
 
 class _MyProfileWidgetState extends State<MyProfileWidget> {
-  final List<NumRestaruant> restaruant = [
-    //will need to make a model and pass it through
-    NumRestaruant(name: 'Arbys', numPicked: 46),
-    NumRestaruant(name: 'Pizza Hut', numPicked: 12),
-    NumRestaruant(name: 'McDonalds', numPicked: 2),
-    NumRestaruant(name: 'Panda Express', numPicked: 8),
-    NumRestaruant(name: 'Culvers', numPicked: 14),
-  ];
-
-  LocationData?
-      locationData; //stores location that user have shared with the app
+  String? _currentAddress;
+  Position? _currentPosition;
 
   @override
   Widget build(BuildContext context) {
     MainModel mainModel = Provider.of<MainModel>(context);
+    var db = mainModel.getDatabase();
+    // ignore: unused_local_variable
+    CollectionReference numRestaurantDB = db.collection('NumResturantPicked');
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Profile'),
@@ -63,7 +68,8 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                               Memories()), //navigating to the My Memories page
+                              // ignore: prefer_const_constructors
+                              Memories()), //navigating to the My Memories page
                     );
                   } else if (value == MenuItem.signOut) {
                     mainModel.userSignedOut();
@@ -126,10 +132,12 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
-                  onPressed: allowLocation,
+                  onPressed: () async {
+                    _getCurrentPosition(mainModel);
+                  },
                   child: const Text('yes'),
                 ),
-              ), //buttons will need to be active
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
@@ -143,8 +151,7 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('Home Address:    '),
-                Text(locationData
-                    .toString()) //this will be replaced with the actual user's address
+                Text(mainModel.getUserAddress() ?? "")
               ],
             ),
           ),
@@ -153,26 +160,16 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             child: Text('Recently Selected:'),
           ),
           Expanded(
-              flex: 10,
               child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: restaruant.length,
-                itemBuilder: ((context, index) {
-                  return ListTile(
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '${restaruant[index].name!}:      ',
-                            textAlign: TextAlign.left,
-                          ),
-                          Text(restaruant[index].numPicked!.toString())
-                        ],
-                      ), //this will need to call the getRestauant({required int at})
-
-                      tileColor: const Color.fromARGB(255, 255, 255, 255));
-                }),
-              ))
+                  itemCount: mainModel.numRestaurant(),
+                  itemBuilder: (context, index) => ListTile(
+                        title: Text(
+                          mainModel.getNameRestaurant(at: index),
+                        ),
+                        subtitle: Text(mainModel
+                            .getNumPickedRestaurant(at: index)
+                            .toString()),
+                      )))
         ],
       ),
     );
@@ -182,21 +179,68 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
 //this information will find nearest restaurants around customer
 //asks user if they are willing to share thier location with the app
   Future<bool> allowLocation() async {
-    Location location = Location();
     bool serviceEnabled;
-    LocationData locationData;
+    LocationPermission permission;
 
-    serviceEnabled =
-        await location.serviceEnabled(); //if user wants to enable location
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      serviceEnabled = await location.requestService(); //will request service
-      if (!serviceEnabled) {
-        debugPrint('Location Denied once');
+      //this popups the snackbar to tell the user to enable their location for the app
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
       }
     }
-
-    locationData = await location.getLocation(); //retrieves location from user
+    if (permission == LocationPermission.deniedForever) {
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
     return true;
+  }
+
+//gets current position of the user
+  Future<void> _getCurrentPosition(MainModel mainModel) async {
+    final hasPermission = await allowLocation();
+
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+      _getAddressFromLatLng(_currentPosition!, mainModel);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+//gets the address from the current position
+  Future<void> _getAddressFromLatLng(
+      Position position, MainModel mainModel) async {
+    await placemarkFromCoordinates(
+            _currentPosition!.latitude, _currentPosition!.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        _currentAddress =
+            '${place.street}, ${place.subLocality}, ${place.subAdministrativeArea}, ${place.postalCode}';
+      });
+    }).catchError((e) {
+      debugPrint(e);
+    });
+
+    mainModel.setUserAddress(address: _currentAddress);
   }
 
 //the customer will not be sharing their location

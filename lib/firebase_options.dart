@@ -4,6 +4,13 @@ import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
+/**
+Name:
+Date:
+Description:
+Bugs: 
+Reflection: 
+*/
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
@@ -67,7 +74,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '736806620309',
     projectId: 'whatsforlunch-621ad',
     storageBucket: 'whatsforlunch-621ad.appspot.com',
-    iosClientId: '736806620309-1kuj3669psd7rs9vnl3k1vdsr8ef1elm.apps.googleusercontent.com',
+    iosClientId:
+        '736806620309-1kuj3669psd7rs9vnl3k1vdsr8ef1elm.apps.googleusercontent.com',
     iosBundleId: 'com.example.whatsForLunch',
   );
 
@@ -77,7 +85,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '736806620309',
     projectId: 'whatsforlunch-621ad',
     storageBucket: 'whatsforlunch-621ad.appspot.com',
-    iosClientId: '736806620309-1kuj3669psd7rs9vnl3k1vdsr8ef1elm.apps.googleusercontent.com',
+    iosClientId:
+        '736806620309-1kuj3669psd7rs9vnl3k1vdsr8ef1elm.apps.googleusercontent.com',
     iosBundleId: 'com.example.whatsForLunch',
   );
 }

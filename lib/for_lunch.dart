@@ -1,73 +1,27 @@
-import 'dart:html';
+//import 'dart:html';
+// ignore_for_file: depend_on_referenced_packages, unused_import, use_build_context_synchronously
 
+// ignore: slash_for_doc_comments
+/**
+Name: Michael Meisenburg
+Date:
+Description:
+Bugs: 
+Reflection: 
+*/
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:whats_for_lunch/restaurant.dart';
 import 'main_model.dart';
+import 'package:geolocator/geolocator.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-///list of states
-const List<String> states = [
-  "AK",
-  "AL",
-  "AR",
-  "AS",
-  "AZ",
-  "CA",
-  "CO",
-  "CT",
-  "DC",
-  "DE",
-  "FL",
-  "GA",
-  "GU",
-  "HI",
-  "IA",
-  "ID",
-  "IL",
-  "IN",
-  "KS",
-  "KY",
-  "LA",
-  "MA",
-  "MD",
-  "ME",
-  "MI",
-  "MN",
-  "MO",
-  "MS",
-  "MT",
-  "NC",
-  "ND",
-  "NE",
-  "NH",
-  "NJ",
-  "NM",
-  "NV",
-  "NY",
-  "OH",
-  "OK",
-  "OR",
-  "PA",
-  "PR",
-  "RI",
-  "SC",
-  "SD",
-  "TN",
-  "TX",
-  "UT",
-  "VA",
-  "VI",
-  "VT",
-  "WA",
-  "WI",
-  "WV",
-  "WY"
-];
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart';
 
-///listview
-class restaurants {
-  String locations;
-  restaurants({required this.locations});
-}
+import 'nearby_response.dart';
 
 class ForLunch extends StatefulWidget {
   const ForLunch({super.key});
@@ -77,95 +31,140 @@ class ForLunch extends StatefulWidget {
 }
 
 class _ForLunchState extends State<ForLunch> {
-  ///for textfields not implemented
-  TextEditingController Address = TextEditingController();
-  TextEditingController Zip = TextEditingController();
-  TextEditingController Radius = TextEditingController();
+  double lat = 0.00;
+  double lng = 0.00;
+  Position? _currentPosition;
+  String? error;
 
-  ///drop down values
-  String dropdownvalue = states.first;
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
-  ///listview
-  List<restaurants> roles = [
-    restaurants(locations: 'Culvers'),
-    restaurants(locations: 'Mammas'),
-    restaurants(locations: 'Nikos'),
-    restaurants(locations: 'Panda Express'),
-    restaurants(locations: 'Pizza Hut'),
-  ];
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _getCurrentPosition() async {
+    final hasPermission = await _handleLocationPermission();
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+  ///for the google places.
+  String apiKey = "AIzaSyBV9aerOFm5L8p6VYFvdoNLjpBjRO-HLek";
+
+  NearbyPlacesResponse nearbyPlacesResponse = NearbyPlacesResponse();
+
+  List<Restaurant> roles = [];
+
+  double _currentSliderValue = 1;
 
   @override
   Widget build(BuildContext context) {
+    MainModel mainModel = Provider.of<MainModel>(context);
+
+    ///gets nearby places.
+    getNearbyPlaces(radius) async {
+      radius = radius * 1000;
+      _getCurrentPosition();
+      double? latitude = _currentPosition?.latitude;
+      double? longitude = _currentPosition?.longitude;
+      mainModel.setUserCurrentLat(latitude);
+      mainModel.setUserCurrentLng(longitude);
+      var url = Uri.parse(
+          'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$latitude,$longitude&radius=$radius&type=restaurant&key=$apiKey');
+      var response = await http.get(url);
+      final values = jsonDecode(response.body);
+      final List result = values['results'];
+      //print(result);
+      //print(values['results'][0]['geometry']['location']['lat']);
+
+      var i = result.length - 1;
+      while (i > 0) {
+        var temp = Restaurant(
+          name: values['results'][i]['name'],
+          lat: values['results'][i]['geometry']['location']['lat'],
+          lng: values['results'][i]['geometry']['location']['lng'],
+          //stars: values['results'][i]['rating'],
+          //open: values['results'][i]['opening_hours']
+        );
+
+        //print(values['results'][i]['geometry']['location']['lat']);
+        //print(values['results'][i]['opening_hours']);
+        roles.add(temp);
+        i--;
+      }
+      mainModel.addRestaurant(roles);
+      mainModel.setAreRestaurantsPopulated('');
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Whats For Lunch'),
+        title: const Text('What\'s For Lunch'),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              getNearbyPlaces(_currentSliderValue);
+            },
+          )
+        ],
       ),
       body: Column(
         children: [
           const Padding(
-            padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
-
-            ///text field for address
-            child: TextField(
-                decoration: InputDecoration(
-                    fillColor: Colors.black12,
-                    filled: true,
-                    border: OutlineInputBorder(),
-                    labelText: 'Address: ')),
-          ),
+              padding: EdgeInsets.fromLTRB(30, 20, 20, 5),
+              child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Radius:",
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 24,
+                          fontFamily: 'Rajdhani')))),
           Padding(
+              padding: const EdgeInsets.fromLTRB(30.0, 20.0, 30.0, 5.0),
 
-              ///drop down button as a form field
-              padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
-              child: DropdownButtonFormField<String>(
-                icon: const Icon(Icons.arrow_downward),
-                elevation: 16,
-                decoration: const InputDecoration(
-                    fillColor: Colors.black12,
-                    filled: true,
-                    border: OutlineInputBorder(),
-                    labelText: 'State'),
-
-                ///setting the value for drop down
-                value: dropdownvalue,
-
-                ///putting list of states in drop down
-                onChanged: (String? value) {
+              ///text field for radius with hint text sense this one is not obvious what the user needs to fill out
+              child: Slider(
+                value: _currentSliderValue,
+                max: 6,
+                divisions: 6,
+                label: _currentSliderValue.round().toString(),
+                onChanged: (double value) {
                   setState(() {
-                    dropdownvalue = value!;
+                    _currentSliderValue = value;
                   });
                 },
-                items: states.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
               )),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
-
-            ///text field for zip
-            child: TextField(
-                decoration: InputDecoration(
-              fillColor: Colors.black12,
-              filled: true,
-              border: OutlineInputBorder(),
-              labelText: 'Zip: ',
-            )),
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
-
-            ///text field for radius with hint text sense this one is not obvious what the user needs to fill out
-            child: TextField(
-                decoration: InputDecoration(
-                    fillColor: Colors.black12,
-                    filled: true,
-                    border: OutlineInputBorder(),
-                    labelText: 'Radius: ',
-                    hintText: 'i.e: 4 mi')),
-          ),
           const Padding(
             ///text
             padding: EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
@@ -173,28 +172,32 @@ class _ForLunchState extends State<ForLunch> {
           Card(
             child: Container(
               color: Colors.black12,
-              height: 30,
+              height: 50,
               child: const Center(
                 child: Text(
-                    'Instructions: Scroll through to remove Restaurants you do not want in the spin'),
+                    'Instructions: Set the radius and hit the search icon. Then scroll through and remove any restaurants you don\'t want in the spin.'),
               ),
             ),
           ),
+          Padding(
+              padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
+              child: Text(mainModel.getAreRestaurantsPopulated(),
+                  style: const TextStyle(fontSize: 20))),
           Expanded(
 
               ///listView
               child: ListView.separated(
-            itemCount: roles.length,
+            itemCount: mainModel.restaurantsNear.length,
 
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
 
                   ///setting the title subtitle and trailing
-                  title: Text(roles[index].locations),
+                  title: Text(mainModel.restaurantsNear[index].name),
                   trailing: IconButton(
                     onPressed: () {
                       ///remove
-                      roles.removeAt(index);
+                      mainModel.removeAt(index);
                       setState(() {});
                     },
                     icon: const Icon(Icons.delete),
@@ -204,8 +207,8 @@ class _ForLunchState extends State<ForLunch> {
             ///for the divider between each element
             separatorBuilder: (BuildContext context, int index) {
               return const Divider(
-                color: Colors.blue,
-                thickness: 2,
+                color: Colors.red,
+                thickness: 1,
               );
             },
           )),

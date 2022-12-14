@@ -1,9 +1,22 @@
+// ignore_for_file: avoid_print
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// ignore: unused_import
 import 'package:rxdart/rxdart.dart';
 import 'main_model.dart';
 
+// ignore: must_be_immutable
+// ignore: slash_for_doc_comments
+/**
+Name: Xee Lo 
+Date: Decemeber 12, 2023
+Description: this is where the user will change their password
+Bugs: NOT A BUG but user can not change password if they use a google sign in and 
+did not register an account with us 
+Reflection: Learned how to change password which was very useful 
+*/
 class ChangePasswordWidget extends StatelessWidget {
   ChangePasswordWidget({super.key});
   TextEditingController oldPassword = TextEditingController();
@@ -34,7 +47,6 @@ class ChangePasswordWidget extends StatelessWidget {
               ],
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
             child: TextField(
@@ -47,8 +59,7 @@ class ChangePasswordWidget extends StatelessWidget {
                 border: OutlineInputBorder(),
               ),
             ),
-          ), //this will be replaced with the actual user's password
-
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
             child: TextField(
@@ -61,7 +72,6 @@ class ChangePasswordWidget extends StatelessWidget {
                 border: OutlineInputBorder(),
               ),
             ),
-            //this will be replaced with the actual user's password
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 5.0),
@@ -100,6 +110,7 @@ class ChangePasswordWidget extends StatelessWidget {
                     );
                   } else {
                     showDialog(
+                      //pop to show if password change was successful or not
                       context: context,
                       builder: (ctx) => AlertDialog(
                         title: const Text('Unsuccessful'),
@@ -131,9 +142,11 @@ class ChangePasswordWidget extends StatelessWidget {
   _changePassword() async {
     if (newPassword.text == retypePassword.text) {
       //Create an instance of the current user.
+      // ignore: await_only_futures
       var user = await FirebaseAuth.instance.currentUser!;
       //Must re-authenticate user before updating the password. Otherwise it may fail or user get signed out.
 
+      // ignore: await_only_futures
       final cred = await EmailAuthProvider.credential(
           email: user.email!, password: oldPassword.text);
       await user.reauthenticateWithCredential(cred).then((value) async {

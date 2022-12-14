@@ -1,11 +1,24 @@
-import 'package:flutter/material.dart';
+//import 'dart:js_util';
 
-//this class keeps track of how many times the user has picked a restaurant
-class NumRestaruant {
+// ignore_for_file: unused_import
+
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:whats_for_lunch/for_lunch.dart';
+
+// ignore: slash_for_doc_comments
+/**
+Name: Xee Lo
+Date: Decemeber 12, 2022
+Description: This is where it stores the number of times the restaurant was picked
+Bugs: N/A
+Reflection: helps stores information
+*/
+class NumRestaurant {
   String? name;
   int? numPicked;
 
-  NumRestaruant({this.name, this.numPicked});
+  NumRestaurant({this.name, this.numPicked});
 
   String getName() {
     return name!;
@@ -14,27 +27,8 @@ class NumRestaruant {
   int getNumPicked() {
     return numPicked!;
   }
-}
 
-class NumRestaruantModel extends ChangeNotifier {
-  final List<NumRestaruant> _restaruant = [];
-
-  bool addNumRestaruant({required NumRestaruant restaruant}) {
-    try {
-      _restaruant.add(restaruant);
-      notifyListeners();
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  NumRestaruant getRestaruant({required int at}) {
-    NumRestaruant restaruant = _restaruant[at];
-    return restaruant;
-  }
-
-  int numResturant() {
-    return _restaruant.length;
+  void setNumPicked({required int num}) {
+    numPicked = numPicked! + 1;
   }
 }

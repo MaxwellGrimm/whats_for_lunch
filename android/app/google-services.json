@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "736806620309",
+    "project_id": "whatsforlunch-621ad",
+    "storage_bucket": "whatsforlunch-621ad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736806620309:android:6c2b3e683aaf145c421f9c",
+        "android_client_info": {
+          "package_name": "com.example.whats_for_lunch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "736806620309-rlp378ucbckpvl18tlogvklfhsod0eok.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAc6kpKPYe73yrxe3_4yAgUc-II6gxJ2a8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "736806620309-rlp378ucbckpvl18tlogvklfhsod0eok.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "736806620309-1kuj3669psd7rs9vnl3k1vdsr8ef1elm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.whatsForLunch"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

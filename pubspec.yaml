@@ -37,6 +37,26 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   provider: ^6.0.4
+  flutter_fortune_wheel: ^1.2.0
+  rxdart: ^0.26.0
+  google_maps_flutter: ^2.2.1
+  google_maps_flutter_web: ^0.4.0+3
+  firebase_auth: ^4.1.2
+  firebase_core: ^2.2.0
+  flutterfire_ui: ^0.4.3+20
+  simple_animations: ^5.0.0+2
+  google_directions_api: ^0.9.1
+  cloud_firestore: ^4.1.0
+  location: ^4.4.0
+  flutter_animated_icons: ^1.0.1
+  flutter_google_places: ^0.3.0
+
+  url_launcher: ^6.1.6
+  flutter_polyline_points: ^1.0.0
+  dio: ^4.0.6
+  geocoding: ^2.0.5
+  geolocator: ^9.0.2
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:
@@ -76,17 +96,23 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  fonts:
+    # - family: Schyler
+    #   fonts:
+    #     - asset: fonts/Schyler-Regular.ttf
+    #     - asset: fonts/Schyler-Italic.ttf
+    #       style: italic
+    # - family: Trajan Pro
+    #   fonts:
+    #     - asset: fonts/TrajanPro.ttf
+    #     - asset: fonts/TrajanPro_Bold.ttf
+    #       weight: 700
+    - family: Rajdhani
+      fonts:
+        - asset: assets/fonts/Rajdhani-Medium.ttf
+        - asset: assets/fonts/Rajdhani-Light.ttf
+        - asset: assets/fonts/Rajdhani-Bold.ttf
+        - asset: assets/fonts/Rajdhani-SemiBold.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
