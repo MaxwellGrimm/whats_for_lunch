@@ -208,18 +208,30 @@ class _RestaurantViewState extends State<RestaurantView> {
                       }
                       List<QueryDocumentSnapshot> currMemory =
                           snapshot.data!.docs;
-                      return Expanded(
-                        child: ListView.separated(
-                            itemBuilder: (context, index) {
-                              var thisMemory = currMemory[index];
-                              return ListTile(
-                                title: Text(thisMemory.toString()),
-                              );
-                            },
-                            separatorBuilder: (context, index) =>
-                                const Divider(),
-                            itemCount: currMemory.length),
-                      );
+                      if (currMemory.isNotEmpty) {
+                        return Expanded(
+                          child: ListView.separated(
+                              itemBuilder: (context, index) {
+                                var thisMemory = currMemory[index];
+                                return ListTile(
+                                  title: Text(thisMemory.toString()),
+                                );
+                              },
+                              separatorBuilder: (context, index) =>
+                                  const Divider(),
+                              itemCount: currMemory.length),
+                        );
+                      } else {
+                        return const Expanded(
+                            child: Padding(
+                                padding: EdgeInsets.all(20.0),
+                                child: Text(
+                                    'Seems like no one has posted a text review for this restaurant on our app yet!',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Rajdhani'))));
+                      }
                     })
               ]),
         ));

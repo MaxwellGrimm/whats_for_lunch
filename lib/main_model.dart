@@ -168,6 +168,7 @@ class MainModel extends ChangeNotifier {
     return restaurant.getName();
   }
 
+  // ignore: body_might_complete_normally_nullable
   String? setUserAddress({required String? address}) {
     userAddress = address;
   }
