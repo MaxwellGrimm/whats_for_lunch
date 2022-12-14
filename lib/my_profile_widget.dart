@@ -159,8 +159,8 @@ class _MyProfileWidgetState extends State<MyProfileWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Text('Home Address:    '),
-                Text(mainModel.getUserAddress() ?? "")
+                const Text('Home Address:'),
+                Text(mainModel.getUserAddress() ?? "", softWrap: true)
               ],
             ),
           ),
