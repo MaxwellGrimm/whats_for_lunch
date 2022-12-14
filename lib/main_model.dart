@@ -8,9 +8,13 @@ import 'restaurant.dart';
 
 // ignore: slash_for_doc_comments
 /**
-Name:
+Name: Max Grimm, Xee Lo
 Date:
 Description:
+
+-Stores all the number of restaurants the user has picked to spin. 
+-It also updates the list when something is added 
+-this also stores the user's current address in userAddress 
 Bugs: 
 Reflection: 
 */
@@ -22,6 +26,7 @@ class MainModel extends ChangeNotifier {
 
   double? userCurrentLat = 44.0;
   double? userCurrentLng = -88.0;
+  String? userAddress;
 
   var db = FirebaseFirestore.instance;
 
@@ -161,5 +166,13 @@ class MainModel extends ChangeNotifier {
   String getNameRestaurant({required int at}) {
     NumRestaurant restaurant = _restaruant[at];
     return restaurant.getName();
+  }
+
+  String? setUserAddress({required String? address}) {
+    userAddress = address;
+  }
+
+  String? getUserAddress() {
+    return userAddress ?? "";
   }
 }
