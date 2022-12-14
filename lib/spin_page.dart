@@ -11,6 +11,7 @@ import 'restaurant_view.dart';
 import 'sign_in_page.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:rxdart/rxdart.dart';
+// ignore: unused_import
 import 'package:firebase_auth/firebase_auth.dart';
 
 // ignore: slash_for_doc_comments

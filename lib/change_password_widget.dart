@@ -17,6 +17,7 @@ Bugs: NOT A BUG but user can not change password if they use a google sign in an
 did not register an account with us 
 Reflection: Learned how to change password which was very useful 
 */
+// ignore: must_be_immutable
 class ChangePasswordWidget extends StatelessWidget {
   ChangePasswordWidget({super.key});
   TextEditingController oldPassword = TextEditingController();

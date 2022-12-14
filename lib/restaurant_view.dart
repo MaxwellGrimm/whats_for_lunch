@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, unused_import, prefer_const_declarations, prefer_final_fields, prefer_initializing_formals
 
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'auth/secrets.dart';
@@ -55,22 +56,6 @@ class RestaurantView extends StatefulWidget {
 }
 
 class _RestaurantViewState extends State<RestaurantView> {
-  //These are the names of the reviews that will probably end up being in the
-  List<String> reviewNames = [
-    'Mary Loo',
-    'Jane Doe',
-    'Ronald Regan',
-    'Karen McKaren'
-  ];
-
-  //These are the reviews related with the names that will probably end up
-  List<String> reviews = [
-    'Great Food!',
-    'Hard to find the enterance',
-    'God Bless America',
-    'The worst place I have ever eaten!'
-  ];
-
   //controller for a google map instance, will need to change the api to the
   Completer<GoogleMapController> _controller = Completer();
   final startLocation = LatLng(RestaurantView.endLat, RestaurantView.endLng);
@@ -113,6 +98,9 @@ class _RestaurantViewState extends State<RestaurantView> {
 
   @override
   Widget build(BuildContext context) {
+    MainModel mainModel = Provider.of<MainModel>(context);
+    var db = mainModel.getDatabase();
+
     return Scaffold(
         appBar: AppBar(
           title: Text(RestaurantView.restaurantName),
@@ -203,27 +191,36 @@ class _RestaurantViewState extends State<RestaurantView> {
                     ),
                   ]),
                 ),
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: reviews.length,
-                    shrinkWrap: true,
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Divider(),
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        title: Text('${reviewNames[index]}: '),
-                        trailing: Text(reviews[index]),
-                        tileColor: const Color.fromARGB(80, 200, 200, 200),
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.elliptical(20, 30))),
-                        selectedTileColor:
-                            const Color.fromARGB(255, 246, 157, 150),
-                        selected: false,
+                StreamBuilder<QuerySnapshot>(
+                    stream: db
+                        .collection('memories')
+                        .where('restaurant',
+                            isEqualTo: RestaurantView.restaurantName)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        // ignore: avoid_print
+                        print(snapshot.error);
+                        return const Text("Error");
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const Text("loading reviews");
+                      }
+                      List<QueryDocumentSnapshot> currMemory =
+                          snapshot.data!.docs;
+                      return Expanded(
+                        child: ListView.separated(
+                            itemBuilder: (context, index) {
+                              var thisMemory = currMemory[index];
+                              return ListTile(
+                                title: Text(thisMemory.toString()),
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                const Divider(),
+                            itemCount: currMemory.length),
                       );
-                    },
-                  ),
-                ),
+                    })
               ]),
         ));
   }
